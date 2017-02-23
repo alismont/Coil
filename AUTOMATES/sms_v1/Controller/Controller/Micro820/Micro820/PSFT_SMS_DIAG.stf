@@ -1,0 +1,178 @@
+FUNCTION_BLOCK PSFT_SMS_DIAG
+(*  ****************************************************************************
+    ****************************************************************************
+    ************** DO NOT MODIFY ANY PART OF THIS FUNCTION BLOCK ***************
+    ****************************************************************************
+    ****************************************************************************
+
+	[UDFB Name]: PSFT_SMS_DIAG
+	[Category]: Plug-in
+	[Description]: Get diagnostic data from ProSoft SMS plug-in module
+	[Version]: 1.00
+	[Release Date]: June 28, 2012
+	----------------------------------------------------------------------------*)
+	(*Error Code Definition*)
+	(*0x01 MCU is not ready*)
+	(*0x02 SynToken is not available*)
+	(*0x03 Module does not respond*)
+	(*0x04 Invalid response packet*)
+	(*0x10 Function block not enabled (no operation) *)
+	(*0x12 Plug-in operation failed due to invalid Slot ID*)
+	(*0x13 Plug-in operation failed because it is not a valid Plug-in Generic module*)
+	(*0x14 Plug-in operation failed due to data operated out of range*)
+	(*0x15 Plug-in operation failed due to a data access parity error*)
+
+R_TRIG_1(FBEN);
+IF R_TRIG_1.Q THEN
+	retryCount := 0;
+	RequestSended := FALSE;
+END_IF;
+IF FBEN THEN
+	FOR index := 1 TO 76 BY 1 DO
+		DiagData[index] := 0;	
+	END_FOR;	
+	IF RequestSended THEN
+		addrOffset := 1023;
+		PLUGIN_READ_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_READ_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_1.Sts)));
+			Q := TRUE;
+			return;
+		END_IF;		
+		IF register[1] <> 186 THEN
+			ErrCode := 3;
+			IF retryCount > 100 THEN
+				Q := TRUE;
+			ELSE
+				Q := FALSE;
+				retryCount := retryCount+1;
+			END_IF;
+			return;
+		END_IF;
+		addrOffset := 1020;
+		PLUGIN_READ_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_READ_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_1.Sts)));
+			IF retryCount > 50 THEN
+				Q := TRUE;
+			ELSE
+				Q := FALSE;
+				retryCount := retryCount+1;
+			END_IF;
+			return;
+		END_IF;		
+		IF register[1] <> 4 THEN
+			ErrCode := 4;
+			Q := TRUE;
+			return;
+		END_IF;
+		addrOffset := 513;
+		PLUGIN_READ_2( TRUE, SlotID, addrOffset, 76, DiagData);
+		IF PLUGIN_READ_2.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_2.Sts)));
+			IF retryCount > 50 THEN
+				Q := TRUE;
+			ELSE
+				Q := FALSE;
+				retryCount := retryCount+1;
+			END_IF;
+			return;
+		END_IF;
+		addrOffset := 1023;
+		register[1] := 0;
+		PLUGIN_WRITE_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_WRITE_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_WRITE_1.Sts)));
+			Q := TRUE;
+			return;
+		END_IF;
+		addrOffset := 1018;
+		register[1] := 0;
+		PLUGIN_WRITE_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_WRITE_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_WRITE_1.Sts)));
+			Q := TRUE;
+			return;
+		END_IF;	
+		NetworkStatus := DiagData[2];
+		SignalStrength := DiagData[3];
+		SIMCardStatus := DiagData[4];		
+		SelfPhoneNumber := '';
+		FOR index:=5 TO 20 by 1 DO
+			SelfPhoneNumber := INSERT( SelfPhoneNumber, CHAR( ANY_TO_DINT(DiagData[index]) ), MLEN(SelfPhoneNumber) );
+		END_FOR;		
+		SIMCardID := '';
+		FOR index:=21 TO 52 BY 1 DO
+			SIMCardID := INSERT(SIMCardID, CHAR( ANY_TO_DINT(DiagData[index]) ), MLEN(SIMCardID) );
+		END_FOR;		
+		MinorRev := ANY_TO_INT(DiagData[54])*256+ANY_TO_INT(DiagData[53]);
+		MajorRev := ANY_TO_INT(DiagData[56])*256+ANY_TO_INT(DiagData[55]);
+		SMSRecvCounter := ANY_TO_DINT(DiagData[60])*16777216+ANY_TO_DINT(DiagData[59])*65536+ ANY_TO_DINT(DiagData[58])*256+ANY_TO_DINT(DiagData[57]);
+		SMSSentCounter := ANY_TO_DINT(DiagData[64])*16777216+ANY_TO_DINT(DiagData[63])*65536+ ANY_TO_DINT(DiagData[62])*256+ANY_TO_DINT(DiagData[61]);		
+		FailedSMSSentCounter := ANY_TO_DINT(DiagData[68])*16777216+ANY_TO_DINT(DiagData[67])*65536+ ANY_TO_DINT(DiagData[66])*256+ANY_TO_DINT(DiagData[65]);
+		NetConnFailedRetries := ANY_TO_DINT(DiagData[72])*16777216+ANY_TO_DINT(DiagData[71])*65536+ ANY_TO_DINT(DiagData[70])*256+ANY_TO_DINT(DiagData[69]);
+		FilteredSMSReceived := ANY_TO_DINT(DiagData[76])*16777216+ANY_TO_DINT(DiagData[75])*65536+ ANY_TO_DINT(DiagData[74])*256+ANY_TO_DINT(DiagData[73]);
+		ErrCode := 0;
+		Q := TRUE;
+	ELSE
+		addrOffset := 1016;
+		PLUGIN_READ_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_READ_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_1.Sts)));
+            Q := TRUE;
+			return;
+		END_IF;		
+		IF register[1] = 17 THEN
+			addrOffset := 1019;
+			PLUGIN_READ_1( TRUE, SlotID, addrOffset, 1, register);
+			IF PLUGIN_READ_1.Sts <> 1 THEN
+				ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_1.Sts)));
+                Q := TRUE;
+				return;
+			END_IF;			
+			IF register[1] <> 0 THEN
+				retryTokenCount := retryTokenCount + 1;
+				
+				IF retryTokenCount > 100 THEN
+					retryTokenCount := 0; 
+				ELSE
+					ErrCode := 0;
+					Q := FALSE;
+					return;
+				END_IF;
+			END_IF;			
+			register[1] := 42;
+			PLUGIN_WRITE_1( TRUE, SlotID, addrOffset, 1, register);
+			IF PLUGIN_WRITE_1.Sts <> 1 THEN
+				ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_WRITE_1.Sts)));
+				Q := TRUE;
+				return;
+			END_IF;
+			register[1] := 4;
+			addrOffset := 1021;
+			PLUGIN_WRITE_1( TRUE, SlotID, addrOffset, 1, register);
+			IF PLUGIN_WRITE_1.Sts <> 1 THEN
+				ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_WRITE_1.Sts)));
+				Q := TRUE;
+				return;
+			END_IF;									
+			register[1] := 171;
+			addrOffset := 1022;
+			PLUGIN_WRITE_1( TRUE, SlotID, addrOffset, 1, register);
+			IF PLUGIN_WRITE_1.Sts <> 1 THEN
+				ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_WRITE_1.Sts)));
+				Q := TRUE;
+				return;
+			END_IF;				
+			RequestSended := TRUE;
+			ErrCode := 0;
+			Q := FALSE;	
+		ELSE
+			ErrCode := 1;
+			Q := TRUE;
+		END_IF;
+	END_IF;
+ELSE
+	Q := FALSE;
+END_IF;
+END_FUNCTION_BLOCK
