@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectElements>
+  <AcfElementGuid Guid="1c04a7a4-2bfe-49a7-a822-f5f987ecf7f3">
+    <File>PSFT_SMS_RECV.acfmlge</File>
+  </AcfElementGuid>
+  <AcfElementGuid Guid="2eb4a830-ddcc-4905-bd73-966f1cae7c04">
+    <File>PSFT_SMS_CONFIG.acfmlge</File>
+  </AcfElementGuid>
+  <AcfElementGuid Guid="3d1aed7a-410c-488a-bd0c-e25e9406a16e">
+    <File>PSFT_SMS_DIAG.acfmlge</File>
+  </AcfElementGuid>
+  <AcfElementGuid Guid="42f94ddf-f2ad-4864-9242-69e109096794">
+    <File>PSFT_ILX800_SMSG.acfmlge</File>
+  </AcfElementGuid>
+  <AcfElementGuid Guid="c68dbc24-939b-478e-9f08-f7aa1c46c06b">
+    <File>PSFT_SMS_SEND.acfmlge</File>
+  </AcfElementGuid>
+</ProjectElements>

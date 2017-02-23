@@ -1,0 +1,143 @@
+FUNCTION_BLOCK PSFT_SMS_SEND
+(*  ****************************************************************************
+    ****************************************************************************
+    ************** DO NOT MODIFY ANY PART OF THIS FUNCTION BLOCK ***************
+    ****************************************************************************
+    ****************************************************************************
+
+	[UDFB Name]: PSFT_SMS_SEND
+	[Category]: Plug-in
+	[Description]: Send SMS text messages through ProSoft SMS plug-in module
+	[Version]: 1.00
+	[Release Date]: June 28, 2012
+	----------------------------------------------------------------------------*)
+	(*Error Code Definition*)
+	(*0x01 MCU is not ready*)
+	(*0x02 SynToken is not available*)
+	(*0x10 Function block not enabled (no operation) *)
+	(*0x12 Plug-in operation failed due to invalid Slot ID*)
+	(*0x13 Plug-in operation failed because it is not a valid Plug-in Generic module*)
+	(*0x14 Plug-in operation failed due to data operated out of range*)
+	(*0x15 Plug-in operation failed due to a data access parity error*)
+
+IF FBEN THEN
+	phoneCount := 5;
+	FOR index := 1 TO 229 BY 1 DO
+		dataBuf[index] := 0;	
+	END_FOR;	
+	endPos := MIN( 140, MLEN( SMSText ) );	
+	IF endPos <= 0 THEN
+		ErrCode := 0;
+		Q := TRUE;
+		return;
+	END_IF;		
+	dataBuf[3] := ANY_TO_BYTE(endPos);
+	curPos := 3;
+	FOR index := 1 TO endPos BY 1 DO
+		dataBuf[curPos+index] := ANY_TO_BYTE(ASCII( SMSText, index));
+	END_FOR;
+	curPos := 145;
+	dataBuf[curPos] := 0;
+	FOR index:=1 TO 5 BY 1 DO
+		IF MLEN(PhoneNum[index])>0 THEN
+			dataBuf[curPos] := dataBuf[curPos] + 1;
+		END_IF;
+	END_FOR;	
+	IF dataBuf[curPos] <= 0 THEN
+		ErrCode := 0;
+		Q := TRUE;
+		return;
+	END_IF;	
+	tmpDint := curPos;
+	count := 0;
+	FOR PNIndex := 1 TO ANY_TO_DINT(phoneCount) BY 1 DO
+		curPos := 17 * count + tmpDint;
+		endPos := MIN( 16, ANY_TO_DINT(MLEN(PhoneNum[PNIndex])));
+		FOR index := 1 TO endPos BY 1 DO
+			dataBuf[index + curPos] := ANY_TO_BYTE(ASCII( PhoneNum[PNIndex], index));
+		END_FOR;		
+		IF endPos > 0 THEN
+			count := count+1;
+		END_IF;
+	END_FOR;	
+	packSize := ANY_TO_UINT( curPos + endPos - 2);
+	IF packSize>255 THEN 
+		dataBuf[1] := 255;
+		dataBuf[2] := ANY_TO_BYTE(packSize-255);
+	ELSE
+		dataBuf[1] := ANY_TO_BYTE(packSize);
+		dataBuf[2] := 0;
+	END_IF;
+	addrOffset := 1016;
+	PLUGIN_READ_1( TRUE, SlotID, addrOffset, 1, register);
+	IF PLUGIN_READ_1.Sts <> 1 THEN
+		ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_1.Sts)));
+		Q := TRUE;
+		return;
+	END_IF;	
+	IF register[1] = 17 THEN
+		addrOffset := 1019;
+		PLUGIN_READ_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_READ_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_1.Sts)));
+			Q := TRUE;
+			return;
+		END_IF;		
+		IF register[1] <> 0 THEN
+			retryTokenCount := retryTokenCount + 1;			
+			IF retryTokenCount > 100 THEN
+				retryTokenCount := 0; 
+			ELSE
+				ErrCode := 0;
+				Q := FALSE;
+				return;
+			END_IF;
+		END_IF;
+		register[1] := 42;
+		PLUGIN_WRITE_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_WRITE_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_WRITE_1.Sts)));
+			Q := TRUE;
+			return;
+		END_IF;		
+		register[1] := 2;
+		addrOffset := 1021;
+		PLUGIN_WRITE_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_WRITE_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_WRITE_1.Sts)));
+			Q := TRUE;
+			return;
+		END_IF;
+		register[1] := 2;
+		addrOffset := 1021;
+		PLUGIN_WRITE_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_WRITE_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_WRITE_1.Sts)));
+			Q := TRUE;
+			return;
+		END_IF;
+		addrOffset := 12;
+		PLUGIN_WRITE_2( TRUE, SlotID, addrOffset, packSize+2, dataBuf);
+		IF PLUGIN_WRITE_2.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_WRITE_2.Sts)));
+			Q := TRUE;
+			return;
+		END_IF;		
+		register[1] := 171;
+		addrOffset := 1022;
+		PLUGIN_WRITE_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_WRITE_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_WRITE_1.Sts)));
+			Q := TRUE;
+			return;
+		END_IF;			
+		ErrCode := 0;
+		Q := TRUE;
+	ELSE
+		ErrCode := 1;
+		Q := TRUE;
+	END_IF;
+ELSE
+	Q := FALSE;
+END_IF;
+END_FUNCTION_BLOCK
