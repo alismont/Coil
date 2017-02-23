@@ -1,0 +1,170 @@
+FUNCTION_BLOCK PSFT_SMS_RECV
+(*  ****************************************************************************
+    ****************************************************************************
+    ************** DO NOT MODIFY ANY PART OF THIS FUNCTION BLOCK ***************
+    ****************************************************************************
+    ****************************************************************************
+
+	[UDFB Name]: PSFT_SMS_RECV
+	[Category]: Plug-in
+	[Description]: Receive SMS text messages through ProSoft SMS plug-in module
+	[Version]: 1.00
+	[Release Date]: June 28, 2012
+	----------------------------------------------------------------------------*)
+	(*Error Code Definition*)
+	(*0x01 MCU is not ready*)
+	(*0x02 Invalid Packet Size*)
+	(*0x03 Invalid Packet Type*)
+	(*0x10 Function block not enabled (no operation) *)
+	(*0x12 Plug-in operation failed due to invalid Slot ID*)
+	(*0x13 Plug-in operation failed because it is not a valid Plug-in Generic module*)
+	(*0x14 Plug-in operation failed due to data operated out of range*)
+	(*0x15 Plug-in operation failed due to a data access parity error*)
+
+IF FBEN THEN
+	FOR index := 1 TO 191 BY 1 DO
+		dataBuf[index] := 0;	
+	END_FOR;
+	addrOffset := 1023;
+	PLUGIN_READ_1( TRUE, SlotID, addrOffset, 1, register);
+	IF PLUGIN_READ_1.Sts <> 1 THEN
+		ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_1.Sts)));
+		Q := TRUE;
+		return;
+	END_IF;	
+	IF register[1] = 186 THEN
+		addrOffset := 1020;
+		PLUGIN_READ_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_READ_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_1.Sts)));
+			SMSText := '';
+			DateTime := '';
+			Sender := '';
+			Q := TRUE;
+			return;
+		END_IF;				
+		IF register[1] <> 3 THEN
+			ErrCode := 3;
+			SMSText := '';
+			DateTime := '';
+			Sender := '';
+			Q := TRUE;
+			return;
+		END_IF;
+		addrOffset := 513;
+		PLUGIN_READ_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_READ_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_1.Sts)));
+			SMSText := '';
+			DateTime := '';
+			Sender := '';
+			Q := TRUE;
+			return;
+		END_IF;	
+		packSize := ANY_TO_UINT(register[1]);		
+		IF packSize<=0 THEN
+			ErrCode := 2;
+			SMSText := '';
+			DateTime := '';
+			Sender := '';
+			Q := TRUE;
+			return;
+		END_IF;
+		Sender := '';
+		FOR index:=1 TO 140 BY 1 DO
+			tmpBuf[index] := 0;
+		END_FOR;		
+		addrOffset := 514;
+		bufSize :=  16;
+		PLUGIN_READ_2( TRUE, SlotID, addrOffset, bufSize, tmpBuf);
+		IF PLUGIN_READ_2.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_2.Sts)));
+			SMSText := '';
+			DateTime := '';
+			Sender := '';
+			Q := TRUE;
+			return;
+		END_IF;		
+		FOR index:=1 TO 16 BY 1 DO
+			Sender := INSERT(Sender, CHAR(ANY_TO_DINT(tmpBuf[index])), index);
+		END_FOR;		
+		DateTime := '';
+		FOR index:=1 TO 140 BY 1 DO
+			tmpBuf[index] := 0;
+		END_FOR;		
+		addrOffset := 530;
+		bufSize := 32;
+		PLUGIN_READ_2(TRUE, SlotID, addrOffset, bufSize, tmpBuf);		
+		IF PLUGIN_READ_2.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_2.Sts)));
+			SMSText := '';
+			DateTime := '';
+			Sender := '';
+			Q := TRUE;
+			return;
+		END_IF;		
+		FOR index:=1 TO 32 BY 1 DO
+			DateTime := INSERT(DateTime, CHAR( ANY_TO_DINT(tmpBuf[index])), index);
+		END_FOR;
+		SMSText := '';
+		FOR index:=1 TO 140 BY 1 DO
+			tmpBuf[index] := 0;
+		END_FOR;		
+		addrOffset := 562;
+		PLUGIN_READ_1(TRUE, SlotID, AddrOffset, 1, register);
+		IF PLUGIN_READ_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_1.Sts)));
+			SMSText := '';
+			DateTime := '';
+			Sender := '';
+			Q := TRUE;
+			return;
+		END_IF;
+		IF register[1] > 0 THEN
+			addrOffset := 563;
+			bufSize := ANY_TO_UINT(register[1]);
+			PLUGIN_READ_2(TRUE, SlotID, AddrOffset, bufSize, tmpBuf);
+			IF PLUGIN_READ_2.Sts <> 1 THEN
+				ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_READ_2.Sts)));
+				SMSText := '';
+				DateTime := '';
+				Sender := '';
+				Q := TRUE;
+				return;
+			END_IF;					
+			endPos := MIN( 140, ANY_TO_DINT(register[1]));
+			FOR index:=1 TO endPos BY 1 DO
+				SMSText := INSERT(SMSText, CHAR(ANY_TO_DINT(tmpBuf[index])), index);
+			END_FOR;
+		ELSE
+			SMSText := '';
+		END_IF;
+		addrOffset := 1023;
+		register[1] := 0;
+		PLUGIN_WRITE_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_WRITE_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_WRITE_1.Sts)));
+			Q := TRUE;
+			return;
+		END_IF;
+		addrOffset := 1018;
+		register[1] := 0;
+		PLUGIN_WRITE_1( TRUE, SlotID, addrOffset, 1, register);
+		IF PLUGIN_WRITE_1.Sts <> 1 THEN
+			ErrCode := ANY_TO_UINT(XOR_MASK( 16, ANY_TO_DINT(PLUGIN_WRITE_1.Sts)));
+			Q := TRUE;
+			return;
+		END_IF;		
+		ErrCode := 0;
+		Q := TRUE;
+	ELSE
+		Sender := '';
+		SMSText := '';
+		DateTime := '';		
+		Q := FALSE;
+	END_IF;
+ELSE
+	retryCount := 0;
+	Q := FALSE;
+END_IF;
+END_FUNCTION_BLOCK
