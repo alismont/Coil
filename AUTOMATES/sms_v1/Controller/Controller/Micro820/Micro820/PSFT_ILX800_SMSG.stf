@@ -1,0 +1,1542 @@
+PROGRAM PSFT_ILX800_SMSG
+#info= QLD
+BOF
+
+
+(*Sample program for the ProSoft ILX800-SMSG plug-in module
+Version 1.00, Released June 28, 2012 
+Customize your program by modifying green rungs. DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,1] (**) (**)  FB  [1,0] (*>*) (*1*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*__SYSVA_CYCLEDATE*) (**)  , (*i2:*)(*Time#15s*) (**) ; (*o1:*)(**) (**) )  FB  [4,0] (*1 gain*) (*2*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*Time#10ms*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_SMSInitTime*) (**) )
+EOR [7,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,5] (**) (**)  FB  [1,0] (*TON*) (*UTIL_progToRun*) ( (*IN:IN*)(**) (**)  , (*PT:PT*)(*UTIL_SMSInitTime*) (**) ; (*Q:Q*)(**) (**)  , (*ET:ET*)(**) (**) )
+EOR [4,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,8] (**) (**)  XIO  [1,0] (*UTIL_executeCmd.Q*) (*Q*)  XIO  [2,0] (*UTIL_executeCmd.Q*) (*Q*)  FB  [3,0] (*TON*) (*UTIL_executeCmd*) ( (*IN:IN*)(**) (**)  , (*PT:PT*)(*time#1000ms*) (**) ; (*Q:Q*)(**) (**)  , (*ET:ET*)(**) (**) )
+EOR [6,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,11] (**) (**)  XIC  [1,0] (*UTIL_executeCmd.Q*) (*Q*)  FB  [2,0] (*CTU*) (*UTIL_counter*) ( (*CU:CU*)(**) (**)  , (*RESET:RESE*)(*UTIL_counter.Q*) (**)  , (*PV:PV*)(*2*) (**) ; (*Q:Q*)(**) (**)  , (*CV:CV*)(**) (**) )
+EOR [5,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,15] (**) (**)  XIC  [1,0] (*UTIL_progToRun.Q*) (*Q*)  FB  [2,0] (*R_TRIG*) (*UTIL_R_TRIG_2*) ( (*CLK:CLK*)(**) (**) ; (*Q:Q*)(**) (**) )
+EOR [5,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,17] (**) (**)  XIC  [1,0] (*CONFIG_whiteListEnabled*) (**)  
+ BST  FB  [2,0] (*R_TRIG*) (*UTIL_R_TRIG_1*) ( (*CLK:CLK*)(**) (**) ; (*Q:Q*)(**) (**) )
+   NXB  FB  [2,1] (*F_TRIG*) (*UTIL_F_TRIG_1*) ( (*CLK:CLK*)(**) (**) ; (*Q:Q*)(**) (**) )
+ BND
+
+EOR [5,0]
+
+
+(*If you delete rung 10, you need to set UTIL_initialized to TRUE.
+Otherwise, do not modify this rung.*)
+
+SOR  [0,20] (**) (**)  XIC  [1,0] (*UTIL_R_TRIG_2.Q*) (*Q*)  
+ BST  FB  [2,0] (*1 gain*) (*3*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*false*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_initialized*) (**) )
+   NXB  
+ BST  FB  [2,2] (*1 gain*) (*3*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*false*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_SMSConfiged*) (**) )
+   NXB  
+ BST  FB  [2,4] (*1 gain*) (*3*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*0*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_configRetryCount*) (**) )
+   NXB  FB  [2,6] (*1 gain*) (*3*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*0*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_sendMsgRetryCount*) (**) )
+ BND
+
+ BND
+
+ BND
+
+EOR [5,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,29] (**) (**)  
+ BST  XIC  [1,0] (*UTIL_R_TRIG_1.Q*) (*Q*)
+   NXB  XIC  [1,1] (*UTIL_F_TRIG_1.Q*) (*Q*)
+ BND
+  
+ BST  FB  [2,0] (*1 gain*) (*3*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*false*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_SMSConfiged*) (**) )
+   NXB  FB  [2,2] (*1 gain*) (*3*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*0*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_sendMsgRetryCount*) (**) )
+ BND
+
+EOR [5,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,34] (**) (**)  XIO  [1,0] (*UTIL_SMSConfiged*) (**)  XIC  [2,0] (*UTIL_executeCmd.Q*) (*Q*)  FB  [3,0] (*=*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_counter.CV*) (**)  , (*i2:*)(*1*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [6,0] (*PSFT_SMS_CONFIG*) (*UTIL_SMSPLUGIN_CONFIG_1*) ( (*FBEN:*)(**) (**)  , (*SlotID:*)(*CONFIG_slotID*) (**)  , (*PINNumber:*)(*UTIL_PINNumber*) (**)  , (*WhiteList:*)(*CONFIG_whiteList*) (**)  , (*SecurityOption:*)(*CONFIG_whiteListEnabled*) (**) ; (*Q:*)(**) (**)  , (*ErrCode:*)(**) (**) )
+   NXB  XIC  [6,5] (*UTIL_SMSPLUGIN_CONFIG_1.Q*) (**)  
+ BST  FB  [7,5] (*=*) (*5*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_SMSPLUGIN_CONFIG_1.ErrCode*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [10,5] (*1 gain*) (*6*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*true*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_SMSConfiged*) (**) )
+   NXB  FB  [10,7] (*1 gain*) (*7*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*0*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_retryCount*) (**) )
+ BND
+
+   NXB  FB  [7,9] (*<>*) (*8*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_SMSPLUGIN_CONFIG_1.ErrCode*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [10,9] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_configRetryCount*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_configRetryCount*) (**) )
+   NXB  FB  [10,12] (*>*) (*10*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_configRetryCount*) (**)  , (*i2:*)(*50*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [13,12] (*1 gain*) (*7*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*false*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_SMSConfiged*) (**) )
+   NXB  FB  [13,14] (*+*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_errCount*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_errCount*) (**) )
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+EOR [16,0]
+
+
+(*This rung sends out a greeting SMS message through the module when the module boots up.
+The message is sent to all phone numbers on the Receiver List.
+If you do not want this feature, delete this rung and modify rung 7 (see rung comments).*)
+
+SOR  [0,52] (**) (**)  XIO  [1,0] (*UTIL_initialized*) (**)  XIC  [2,0] (*UTIL_executeCmd.Q*) (*Q*)  FB  [3,0] (*=*) (*12*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_counter.CV*) (**)  , (*i2:*)(*2*) (**) ; (*o1:*)(**) (**) )  
+ BST  XIO  [6,0] (*UTIL_initialized*) (**)  FB  [7,0] (*PSFT_SMS_SEND*) (*UTIL_SEND_SMS_1*) ( (*FBEN:*)(**) (**)  , (*SlotID:*)(*CONFIG_slotID*) (**)  , (*PhoneNum:*)(*CONFIG_receiverList*) (**)  , (*SMSText:*)(*DATA_greetingSMSText*) (**) ; (*Q:*)(**) (**)  , (*ErrCode:*)(**) (**) )
+   NXB  
+ BST  XIC  [6,4] (*UTIL_SEND_SMS_1.Q*) (**)  FB  [7,4] (*=*) (*18*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_SEND_SMS_1.ErrCode*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [10,4] (*1 gain*) (*19*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*true*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_initialized*) (**) )
+   NXB  FB  [10,6] (*1 gain*) (*19*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*0*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_retryCount*) (**) )
+ BND
+
+   NXB  XIC  [6,8] (*UTIL_SEND_SMS_1.Q*) (**)  FB  [7,8] (*<>*) (*20*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_SEND_SMS_1.ErrCode*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [10,8] (*<>*) (*21*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_SEND_SMS_1.ErrCode*) (**)  , (*i2:*)(*1*) (**) ; (*o1:*)(**) (**) )  FB  [13,8] (*+*) (*22*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_sendMsgRetryCount*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_sendMsgRetryCount*) (**) )
+   NXB  FB  [10,11] (*>*) (*23*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_sendMsgRetryCount*) (**)  , (*i2:*)(*50*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [13,11] (*1 gain*) (*24*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*true*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_initialized*) (**) )
+   NXB  FB  [13,13] (*+*) (*25*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_errCount*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_errCount*) (**) )
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+EOR [16,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,69] (*READY*) (**)  XIC  [1,0] (*UTIL_initialized*) (**)  XIC  [2,0] (*UTIL_SMSConfiged*) (**)  OTS  [3,0] (*UTIL_systemInitialized*) (**)
+EOR [4,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,71] (**) (**)  XIO  [1,0] (*UTIL_TON_1.Q*) (*Q*)  FB  [2,0] (*TON*) (*UTIL_TON_1*) ( (*IN:IN*)(**) (**)  , (*PT:PT*)(*time#1s*) (**) ; (*Q:Q*)(**) (**)  , (*ET:ET*)(**) (**) )
+EOR [5,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,74] (**) (**)  XIO  [1,0] (*UTIL_TON_2.Q*) (*Q*)  FB  [2,0] (*TON*) (*UTIL_TON_2*) ( (*IN:IN*)(**) (**)  , (*PT:PT*)(*time#1503ms*) (**) ; (*Q:Q*)(**) (**)  , (*ET:ET*)(**) (**) )
+EOR [5,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,77] (**) (**)  XIC  [1,0] (*UTIL_TON_2.Q*) (*Q*)  FB  [2,0] (*1 gain*) (*1*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*TRUE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_getDiagData*) (**) )
+EOR [5,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,80] (**) (**)  XIC  [1,0] (*UTIL_TON_1.Q*) (*Q*)  
+ BST  FB  [2,0] (*PSFT_SMS_RECV*) (*UTIL_READ_SMS_1*) ( (*FBEN:*)(**) (**)  , (*SlotID:*)(*CONFIG_slotID*) (**) ; (*Q:*)(**) (**)  , (*ErrCode:*)(**) (**)  , (*Sender:*)(**) (**)  , (*DateTime:*)(**) (**)  , (*SMSText:*)(**) (**) )
+   NXB  XIC  [2,5] (*UTIL_READ_SMS_1.Q*) (**)  FB  [3,5] (*=*) (*2*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_READ_SMS_1.ErrCode*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  
+ BST  
+ BST  FB  [6,5] (*MLEN*) (*3*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_READ_SMS_1.SMSText*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpStrLen*) (**) )
+   NXB  FB  [6,7] (*>*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpStrLen*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  FB  [9,7] (*<*) (*5*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpStrLen*) (**)  , (*i2:*)(*40*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [12,7] (*1 gain*) (*6*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_READ_SMS_1.SMSText*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_recvedSMSText*) (**) )
+   NXB  
+ BST  FB  [12,9] (*1 gain*) (*7*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*TRUE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_newSMSRecved*) (**) )
+   NXB  FB  [12,11] (*1 gain*) (*8*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_READ_SMS_1.Sender*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_sender*) (**) )
+ BND
+
+ BND
+
+ BND
+
+   NXB  
+ BST  FB  [6,13] (*<=*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpStrLen*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )
+   NXB  FB  [6,16] (*>=*) (*10*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpStrLen*) (**)  , (*i2:*)(*40*) (**) ; (*o1:*)(**) (**) )
+ BND
+  OTR  [9,13] (*UTIL_newSMSRecved*) (**)
+ BND
+
+ BND
+
+EOR [15,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,100] (**) (**)  XIC  [1,0] (*UTIL_systemInitialized*) (**)  XIC  [2,0] (*UTIL_getDiagData*) (**)  FB  [3,0] (*PSFT_SMS_DIAG*) (*UTIL_GET_DIAG*) ( (*FBEN:*)(**) (**)  , (*SlotID:*)(*CONFIG_slotID*) (**) ; (*Q:*)(**) (**)  , (*ErrCode:*)(**) (**)  , (*NetworkStatus:*)(**) (**)  , (*SignalStrength:*)(**) (**)  , (*SIMCardStatus:*)(**) (**)  , (*SelfPhoneNumber:*)(**) (**)  , (*SIMCardID:*)(**) (**)  , (*MinorRev:*)(**) (**)  , (*MajorRev:*)(**) (**)  , (*SMSRecvCounter:*)(**) (**)  , (*SMSSentCounter:*)(**) (**)  , (*FailedSMSSentCounter:*)(**) (**)  , (*NetConnFailedRetries:*)(**) (**)  , (*FilteredSMSReceived:*)(**) (**) )
+EOR [6,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,115] (**) (**)  XIC  [1,0] (*UTIL_getDiagData*) (**)  XIC  [2,0] (*UTIL_GET_DIAG.Q*) (**)  
+ BST  
+ BST  
+ BST  
+ BST  
+ BST  
+ BST  
+ BST  FB  [3,0] (*ANY_TO_INT*) (*32*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_GET_DIAG.SignalStrength*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpInt*) (**) )  FB  [6,0] (***) (*33*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpInt*) (**)  , (*i2:*)(*2*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpInt*) (**) )  FB  [9,0] (*-*) (*34*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpInt*) (**)  , (*i2:*)(*113*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_signalStrength*) (**) )
+   NXB  FB  [3,3] (*1 gain*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_GET_DIAG.NetworkStatus*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_networkStatus*) (**) )
+ BND
+
+   NXB  FB  [3,5] (*1 gain*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_GET_DIAG.SMSSentCounter*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_SMSSendCount*) (**) )
+ BND
+
+   NXB  FB  [3,7] (*1 gain*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_GET_DIAG.SMSRecvCounter*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_SMSRecvCount*) (**) )
+ BND
+
+   NXB  FB  [3,9] (*1 gain*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_GET_DIAG.FailedSMSSentCounter*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_SMSSendFailCount*) (**) )
+ BND
+
+   NXB  FB  [3,11] (*1 gain*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_GET_DIAG.NetConnFailedRetries*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_netConnFailedRetries*) (**) )
+ BND
+
+   NXB  FB  [3,13] (*1 gain*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_GET_DIAG.FilteredSMSReceived*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_WLFiltCount*) (**) )
+ BND
+
+   NXB  
+ BST  FB  [3,15] (*1 gain*) (*29*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_GET_DIAG.MinorRev*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_minorRev*) (**) )
+   NXB  
+ BST  
+ BST  FB  [3,17] (*1 gain*) (*30*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_GET_DIAG.MajorRev*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_majorRev*) (**) )
+   NXB  FB  [3,19] (*1 gain*) (*31*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_GET_DIAG.SIMCardStatus*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_SIMCardStatus*) (**) )
+ BND
+
+   NXB  FB  [3,21] (*1 gain*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*FALSE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_getDiagData*) (**) )
+ BND
+
+ BND
+
+ BND
+
+EOR [12,0]
+
+
+(*Rungs 18-21 send out alarm messages if the program detects changes to digital inputs 0 and 1.
+Delete or add rungs for additional inputs as required. You can customize the text string.
+Digital Input 0: This rung checks for a 0-to-1 transition*)
+
+SOR  [0,139] (**) (**)  XIC  [1,0] (*_IO_EM_DI_00*) (**)  FB  [2,0] (*R_TRIG*) (*UTIL_input0_r*) ( (*CLK:CLK*)(**) (**) ; (*Q:Q*)(**) (**) )  
+ BST  FB  [5,0] (*1 gain*) (*12*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'Alarm Detected: Input 0 is ON'*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_inputONOFFSMSText*) (**) )
+   NXB  FB  [5,2] (*PSFT_SMS_SEND*) (*UTIL_SEND_SMS_2*) ( (*FBEN:*)(**) (**)  , (*SlotID:*)(*CONFIG_slotID*) (**)  , (*PhoneNum:*)(*CONFIG_receiverList*) (**)  , (*SMSText:*)(*DATA_inputONOFFSMSText*) (**) ; (*Q:*)(**) (**)  , (*ErrCode:*)(**) (**) )
+ BND
+
+EOR [8,0]
+
+
+(*Digital Input 0: This rung checks for a 1-to-0 transition*)
+
+SOR  [0,146] (**) (**)  XIC  [1,0] (*_IO_EM_DI_00*) (**)  FB  [2,0] (*F_TRIG*) (*UTIL_input0_f*) ( (*CLK:CLK*)(**) (**) ; (*Q:Q*)(**) (**) )  
+ BST  FB  [5,0] (*1 gain*) (*12*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'Alarm Detected: Input 0 is OFF'*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_inputONOFFSMSText*) (**) )
+   NXB  FB  [5,2] (*PSFT_SMS_SEND*) (*UTIL_SEND_SMS_2*) ( (*FBEN:*)(**) (**)  , (*SlotID:*)(*CONFIG_slotID*) (**)  , (*PhoneNum:*)(*CONFIG_receiverList*) (**)  , (*SMSText:*)(*DATA_inputONOFFSMSText*) (**) ; (*Q:*)(**) (**)  , (*ErrCode:*)(**) (**) )
+ BND
+
+EOR [8,0]
+
+
+(*Digital Input 1: This rung checks for a 0-to-1 transition*)
+
+SOR  [0,153] (**) (**)  XIC  [1,0] (*_IO_EM_DI_01*) (**)  FB  [2,0] (*R_TRIG*) (*UTIL_input1_r*) ( (*CLK:CLK*)(**) (**) ; (*Q:Q*)(**) (**) )  
+ BST  FB  [5,0] (*1 gain*) (*35*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'Alarm Detected: Input 1 is ON'*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_inputONOFFSMSText*) (**) )
+   NXB  FB  [5,2] (*PSFT_SMS_SEND*) (*UTIL_SEND_SMS_2*) ( (*FBEN:*)(**) (**)  , (*SlotID:*)(*CONFIG_slotID*) (**)  , (*PhoneNum:*)(*CONFIG_receiverList*) (**)  , (*SMSText:*)(*DATA_inputONOFFSMSText*) (**) ; (*Q:*)(**) (**)  , (*ErrCode:*)(**) (**) )
+ BND
+
+EOR [8,0]
+
+
+(*Digital Input 1: This rung checks for a 1-to-0 transition*)
+
+SOR  [0,160] (**) (**)  XIC  [1,0] (*_IO_EM_DI_01*) (**)  FB  [2,0] (*F_TRIG*) (*UTIL_input1_f*) ( (*CLK:CLK*)(**) (**) ; (*Q:Q*)(**) (**) )  
+ BST  FB  [5,0] (*1 gain*) (*35*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'Alarm Detected: Input 1 is OFF'*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_inputONOFFSMSText*) (**) )
+   NXB  FB  [5,2] (*PSFT_SMS_SEND*) (*UTIL_SEND_SMS_2*) ( (*FBEN:*)(**) (**)  , (*SlotID:*)(*CONFIG_slotID*) (**)  , (*PhoneNum:*)(*CONFIG_receiverList*) (**)  , (*SMSText:*)(*DATA_inputONOFFSMSText*) (**) ; (*Q:*)(**) (**)  , (*ErrCode:*)(**) (**) )
+ BND
+
+EOR [8,0]
+
+
+(*Generic Event-Triggered Text Message: Use this rung to create a custom SMS message to send out to all numbers on the Receiver List.
+The messages are sent when DATA_customSMSTrigger = TRUE.
+If you do not want this feature, delete this rung.*)
+
+SOR  [0,167] (**) (**)  XIC  [1,0] (*DATA_customSMSTrigger*) (**)  
+ BST  FB  [2,0] (*PSFT_SMS_SEND*) (*UTIL_SEND_SMS_5*) ( (*FBEN:*)(**) (**)  , (*SlotID:*)(*CONFIG_slotID*) (**)  , (*PhoneNum:*)(*CONFIG_receiverList*) (**)  , (*SMSText:*)(*DATA_customSMSText*) (**) ; (*Q:*)(**) (**)  , (*ErrCode:*)(**) (**) )
+   NXB  OTR  [2,4] (*DATA_customSMSTrigger*) (**)
+ BND
+
+EOR [5,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,173] (**) (**)  FB  [1,0] (*MLEN*) (*1*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*DATA_recvedSMSText*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*DATA_recvedSMSTxtLen*) (**) )
+EOR [4,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,176] (**) (**)  FB  [1,0] (*1 gain*) (*3*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_targetTagName*) (**) )
+EOR [4,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,179] (**) (**)  FB  [1,0] (*1 gain*) (*3*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_targetTagValue*) (**) )
+EOR [4,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,182] (**) (**)  FB  [1,0] (*1 gain*) (*3*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpStr*) (**) )
+EOR [4,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,185] (**) (**)  FB  [1,0] (*1 gain*) (*3*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*false*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_findTagName*) (**) )
+EOR [4,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,188] (**) (**)  
+ BST  XIO  [1,0] (*UTIL_newSMSRecved*) (**)
+   NXB  FB  [1,1] (*<*) (*35*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*DATA_recvedSMSTxtLen*) (**)  , (*i2:*)(*2*) (**) ; (*o1:*)(**) (**) )
+ BND
+  RET [4,0]
+EOR [5,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,193] (**) (**)  FB  [1,0] (*1 gain*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_pos*) (**) )
+EOR [4,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,196] (*FOR_LOOP*) (**)  FB  [1,0] (*>*) (*5*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_pos*) (**)  , (*i2:*)(*DATA_recvedSMSTxtLen*) (**) ; (*o1:*)(**) (**) )  JMP [4,0] (*GET_RESULT*) (**)
+EOR [5,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,200] (**) (**)  FB  [1,0] (*ASCII*) (*6*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*DATA_recvedSMSText*) (**)  , (*Pos:Pos*)(*UTIL_pos*) (**) ; (*ENO:ENO*)(**) (**)  , (*ASCII:Code*)(*UTIL_charValue*) (**) )
+EOR [4,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,204] (**) (**)  FB  [1,0] (*<>*) (*7*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_charValue*) (**)  , (*i2:*)(*32*) (**) ; (*o1:*)(**) (**) )  FB  [4,0] (*<>*) (*7*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_charValue*) (**)  , (*i2:*)(*61*) (**) ; (*o1:*)(**) (**) )  FB  [7,0] (*<*) (*8*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_pos*) (**)  , (*i2:*)(*DATA_recvedSMSTxtLen*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [10,0] (*CHAR*) (*9*) ( (*EN:EN*)(**) (**)  , (*Code:Code*)(*UTIL_charValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*CHAR:Q*)(*UTIL_tmpChar*) (**) )
+   NXB  
+ BST  
+ BST  FB  [10,2] (*MLEN*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tmpStr*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue*) (**) )
+   NXB  FB  [10,4] (*+*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue*) (**) )
+ BND
+
+   NXB  FB  [10,7] (*INSERT*) (*12*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tmpStr*) (**)  , (*Str:Str*)(*UTIL_tmpChar*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tmpStr*) (**) )
+ BND
+
+ BND
+
+EOR [13,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,216] (**) (**)  
+ BST  
+ BST  FB  [1,0] (*=*) (*13*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_charValue*) (**)  , (*i2:*)(*32*) (**) ; (*o1:*)(**) (**) )
+   NXB  FB  [1,3] (*=*) (*13*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_charValue*) (**)  , (*i2:*)(*61*) (**) ; (*o1:*)(**) (**) )
+ BND
+
+   NXB  FB  [1,6] (*>=*) (*14*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_pos*) (**)  , (*i2:*)(*DATA_recvedSMSTxtLen*) (**) ; (*o1:*)(**) (**) )
+ BND
+  
+ BST  FB  [4,0] (*=*) (*15*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*DATA_recvedSMSTxtLen*) (**)  , (*i2:*)(*UTIL_pos*) (**) ; (*o1:*)(**) (**) )  FB  [7,0] (*<>*) (*7*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_charValue*) (**)  , (*i2:*)(*32*) (**) ; (*o1:*)(**) (**) )  FB  [10,0] (*<>*) (*7*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_charValue*) (**)  , (*i2:*)(*61*) (**) ; (*o1:*)(**) (**) )  
+ BST  
+ BST  
+ BST  FB  [13,0] (*MLEN*) (*16*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tmpStr*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue*) (**) )
+   NXB  FB  [13,2] (*+*) (*17*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue*) (**) )
+ BND
+
+   NXB  FB  [13,5] (*CHAR*) (*18*) ( (*EN:EN*)(**) (**)  , (*Code:Code*)(*UTIL_charValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*CHAR:Q*)(*UTIL_tmpChar*) (**) )
+ BND
+
+   NXB  FB  [13,7] (*INSERT*) (*19*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tmpStr*) (**)  , (*Str:Str*)(*UTIL_tmpChar*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tmpStr*) (**) )
+ BND
+
+   NXB  
+ BST  
+ BST  FB  [4,11] (*MLEN*) (*20*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tmpStr*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue*) (**) )
+   NXB  XIC  [4,13] (*UTIL_findTagName*) (**)  FB  [5,13] (*>*) (*21*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  FB  [8,13] (*1 gain*) (*23*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpStr*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_targetTagValue*) (**) )
+ BND
+
+   NXB  XIO  [4,16] (*UTIL_findTagName*) (**)  FB  [5,16] (*>*) (*21*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  
+ BST  
+ BST  OTS  [8,16] (*UTIL_findTagName*) (**)
+   NXB  FB  [8,17] (*1 gain*) (*23*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpStr*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_targetTagName*) (**) )
+ BND
+
+   NXB  FB  [8,19] (*1 gain*) (*24*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpStr*) (**) )
+ BND
+
+ BND
+
+ BND
+
+EOR [16,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,238] (**) (**)  FB  [1,0] (*+*) (*25*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_pos*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_pos*) (**) )
+EOR [4,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,242] (**) (**)  JMP [1,0] (*FOR_LOOP*) (**)
+EOR [2,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,244] (*GET_RESULT*) (**)  FB  [1,0] (*MLEN*) (*26*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_targetTagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue*) (**) )
+EOR [4,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,247] (**) (**)  FB  [1,0] (*MLEN*) (*26*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_targetTagValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue1*) (**) )
+EOR [4,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,250] (**) (**)  FB  [1,0] (*>*) (*27*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  FB  [4,0] (*>*) (*27*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue1*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  
+ BST  OTS  [7,0] (*UTIL_setTagValueCmd*) (**)
+   NXB  OTR  [7,1] (*UTIL_getTagValueCmd*) (**)
+ BND
+
+EOR [8,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,254] (**) (**)  FB  [1,0] (*>*) (*27*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  FB  [4,0] (*=*) (*28*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue1*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  
+ BST  OTR  [7,0] (*UTIL_setTagValueCmd*) (**)
+   NXB  OTS  [7,1] (*UTIL_getTagValueCmd*) (**)
+ BND
+
+EOR [8,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,258] (**) (**)  FB  [1,0] (*<=*) (*29*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  FB  [4,0] (*<=*) (*30*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue1*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  
+ BST  OTR  [7,0] (*UTIL_setTagValueCmd*) (**)
+   NXB  
+ BST  OTR  [7,1] (*UTIL_getTagValueCmd*) (**)
+   NXB  
+ BST  OTR  [7,2] (*UTIL_setCmdAcked*) (**)
+   NXB  
+ BST  FB  [7,3] (*1 gain*) (*31*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'Invalid command received:'*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_ackSMSText*) (**) )
+   NXB  
+ BST  FB  [7,5] (*MLEN*) (*32*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*DATA_ackSMSText*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue*) (**) )
+   NXB  
+ BST  FB  [7,7] (*+*) (*33*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue*) (**) )
+   NXB  FB  [7,10] (*INSERT*) (*34*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*DATA_ackSMSText*) (**)  , (*Str:Str*)(*DATA_recvedSMSText*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*DATA_ackSMSText*) (**) )
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+EOR [10,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,273] (**) (**)  OTR  [1,0] (*UTIL_newSMSRecved*) (**)
+EOR [2,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,275] (**) (**)  XIO  [1,0] (*UTIL_getTagValueCmd*) (**)  JMP [2,0] (*SEND_SMS*) (**)
+EOR [3,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,277] (**) (**)  FB  [1,0] (*1 gain*) (*1*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagName*) (**) )
+EOR [4,0]
+
+
+(*PLCSTATUS request: This rung responds to a PLCSTATUS request by retrieving controller status variable values,
+and building a response message. If you do not want this feature, delete this rung.
+Delete or add digital inputs or outputs as required.*)
+
+SOR  [0,280] (**) (**)  FB  [1,0] (*=*) (*2*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**)  , (*i2:*)(*'PLCSTATUS'*) (**) ; (*o1:*)(**) (**) )  
+ BST  XIC  [4,0] (*__SYSVA_MAJ_ERR_HALT*) (**)  FB  [5,0] (*1 gain*) (*5*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'FAULT, '*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  XIO  [4,2] (*__SYSVA_MAJ_ERR_HALT*) (**)  
+ BST  XIC  [5,2] (*__SYSVA_REMOTE*) (**)  FB  [6,2] (*1 gain*) (*5*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'REMOTE '*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  FB  [5,4] (*=*) (*6*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*__SYSVA_RESMODE*) (**)  , (*i2:*)(*8*) (**) ; (*o1:*)(**) (**) )  FB  [8,4] (*1 gain*) (*7*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'PROGRAM, '*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_sentSMSText*) (**) )
+   NXB  
+ BST  FB  [5,7] (*=*) (*6*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*__SYSVA_RESMODE*) (**)  , (*i2:*)(*3*) (**) ; (*o1:*)(**) (**) )  FB  [8,7] (*1 gain*) (*7*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'RUN, '*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_sentSMSText*) (**) )
+   NXB  FB  [5,10] (*<>*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*__SYSVA_RESMODE*) (**)  , (*i2:*)(*8*) (**) ; (*o1:*)(**) (**) )  FB  [8,10] (*<>*) (*12*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*__SYSVA_RESMODE*) (**)  , (*i2:*)(*3*) (**) ; (*o1:*)(**) (**) )  FB  [11,10] (*1 gain*) (*7*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'UNKNOWN, '*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_sentSMSText*) (**) )
+ BND
+
+ BND
+  
+ BST  FB  [14,4] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )
+   NXB  
+ BST  FB  [14,6] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )
+   NXB  FB  [14,9] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*DATA_sentSMSText*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+ BND
+
+ BND
+
+ BND
+
+   NXB  
+ BST  FB  [4,13] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [7,13] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [10,13] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'DO: '*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  
+ BST  
+ BST  XIC  [4,17] (*_IO_EM_DO_00*) (**)  FB  [5,17] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [8,17] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [11,17] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'1'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  XIO  [4,21] (*_IO_EM_DO_00*) (**)  FB  [5,21] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [8,21] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [11,21] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'0'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  XIC  [4,25] (*_IO_EM_DO_01*) (**)  FB  [5,25] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [8,25] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [11,25] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'1'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  XIO  [4,29] (*_IO_EM_DO_01*) (**)  FB  [5,29] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [8,29] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [11,29] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'0'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+ BND
+
+ BND
+
+ BND
+
+   NXB  
+ BST  
+ BST  FB  [4,33] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [7,33] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [10,33] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*', DI: '*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  XIC  [4,37] (*_IO_EM_DI_00*) (**)  FB  [5,37] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [8,37] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [11,37] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'1'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+ BND
+
+   NXB  
+ BST  XIO  [4,41] (*_IO_EM_DI_00*) (**)  FB  [5,41] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [8,41] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [11,41] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'0'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  XIC  [4,45] (*_IO_EM_DI_01*) (**)  FB  [5,45] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [8,45] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [11,45] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'1'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  XIO  [4,49] (*_IO_EM_DI_01*) (**)  FB  [5,49] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [8,49] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [11,49] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'0'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+   NXB  FB  [4,53] (*1 gain*) (*23*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagValue*) (**) )
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+EOR [17,0]
+
+
+(*MSGSTATUS request: This rung responds to a MSGSTATUS request by retrieving SMS message status variable values, 
+and building a response SMS message to send out through the module.
+If you do not want this feature, delete this rung.*)
+
+SOR  [0,336] (**) (**)  FB  [1,0] (*=*) (*2*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**)  , (*i2:*)(*'MSGSTATUS'*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [4,0] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [7,0] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [10,0] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'Msgs in: '*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  
+ BST  
+ BST  
+ BST  
+ BST  FB  [4,4] (*ANY_TO_STRING*) (*18*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_SMSRecvCount*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_sentSMSText*) (**) )  FB  [7,4] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,4] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,4] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*DATA_sentSMSText*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  FB  [4,8] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [7,8] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [10,8] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*', Msgs out: '*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+ BND
+
+   NXB  
+ BST  FB  [4,12] (*ANY_TO_STRING*) (*18*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_SMSSendCount*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_sentSMSText*) (**) )  FB  [7,12] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,12] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,12] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*DATA_sentSMSText*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  FB  [4,16] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [7,16] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [10,16] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*', Failed msgs out: '*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+ BND
+
+ BND
+
+   NXB  
+ BST  FB  [4,20] (*ANY_TO_STRING*) (*46*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_SMSSendFailCount*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_sentSMSText*) (**) )  FB  [7,20] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,20] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,20] (*INSERT*) (*47*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*DATA_sentSMSText*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  FB  [4,24] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [7,24] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [10,24] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*', WL filtered msgs: '*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+ BND
+
+ BND
+
+   NXB  FB  [4,28] (*ANY_TO_STRING*) (*48*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_WLFiltCount*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_sentSMSText*) (**) )  FB  [7,28] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,28] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,28] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*DATA_sentSMSText*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+ BND
+
+   NXB  FB  [4,32] (*1 gain*) (*23*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagValue*) (**) )
+ BND
+
+ BND
+
+EOR [16,0]
+
+
+(*NETSTATUS request: This rung responds to a NETSTATUS request by retrieving network status variable values, 
+and building a response SMS message to send out through the module.
+If you do not want this feature, delete this rung.*)
+
+SOR  [0,371] (**) (**)  FB  [1,0] (*=*) (*2*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**)  , (*i2:*)(*'NETSTATUS'*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [4,0] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [7,0] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [10,0] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'Signal strength (dBm): '*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  
+ BST  FB  [4,4] (*ANY_TO_STRING*) (*22*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_signalStrength*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_sentSMSText*) (**) )  FB  [7,4] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,4] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,4] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*DATA_sentSMSText*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  FB  [4,8] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [7,8] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [10,8] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*', Network status: '*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  
+ BST  
+ BST  FB  [4,12] (*=*) (*62*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_networkStatus*) (**)  , (*i2:*)(*48*) (**) ; (*o1:*)(**) (**) )  FB  [7,12] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,12] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,12] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'NotRegisteredSearching'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  
+ BST  FB  [4,16] (*=*) (*62*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_networkStatus*) (**)  , (*i2:*)(*49*) (**) ; (*o1:*)(**) (**) )  FB  [7,16] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,16] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,16] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'RegisteredHome'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  FB  [4,20] (*=*) (*62*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_networkStatus*) (**)  , (*i2:*)(*50*) (**) ; (*o1:*)(**) (**) )  FB  [7,20] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,20] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,20] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'NotRegisteredNoSearching'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+ BND
+
+   NXB  
+ BST  FB  [4,24] (*=*) (*62*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_networkStatus*) (**)  , (*i2:*)(*51*) (**) ; (*o1:*)(**) (**) )  FB  [7,24] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,24] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,24] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'RegistrationDenied'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  FB  [4,28] (*=*) (*62*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_networkStatus*) (**)  , (*i2:*)(*52*) (**) ; (*o1:*)(**) (**) )  FB  [7,28] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,28] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,28] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'Unknown'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  FB  [4,32] (*=*) (*62*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_networkStatus*) (**)  , (*i2:*)(*53*) (**) ; (*o1:*)(**) (**) )  FB  [7,32] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,32] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,32] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'RegisteredRoaming'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  FB  [4,36] (*<*) (*63*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_networkStatus*) (**)  , (*i2:*)(*48*) (**) ; (*o1:*)(**) (**) )
+   NXB  FB  [4,39] (*>*) (*64*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_networkStatus*) (**)  , (*i2:*)(*53*) (**) ; (*o1:*)(**) (**) )
+ BND
+  FB  [7,36] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,36] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,36] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'Error'*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+   NXB  FB  [4,42] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [7,42] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [10,42] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*', Connection failures: '*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+ BND
+
+   NXB  FB  [4,46] (*ANY_TO_STRING*) (*18*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_netConnFailedRetries*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_sentSMSText*) (**) )  FB  [7,46] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,46] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,46] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*DATA_sentSMSText*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+ BND
+
+ BND
+
+ BND
+
+   NXB  FB  [4,50] (*1 gain*) (*23*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagValue*) (**) )
+ BND
+
+ BND
+
+EOR [16,0]
+
+
+(*UPTIME request: This rung responds to an UPTIME request by retrieving controller time variable values,
+and building a response SMS message to send out through the module.
+If you do not want this feature, delete this rung.*)
+
+SOR  [0,424] (**) (**)  FB  [1,0] (*=*) (*2*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**)  , (*i2:*)(*'UPTIME'*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [4,0] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*'Controller UP Time **NOTE Controller clock resets after 20 days**: '*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  FB  [4,4] (*ANY_TO_DINT*) (*13*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*__SYSVA_CYCLEDATE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_dateTimeInDINT*) (**) )  FB  [7,4] (*/*) (*14*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_dateTimeInDINT*) (**)  , (*i2:*)(*1000*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_curValue*) (**) )  FB  [10,4] (***) (*15*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_curValue*) (**)  , (*i2:*)(*1000*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_curValue*) (**) )  FB  [13,4] (*-*) (*34*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_dateTimeInDINT*) (**)  , (*i2:*)(*UTIL_curValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_curValue*) (**) )  FB  [16,4] (*ANY_TO_STRING*) (*16*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_curValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagValue*) (**) )
+   NXB  
+ BST  FB  [4,7] (*/*) (*14*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_dateTimeInDINT*) (**)  , (*i2:*)(*1000*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_dateTimeInDINT*) (**) )  FB  [7,7] (*/*) (*14*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_dateTimeInDINT*) (**)  , (*i2:*)(*60*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_curValue*) (**) )  FB  [10,7] (***) (*15*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_curValue*) (**)  , (*i2:*)(*60*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_curValue*) (**) )  FB  [13,7] (*-*) (*34*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_dateTimeInDINT*) (**)  , (*i2:*)(*UTIL_curValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_curValue*) (**) )  FB  [16,7] (*INSERT*) (*17*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagValue*) (**)  , (*Str:Str*)(*'s'*) (**)  , (*Pos:Pos*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagValue*) (**) )
+   NXB  
+ BST  
+ BST  FB  [4,11] (*ANY_TO_STRING*) (*18*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_curValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpStr*) (**) )  FB  [7,11] (*INSERT*) (*17*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagValue*) (**)  , (*Str:Str*)(*UTIL_tmpStr*) (**)  , (*Pos:Pos*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagValue*) (**) )
+   NXB  
+ BST  FB  [4,15] (*/*) (*14*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_dateTimeInDINT*) (**)  , (*i2:*)(*60*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_dateTimeInDINT*) (**) )  FB  [7,15] (*/*) (*14*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_dateTimeInDINT*) (**)  , (*i2:*)(*60*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_curValue*) (**) )  FB  [10,15] (***) (*15*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_curValue*) (**)  , (*i2:*)(*60*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_curValue*) (**) )  FB  [13,15] (*-*) (*34*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_dateTimeInDINT*) (**)  , (*i2:*)(*UTIL_curValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_curValue*) (**) )  FB  [16,15] (*INSERT*) (*17*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagValue*) (**)  , (*Str:Str*)(*'m'*) (**)  , (*Pos:Pos*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagValue*) (**) )
+   NXB  
+ BST  FB  [4,19] (*ANY_TO_STRING*) (*18*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_curValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpStr*) (**) )  FB  [7,19] (*INSERT*) (*17*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagValue*) (**)  , (*Str:Str*)(*UTIL_tmpStr*) (**)  , (*Pos:Pos*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagValue*) (**) )
+   NXB  
+ BST  FB  [4,23] (*/*) (*14*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_dateTimeInDINT*) (**)  , (*i2:*)(*60*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_dateTimeInDINT*) (**) )  FB  [7,23] (*/*) (*14*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_dateTimeInDINT*) (**)  , (*i2:*)(*24*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_curValue*) (**) )  FB  [10,23] (***) (*15*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_curValue*) (**)  , (*i2:*)(*24*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_curValue*) (**) )  FB  [13,23] (*-*) (*34*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_dateTimeInDINT*) (**)  , (*i2:*)(*UTIL_curValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_curValue*) (**) )  FB  [16,23] (*INSERT*) (*17*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagValue*) (**)  , (*Str:Str*)(*'h'*) (**)  , (*Pos:Pos*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagValue*) (**) )
+   NXB  
+ BST  FB  [4,27] (*ANY_TO_STRING*) (*18*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_curValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpStr*) (**) )  FB  [7,27] (*INSERT*) (*17*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagValue*) (**)  , (*Str:Str*)(*UTIL_tmpStr*) (**)  , (*Pos:Pos*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagValue*) (**) )
+   NXB  
+ BST  FB  [4,31] (*/*) (*14*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_dateTimeInDINT*) (**)  , (*i2:*)(*24*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_curValue*) (**) )  FB  [7,31] (*INSERT*) (*17*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagValue*) (**)  , (*Str:Str*)(*'d'*) (**)  , (*Pos:Pos*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagValue*) (**) )  FB  [10,31] (*ANY_TO_STRING*) (*18*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_curValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpStr*) (**) )  FB  [13,31] (*INSERT*) (*17*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagValue*) (**)  , (*Str:Str*)(*UTIL_tmpStr*) (**)  , (*Pos:Pos*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagValue*) (**) )
+   NXB  FB  [4,35] (*MLEN*) (*8*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue*) (**) )  FB  [7,35] (*+*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue*) (**) )  FB  [10,35] (*INSERT*) (*17*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*UTIL_tagValue*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*UTIL_tagName*) (**) )
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+   NXB  FB  [4,39] (*1 gain*) (*23*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagValue*) (**) )
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+EOR [19,0]
+
+
+(*WHITELIST request: This rung responds to a WHITELIST request by building a response SMS message
+indicating whether or not Whitelist filtering of incoming SMS messages is enabled.
+If you do not want this feature, delete this rung.*)
+
+SOR  [0,466] (**) (**)  FB  [1,0] (*=*) (*36*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**)  , (*i2:*)(*'WHITELIST'*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [4,0] (*1 gain*) (*37*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  XIC  [4,2] (*CONFIG_whiteListEnabled*) (**)  FB  [5,2] (*1 gain*) (*38*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'ON'*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagValue*) (**) )
+   NXB  XIO  [4,4] (*CONFIG_whiteListEnabled*) (**)  FB  [5,4] (*1 gain*) (*39*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'OFF'*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagValue*) (**) )
+ BND
+
+ BND
+
+EOR [8,0]
+
+
+(*OUTPUTx request: Rungs 49 and 50 respond to OUTPUT0 and OUTPUT1 requests by building a response
+SMS message indicating the ON/OFF status of the digital output. Delete or add digital outputs as required.
+OUTPUT0 request:*)
+
+SOR  [0,473] (**) (**)  FB  [1,0] (*=*) (*24*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**)  , (*i2:*)(*'OUTPUT0'*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [4,0] (*1 gain*) (*25*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  XIC  [4,2] (*_IO_EM_DO_00*) (**)  FB  [5,2] (*1 gain*) (*26*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'ON'*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagValue*) (**) )
+   NXB  XIO  [4,4] (*_IO_EM_DO_00*) (**)  FB  [5,4] (*1 gain*) (*26*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'OFF'*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagValue*) (**) )
+ BND
+
+ BND
+
+EOR [8,0]
+
+
+(*OUTPUT1 request:*)
+
+SOR  [0,480] (**) (**)  FB  [1,0] (*=*) (*24*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**)  , (*i2:*)(*'OUTPUT1'*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [4,0] (*1 gain*) (*25*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagName*) (**) )
+   NXB  
+ BST  XIC  [4,2] (*_IO_EM_DO_01*) (**)  FB  [5,2] (*1 gain*) (*26*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'ON'*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagValue*) (**) )
+   NXB  XIO  [4,4] (*_IO_EM_DO_01*) (**)  FB  [5,4] (*1 gain*) (*26*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'OFF'*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tagValue*) (**) )
+ BND
+
+ BND
+
+EOR [8,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,487] (**) (**)  FB  [1,0] (*MLEN*) (*27*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  
+ BST  FB  [4,0] (*<=*) (*32*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  FB  [7,0] (*1 gain*) (*33*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'ok'*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_sentSMSText*) (**) )
+   NXB  FB  [4,3] (*>*) (*28*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [7,3] (*+*) (*31*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [10,3] (*INSERT*) (*30*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_tagName*) (**)  , (*Str:Str*)(*' '*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*DATA_sentSMSText*) (**) )
+   NXB  FB  [7,7] (*MLEN*) (*27*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*DATA_sentSMSText*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue2*) (**) )  FB  [10,7] (*+*) (*31*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue2*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue2*) (**) )  FB  [13,7] (*INSERT*) (*30*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*DATA_sentSMSText*) (**)  , (*Str:Str*)(*UTIL_tagValue*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue2*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*DATA_sentSMSText*) (**) )
+ BND
+
+ BND
+
+EOR [16,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,499] (**) (**)  OTR  [1,0] (*UTIL_succeed*) (**)
+EOR [2,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,501] (**) (**)  OTR  [1,0] (*UTIL_getTagValueCmd*) (**)
+EOR [2,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,503] (*SEND_SMS*) (**)  XIO  [1,0] (*UTIL_succeed*) (**)  FB  [2,0] (*<>*) (*3*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_sender*) (**)  , (*i2:*)(*''*) (**) ; (*o1:*)(**) (**) )  FB  [5,0] (*<>*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*DATA_sentSMSText*) (**)  , (*i2:*)(*''*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [8,0] (*1 gain*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_sender*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_ackReceivers[1]*) (**) )
+   NXB  
+ BST  FB  [8,2] (*1 gain*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_ackReceivers[2]*) (**) )
+   NXB  
+ BST  FB  [8,4] (*1 gain*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_ackReceivers[3]*) (**) )
+   NXB  
+ BST  FB  [8,6] (*1 gain*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_ackReceivers[4]*) (**) )
+   NXB  
+ BST  
+ BST  FB  [8,8] (*1 gain*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_ackReceivers[5]*) (**) )
+   NXB  FB  [8,10] (*PSFT_SMS_SEND*) (*UTIL_SEND_SMS_3*) ( (*FBEN:*)(**) (**)  , (*SlotID:*)(*CONFIG_slotID*) (**)  , (*PhoneNum:*)(*UTIL_ackReceivers*) (**)  , (*SMSText:*)(*DATA_sentSMSText*) (**) ; (*Q:*)(**) (**)  , (*ErrCode:*)(**) (**) )
+ BND
+
+   NXB  
+ BST  XIC  [8,14] (*UTIL_SEND_SMS_3.Q*) (**)  FB  [9,14] (*=*) (*5*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_SEND_SMS_3.ErrCode*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  FB  [12,14] (*1 gain*) (*6*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*TRUE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_succeed*) (**) )
+   NXB  
+ BST  XIO  [8,17] (*UTIL_SEND_SMS_3.Q*) (**)
+   NXB  FB  [8,18] (*<>*) (*8*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_SEND_SMS_3.ErrCode*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )
+ BND
+  
+ BST  
+ BST  FB  [11,17] (*1 gain*) (*6*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*FALSE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_succeed*) (**) )
+   NXB  FB  [11,19] (*+*) (*7*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_retryCount*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_retryCount*) (**) )
+ BND
+
+   NXB  FB  [11,22] (*>*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_retryCount*) (**)  , (*i2:*)(*UTIL_maxRetryTime*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [14,22] (*+*) (*10*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_errCount*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_errCount*) (**) )
+   NXB  
+ BST  FB  [14,25] (*1 gain*) (*6*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*TRUE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_succeed*) (**) )
+   NXB  FB  [14,27] (*1 gain*) (*6*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*0*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_retryCount*) (**) )
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+EOR [17,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,533] (**) (**)  XIO  [1,0] (*UTIL_setTagValueCmd*) (**)  JMP [2,0] (*ACK*) (**)
+EOR [3,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,535] (**) (**)  OTR  [1,0] (*UTIL_setTagValueCmd*) (**)
+EOR [2,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,537] (**) (**)  FB  [1,0] (*1 gain*) (*50*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'OK: Set '*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_ackSMSText*) (**) )  FB  [4,0] (*MLEN*) (*52*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*DATA_ackSMSText*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue3*) (**) )  FB  [7,0] (*+*) (*51*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue3*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue3*) (**) )  FB  [10,0] (*INSERT*) (*3*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*DATA_ackSMSText*) (**)  , (*Str:Str*)(*UTIL_targetTagName*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue3*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*DATA_ackSMSText*) (**) )
+EOR [13,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,542] (**) (**)  FB  [1,0] (*MLEN*) (*1*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*DATA_ackSMSText*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue3*) (**) )  FB  [4,0] (*+*) (*2*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue3*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue3*) (**) )  FB  [7,0] (*INSERT*) (*3*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*DATA_ackSMSText*) (**)  , (*Str:Str*)(*' = '*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue3*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*DATA_ackSMSText*) (**) )
+EOR [10,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,547] (**) (**)  FB  [1,0] (*MLEN*) (*1*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*DATA_ackSMSText*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue3*) (**) )  FB  [4,0] (*+*) (*2*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue3*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_tmpValue3*) (**) )  FB  [7,0] (*INSERT*) (*3*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*DATA_ackSMSText*) (**)  , (*Str:Str*)(*UTIL_targetTagValue*) (**)  , (*Pos:Pos*)(*UTIL_tmpValue3*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*DATA_ackSMSText*) (**) )
+EOR [10,0]
+
+
+(*ADD command: This rung responds to SMS message commands to ADD a phone number to the 5th element of the
+Receiver List.
+If you do not want this feature, delete this rung.*)
+
+SOR  [0,552] (**) (**)  FB  [1,0] (*=*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**)  , (*i2:*)(*'ADD'*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [4,0] (*1 gain*) (*5*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*CONFIG_receiverList[5]*) (**) )
+   NXB  
+ BST  FB  [4,2] (*INSERT*) (*6*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*'OK:  added'*) (**)  , (*Str:Str*)(*UTIL_targetTagValue*) (**)  , (*Pos:Pos*)(*5*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*DATA_ackSMSText*) (**) )
+   NXB  JMP [4,6] (*DONE*) (**)
+ BND
+
+ BND
+
+EOR [7,0]
+
+
+(*DELETE command: This rung responds to SMS message commands to DELETE a phone number from the
+Receiver List.
+If you do not want this feature, delete this rung.*)
+
+SOR  [0,560] (**) (**)  FB  [1,0] (*=*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**)  , (*i2:*)(*'DELETE'*) (**) ; (*o1:*)(**) (**) )  
+ BST  
+ BST  FB  [4,0] (*INSERT*) (*6*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*'FAILED:  not found'*) (**)  , (*Str:Str*)(*UTIL_targetTagValue*) (**)  , (*Pos:Pos*)(*9*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*DATA_ackSMSText*) (**) )
+   NXB  
+ BST  FB  [4,4] (*FIND*) (*8*) ( (*EN:EN*)(**) (**)  , (*In:In*)(*CONFIG_receiverList[1]*) (**)  , (*Pat:Pat*)(*UTIL_targetTagValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*FIND:Pos*)(*UTIL_tmpValue3*) (**) )  FB  [7,4] (*=*) (*16*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue3*) (**)  , (*i2:*)(*1*) (**) ; (*o1:*)(**) (**) )  FB  [10,4] (*1 gain*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*CONFIG_receiverList[1]*) (**) )
+   NXB  
+ BST  
+ BST  
+ BST  FB  [4,7] (*FIND*) (*8*) ( (*EN:EN*)(**) (**)  , (*In:In*)(*CONFIG_receiverList[2]*) (**)  , (*Pat:Pat*)(*UTIL_targetTagValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*FIND:Pos*)(*UTIL_tmpValue3*) (**) )  FB  [7,7] (*=*) (*16*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue3*) (**)  , (*i2:*)(*1*) (**) ; (*o1:*)(**) (**) )  FB  [10,7] (*1 gain*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*CONFIG_receiverList[2]*) (**) )
+   NXB  FB  [4,10] (*FIND*) (*8*) ( (*EN:EN*)(**) (**)  , (*In:In*)(*CONFIG_receiverList[3]*) (**)  , (*Pat:Pat*)(*UTIL_targetTagValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*FIND:Pos*)(*UTIL_tmpValue3*) (**) )  FB  [7,10] (*=*) (*16*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue3*) (**)  , (*i2:*)(*1*) (**) ; (*o1:*)(**) (**) )  FB  [10,10] (*1 gain*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*CONFIG_receiverList[3]*) (**) )
+ BND
+
+   NXB  FB  [4,13] (*FIND*) (*8*) ( (*EN:EN*)(**) (**)  , (*In:In*)(*CONFIG_receiverList[4]*) (**)  , (*Pat:Pat*)(*UTIL_targetTagValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*FIND:Pos*)(*UTIL_tmpValue3*) (**) )  FB  [7,13] (*=*) (*16*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue3*) (**)  , (*i2:*)(*1*) (**) ; (*o1:*)(**) (**) )  FB  [10,13] (*1 gain*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*CONFIG_receiverList[4]*) (**) )
+ BND
+
+   NXB  FB  [4,16] (*FIND*) (*8*) ( (*EN:EN*)(**) (**)  , (*In:In*)(*CONFIG_receiverList[5]*) (**)  , (*Pat:Pat*)(*UTIL_targetTagValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*FIND:Pos*)(*UTIL_tmpValue3*) (**) )  FB  [7,16] (*1 gain*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*CONFIG_receiverList[5]*) (**) )  FB  [10,16] (*=*) (*16*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue3*) (**)  , (*i2:*)(*1*) (**) ; (*o1:*)(**) (**) )
+ BND
+
+ BND
+  FB  [13,4] (*INSERT*) (*10*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*'OK:  deleted'*) (**)  , (*Str:Str*)(*UTIL_targetTagValue*) (**)  , (*Pos:Pos*)(*5*) (**) ; (*ENO:ENO*)(**) (**)  , (*INSERT:Q*)(*DATA_ackSMSText*) (**) )
+ BND
+
+   NXB  
+ BST  OTS  [4,19] (*UTIL_handled*) (**)
+   NXB  JMP [4,20] (*DONE*) (**)
+ BND
+
+ BND
+
+EOR [16,0]
+
+
+(*WHITELIST ON/OFF command: This rung responds to SMS message commands to enable or disable Whitelist
+filtering of incoming SMS messages.
+If you do not want this feature, delete this rung.*)
+
+SOR  [0,582] (**) (**)  FB  [1,0] (*=*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**)  , (*i2:*)(*'WHITELIST'*) (**) ; (*o1:*)(**) (**) )  
+ BST  
+ BST  
+ BST  
+ BST  FB  [4,0] (*=*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagValue*) (**)  , (*i2:*)(*'OFF'*) (**) ; (*o1:*)(**) (**) )
+   NXB  FB  [4,3] (*=*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagValue*) (**)  , (*i2:*)(*'0'*) (**) ; (*o1:*)(**) (**) )
+ BND
+  FB  [7,0] (*1 gain*) (*12*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*FALSE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*CONFIG_whiteListEnabled*) (**) )  OTS  [10,0] (*UTIL_handled*) (**)
+   NXB  
+ BST  FB  [4,6] (*=*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagValue*) (**)  , (*i2:*)(*'ON'*) (**) ; (*o1:*)(**) (**) )
+   NXB  FB  [4,9] (*=*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagValue*) (**)  , (*i2:*)(*'1'*) (**) ; (*o1:*)(**) (**) )
+ BND
+  FB  [7,6] (*1 gain*) (*12*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*TRUE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*CONFIG_whiteListEnabled*) (**) )  OTS  [10,6] (*UTIL_handled*) (**)
+ BND
+
+   NXB  XIO  [4,12] (*UTIL_handled*) (**)  FB  [5,12] (*1 gain*) (*56*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_invalidTagValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_ackSMSText*) (**) )
+ BND
+
+   NXB  JMP [4,14] (*DONE*) (**)
+ BND
+
+EOR [11,0]
+
+
+(*OUTPUTx ON/OFF command: Rungs 63 and 64 respond to SMS message commands to turn digital inputs ON or OFF.
+This sample program handles digital outputs 0 and 1. Delete or add digital outputs as required.
+OUTPUT0 ON/OFF command:*)
+
+SOR  [0,598] (**) (**)  FB  [1,0] (*=*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**)  , (*i2:*)(*'OUTPUT0'*) (**) ; (*o1:*)(**) (**) )  
+ BST  
+ BST  
+ BST  
+ BST  FB  [4,0] (*=*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagValue*) (**)  , (*i2:*)(*'OFF'*) (**) ; (*o1:*)(**) (**) )
+   NXB  FB  [4,3] (*=*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagValue*) (**)  , (*i2:*)(*'0'*) (**) ; (*o1:*)(**) (**) )
+ BND
+  FB  [7,0] (*1 gain*) (*12*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*FALSE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*_IO_EM_DO_00*) (**) )  OTS  [10,0] (*UTIL_handled*) (**)
+   NXB  
+ BST  FB  [4,6] (*=*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagValue*) (**)  , (*i2:*)(*'ON'*) (**) ; (*o1:*)(**) (**) )
+   NXB  FB  [4,9] (*=*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagValue*) (**)  , (*i2:*)(*'1'*) (**) ; (*o1:*)(**) (**) )
+ BND
+  FB  [7,6] (*1 gain*) (*12*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*TRUE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*_IO_EM_DO_00*) (**) )  OTS  [10,6] (*UTIL_handled*) (**)
+ BND
+
+   NXB  XIO  [4,12] (*UTIL_handled*) (**)  FB  [5,12] (*1 gain*) (*57*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_invalidTagValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_ackSMSText*) (**) )
+ BND
+
+   NXB  JMP [4,14] (*DONE*) (**)
+ BND
+
+EOR [11,0]
+
+
+(*OUTPUT1 ON/OFF command:*)
+
+SOR  [0,614] (**) (**)  FB  [1,0] (*=*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagName*) (**)  , (*i2:*)(*'OUTPUT1'*) (**) ; (*o1:*)(**) (**) )  
+ BST  
+ BST  
+ BST  
+ BST  FB  [4,0] (*=*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagValue*) (**)  , (*i2:*)(*'OFF'*) (**) ; (*o1:*)(**) (**) )
+   NXB  FB  [4,3] (*=*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagValue*) (**)  , (*i2:*)(*'0'*) (**) ; (*o1:*)(**) (**) )
+ BND
+  FB  [7,0] (*1 gain*) (*12*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*FALSE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*_IO_EM_DO_01*) (**) )  OTS  [10,0] (*UTIL_handled*) (**)
+   NXB  
+ BST  FB  [4,6] (*=*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagValue*) (**)  , (*i2:*)(*'ON'*) (**) ; (*o1:*)(**) (**) )
+   NXB  FB  [4,9] (*=*) (*11*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_targetTagValue*) (**)  , (*i2:*)(*'1'*) (**) ; (*o1:*)(**) (**) )
+ BND
+  FB  [7,6] (*1 gain*) (*12*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*TRUE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*_IO_EM_DO_01*) (**) )  OTS  [10,6] (*UTIL_handled*) (**)
+ BND
+
+   NXB  XIO  [4,12] (*UTIL_handled*) (**)  FB  [5,12] (*1 gain*) (*58*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_invalidTagValue*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_ackSMSText*) (**) )
+ BND
+
+   NXB  JMP [4,14] (*DONE*) (**)
+ BND
+
+EOR [11,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,630] (**) (**)  XIO  [1,0] (*UTIL_handled*) (**)  FB  [2,0] (*1 gain*) (*65*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*'FAILED: Invalid command'*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_ackSMSText*) (**) )
+EOR [5,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,633] (*DONE*) (**)  
+ BST  OTR  [1,0] (*UTIL_setCmdAcked*) (**)
+   NXB  OTR  [1,1] (*UTIL_handled*) (**)
+ BND
+
+EOR [2,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,636] (*ACK*) (**)  XIO  [1,0] (*CONFIG_ackEnabled*) (**)  
+ BST  OTS  [2,0] (*UTIL_setCmdAcked*) (**)
+   NXB  
+ BST  FB  [2,1] (*1 gain*) (*1*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*0*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_retryCount*) (**) )
+   NXB  JMP [2,3] (*DONE2*) (**)
+ BND
+
+ BND
+
+EOR [5,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,641] (**) (**)  XIC  [1,0] (*CONFIG_ackEnabled*) (**)  XIO  [2,0] (*UTIL_setCmdAcked*) (**)  
+ BST  FB  [3,0] (*MLEN*) (*2*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*DATA_ackSMSText*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue4*) (**) )
+   NXB  
+ BST  FB  [3,2] (*MLEN*) (*2*) ( (*EN:EN*)(**) (**)  , (*IN:IN*)(*UTIL_sender*) (**) ; (*ENO:ENO*)(**) (**)  , (*MLEN:NbC*)(*UTIL_tmpValue5*) (**) )
+   NXB  FB  [3,4] (*>*) (*3*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue4*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  FB  [6,4] (*>*) (*3*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_tmpValue5*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [9,4] (*1 gain*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_sender*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_ackReceivers[1]*) (**) )
+   NXB  
+ BST  FB  [9,6] (*1 gain*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_ackReceivers[2]*) (**) )
+   NXB  
+ BST  FB  [9,8] (*1 gain*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_ackReceivers[3]*) (**) )
+   NXB  
+ BST  FB  [9,10] (*1 gain*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_ackReceivers[4]*) (**) )
+   NXB  
+ BST  
+ BST  FB  [9,12] (*1 gain*) (*4*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_ackReceivers[5]*) (**) )
+   NXB  XIO  [9,14] (*UTIL_setCmdAcked*) (**)  FB  [10,14] (*PSFT_SMS_SEND*) (*UTIL_SEND_SMS_4*) ( (*FBEN:*)(**) (**)  , (*SlotID:*)(*CONFIG_slotID*) (**)  , (*PhoneNum:*)(*UTIL_ackReceivers*) (**)  , (*SMSText:*)(*DATA_ackSMSText*) (**) ; (*Q:*)(**) (**)  , (*ErrCode:*)(**) (**) )
+ BND
+
+   NXB  
+ BST  XIC  [9,18] (*UTIL_SEND_SMS_4.Q*) (**)  FB  [10,18] (*=*) (*5*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_SEND_SMS_4.ErrCode*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [13,18] (*1 gain*) (*6*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*TRUE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_setCmdAcked*) (**) )
+   NXB  FB  [13,20] (*1 gain*) (*6*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*0*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_retryCount*) (**) )
+ BND
+
+   NXB  
+ BST  XIO  [9,22] (*UTIL_SEND_SMS_4.Q*) (**)
+   NXB  FB  [9,23] (*<>*) (*8*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_SEND_SMS_4.ErrCode*) (**)  , (*i2:*)(*0*) (**) ; (*o1:*)(**) (**) )
+ BND
+  FB  [12,22] (*+*) (*7*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_retryCount*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_retryCount*) (**) )  FB  [15,22] (*>*) (*9*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*UTIL_retryCount*) (**)  , (*i2:*)(*UTIL_maxRetryTime*) (**) ; (*o1:*)(**) (**) )  
+ BST  FB  [18,22] (*+*) (*10*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*STATUS_errCount*) (**)  , (*i2:*)(*1*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*STATUS_errCount*) (**) )
+   NXB  
+ BST  FB  [18,25] (*1 gain*) (*6*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*TRUE*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_setCmdAcked*) (**) )
+   NXB  
+ BST  FB  [18,27] (*1 gain*) (*6*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*0*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*UTIL_retryCount*) (**) )
+   NXB  FB  [18,29] (*1 gain*) (*6*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*''*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*DATA_ackSMSText*) (**) )
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+EOR [21,0]
+
+
+(*DO NOT MODIFY THIS RUNG*)
+
+SOR  [0,673] (*DONE2*) (**)
+EOR [1,0]
+
+
+(**)
+
+SOR  [0,674] (**) (**)  FB  [1,0] (*1 gain*) (*66*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*DATA_recvedSMSText*) (**) ; (*ENO:ENO*)(**) (**)  , (*o1:*)(*sms_recu*) (**) )
+EOR [4,0]
+
+
+(**)
+
+SOR  [0,677] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L4*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_HS_L4*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,681] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L4_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_HS_L4*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,685] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L4_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_HS_L4*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,689] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L4_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_HS_L4*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,693] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*GR_BRONZ_L2*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_GR_BRONZ_L2*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,697] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*GR_BRONZ_L2_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_GR_BRONZ_L2*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,701] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*GR_BRONZ_L2_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_GR_BRONZ_L2*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,705] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*GR_BRONZ_L2_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_GR_BRONZ_L2*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,709] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*CV_Coil_7*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_CV_Coil_7*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,713] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*CV_Coil_7_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_CV_Coil_7*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,717] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*CV_Coil_7_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_CV_Coil_7*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,721] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*CV_Coil_7_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_CV_Coil_7*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,725] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L1*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_HS_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,729] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L1_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_HS_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,733] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L1_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_HS_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,737] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L1_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_HS_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,741] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L2*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_HS_L2*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,745] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L2_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_HS_L2*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,749] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L2_CENT*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_HS_L2*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,753] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L2_R_CENT*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_HS_L2*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,757] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L3*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_HS_L3*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,761] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L3_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_HS_L3*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,765] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L3_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_HS_L3*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,769] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*HS_L3_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_HS_L3*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,773] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*IBT*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_IBT*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,777] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*IBT_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_IBT*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,781] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*IBT_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_IBT*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,785] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*IBT_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_IBT*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,789] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*ICT*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_ICT*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,793] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*ICT_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_ICT*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,797] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*ICT_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_ICT*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,801] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*ICT_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_ICT*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,805] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*INGANG_L1*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_INGANG_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,809] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*INGANG_L1_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_INGANG_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,813] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*INGANG_L1_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_CV_INGANG_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,817] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*INGANG_L1_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_CV_INGANG_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,821] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*UITGANG_L1*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_UITGANG_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,825] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*UITGANG_L1_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_UITGANG_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,829] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*UITGANG_L1_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_UITGANG_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,833] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*UITGANG_L1_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_UITGANG_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,837] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*IWTS_WANS*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_IWTS_WANS*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,841] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*IWTS_WANS_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_IWTS_WANS*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,845] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*IWTS_WANS_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_IWTS_WANS*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,849] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*IWTS_WANS_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_IWTS_WANS*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,853] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*WANSON_L3*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_WANSON_L3*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,857] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*WANSON_L3_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_WANSON_L3*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,861] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*WANSON_L3_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_WANSON_L3*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,865] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*WANSON_L3_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_WANSON_L3*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,869] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*WKK*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_WKK*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,873] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*WKK_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_WKK*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,877] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*WKK_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_WKK*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,881] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*WKK_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_WKK*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,885] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*LS_L2*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_LS_L2*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,889] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*LS_L2_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_LS_L2*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,893] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*LS_L2_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_LS_L2*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,897] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*LS_L2_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_LS_L2*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,901] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*LS_L3*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_brandalarm_INGANG_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,905] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*LS_L3_R*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_brandalarm_INGANG_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,909] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*LS_L3_cent*) (**) ; (*o1:*)(**) (**) )  OTS  [4,0] (*def_centralealarm_CV_INGANG_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,913] (**) (**)  FB  [1,0] (*=*) (*67*) ( (*EN:EN*)(**) (**)  , (*i1:*)(*sms_recu*) (**)  , (*i2:*)(*LS_L3_R_cent*) (**) ; (*o1:*)(**) (**) )  OTR  [4,0] (*def_centralealarm_CV_INGANG_L1*) (**)
+EOR [5,0]
+
+
+(**)
+
+SOR  [0,917] (**) (**)  XIO  [1,0] (*def_brandalarm_HS_L4*) (**)  XIO  [2,0] (*def_brandalarm_IBT*) (**)  XIO  [3,0] (*def_brandalarm_ICT*) (**)  XIO  [4,0] (*def_brandalarm_INGANG_L1*) (**)  XIO  [5,0] (*def_brandalarm_IWTS_WANS*) (**)  XIO  [6,0] (*def_brandalarm_LS_L2*) (**)  XIO  [7,0] (*def_brandalarm_LS_L3*) (**)  XIO  [8,0] (*def_brandalarm_UITGANG_L1*) (**)  XIO  [9,0] (*def_brandalarm_WANSON_L3*) (**)  XIO  [10,0] (*def_brandalarm_WKK*) (**)  XIO  [11,0] (*def_brandalarm_HS_L3*) (**)  XIO  [12,0] (*def_brandalarm_HS_L2*) (**)  XIO  [13,0] (*def_brandalarm_HS_L1*) (**)  XIO  [14,0] (*def_brandalarm_GR_BRONZ_L2*) (**)  XIO  [15,0] (*def_brandalarm_CV_Coil_7*) (**)  OTE  [16,0] (*aux3*) (**)
+EOR [17,0]
+
+
+(**)
+
+SOR  [0,919] (**) (**)  XIO  [1,0] (*def_centralealarm_CV_Coil_7*) (**)  XIO  [2,0] (*def_centralealarm_CV_INGANG_L1*) (**)  XIO  [3,0] (*def_centralealarm_GR_BRONZ_L2*) (**)  XIO  [4,0] (*def_centralealarm_HS_L1*) (**)  XIO  [5,0] (*def_centralealarm_HS_L2*) (**)  XIO  [6,0] (*def_centralealarm_HS_L3*) (**)  XIO  [7,0] (*def_centralealarm_HS_L4*) (**)  XIO  [8,0] (*def_centralealarm_IBT*) (**)  XIO  [9,0] (*def_centralealarm_ICT*) (**)  XIO  [10,0] (*def_centralealarm_IWTS_WANS*) (**)  XIO  [11,0] (*def_centralealarm_LS_L2*) (**)  XIO  [12,0] (*def_centralealarm_LS_L3*) (**)  XIO  [13,0] (*def_centralealarm_UITGANG_L1*) (**)  XIO  [14,0] (*def_centralealarm_WANSON_L3*) (**)  XIO  [15,0] (*def_centralealarm_WKK*) (**)  XIC  [16,0] (*aux3*) (**)  OTE  [17,0] (*aux2*) (**)
+EOR [18,0]
+
+
+(**)
+
+SOR  [0,921] (**) (**)  XIC  [1,0] (*aux4*) (**)  XIO  [2,0] (*aux4*) (**)  
+ BST  OTS  [3,0] (*scr_l1*) (**)
+   NXB  
+ BST  OTS  [3,1] (*scr_l2*) (**)
+   NXB  
+ BST  OTS  [3,2] (*scr_l3*) (**)
+   NXB  
+ BST  OTS  [3,3] (*sct_stat*) (**)
+   NXB  OTS  [3,4] (*scr_tl*) (**)
+ BND
+
+ BND
+
+ BND
+
+ BND
+
+EOR [4,0]
+
+
+(**)
+
+SOR  [0,927] (**) (**)  XIO  [1,0] (*aux2*) (**)  XIO  [2,0] (*ons2*) (**)  OTE  [3,0] (*aux4*) (**)
+EOR [4,0]
+
+
+(**)
+
+SOR  [0,929] (**) (**)  XIO  [1,0] (*aux2*) (**)  OTE  [2,0] (*ons2*) (**)
+EOR [3,0]
+
+
+(**)
+
+SOR  [0,931] (**) (**)
+EOR [1,0]
+EOF
+#end_info
+#info= ID_MAX
+NextId=67
+#end_info
+END_PROGRAM

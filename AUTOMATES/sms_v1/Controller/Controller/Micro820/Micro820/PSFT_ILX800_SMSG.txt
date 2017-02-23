@@ -1,0 +1,5424 @@
+(*************** QuickLD compiler **********************)
+(*************** Copyright ICS Triplex ISaGRAF *********)
+(*************** ST ************************************)
+
+(*************** Rung **********************************)
+(*Sample program for the ProSoft ILX800-SMSG plug-in module Version 1.00, Released June 28, 2012
+Customize your program by modifying green rungs. DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB2 := TRUE ;
+IF __EDTB2 THEN
+(* Operator output on : > with __EDTB1 *)
+__EDTB1 := (__SYSVA_CYCLEDATE > Time#15s) ;
+ELSE
+__EDTB1 := FALSE ;
+END_IF ;
+__MO_GREAT_1 := __EDTB1 ;
+__EDTB3 := __EDTB1 ;
+IF __EDTB3 THEN
+UTIL_SMSINITTIME := (  Time#10ms) ;
+END_IF ;
+__MO_1GAIN_1 := __EDTB3 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+(* FB call: TON *)
+UTIL_progToRun(TRUE, UTIL_SMSINITTIME) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+(* FB call: TON *)
+UTIL_executeCmd(NOT(UTIL_EXECUTECMD.Q) AND NOT(UTIL_EXECUTECMD.Q), time#1000ms) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+(* FB call: CTU *)
+UTIL_counter(UTIL_EXECUTECMD.Q, UTIL_COUNTER.Q, 2) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+(* FB call: R_TRIG *)
+UTIL_R_TRIG_2(UTIL_PROGTORUN.Q) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+(* FB call: R_TRIG *)
+UTIL_R_TRIG_1(CONFIG_WHITELISTENABLED) ;
+__EDTB4 := UTIL_R_TRIG_1.Q ;
+(* FB call: F_TRIG *)
+UTIL_F_TRIG_1(CONFIG_WHITELISTENABLED) ;
+__EDTB5 := UTIL_F_TRIG_1.Q ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*If you delete rung 10, you need to set UTIL_initialized to TRUE. Otherwise, do not modify this rung.*)
+(*Label :*)(**)
+__EDTB6 := UTIL_R_TRIG_2.Q ;
+IF __EDTB6 THEN
+UTIL_INITIALIZED := (  false) ;
+END_IF ;
+__MO_1GAIN_2 := __EDTB6 ;
+__EDTB7 := __EDTB6 ;
+__EDTB8 := UTIL_R_TRIG_2.Q ;
+IF __EDTB8 THEN
+UTIL_SMSCONFIGED := (  false) ;
+END_IF ;
+__MO_1GAIN_3 := __EDTB8 ;
+__EDTB9 := __EDTB8 ;
+__EDTB10 := UTIL_R_TRIG_2.Q ;
+IF __EDTB10 THEN
+UTIL_CONFIGRETRYCOUNT := (  0) ;
+END_IF ;
+__MO_1GAIN_4 := __EDTB10 ;
+__EDTB11 := __EDTB10 ;
+__EDTB12 := UTIL_R_TRIG_2.Q ;
+IF __EDTB12 THEN
+UTIL_SENDMSGRETRYCOUNT := (  0) ;
+END_IF ;
+__MO_1GAIN_5 := __EDTB12 ;
+__EDTB13 := __EDTB12 ;
+__EDTB14 := (__EDTB11 OR __EDTB13) ;
+__EDTB15 := (__EDTB9 OR __EDTB14) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB16 := UTIL_R_TRIG_1.Q ;
+__EDTB17 := UTIL_F_TRIG_1.Q ;
+__EDTB18 := (__EDTB16 OR __EDTB17) ;
+__EDTB19 := __EDTB18 ;
+IF __EDTB19 THEN
+UTIL_SMSCONFIGED := (  false) ;
+END_IF ;
+__MO_1GAIN_6 := __EDTB19 ;
+__EDTB20 := __EDTB19 ;
+__EDTB21 := __EDTB18 ;
+IF __EDTB21 THEN
+UTIL_SENDMSGRETRYCOUNT := (  0) ;
+END_IF ;
+__MO_1GAIN_7 := __EDTB21 ;
+__EDTB22 := __EDTB21 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB24 := NOT(UTIL_SMSCONFIGED) AND UTIL_EXECUTECMD.Q ;
+IF __EDTB24 THEN
+(* Operator output on : = with __EDTB23 *)
+__EDTB23 := (UTIL_COUNTER.CV = 1) ;
+ELSE
+__EDTB23 := FALSE ;
+END_IF ;
+__MO_EQUAL_1 := __EDTB23 ;
+(* FB call: PSFT_SMS_CONFIG *)
+UTIL_SMSPLUGIN_CONFIG_1(__EDTB23, CONFIG_SLOTID, UTIL_PINNUMBER, CONFIG_WHITELIST, CONFIG_WHITELISTENABLED) ;
+__EDTB25 := UTIL_SMSPLUGIN_CONFIG_1.Q ;
+__EDTB26 := __EDTB23 AND UTIL_SMSPLUGIN_CONFIG_1.Q ;
+__EDTB28 := __EDTB26 ;
+IF __EDTB28 THEN
+(* Operator output on : = with __EDTB27 *)
+__EDTB27 := (UTIL_SMSPLUGIN_CONFIG_1.ERRCODE = 0) ;
+ELSE
+__EDTB27 := FALSE ;
+END_IF ;
+__MO_EQUAL_2 := __EDTB27 ;
+__EDTB29 := __EDTB27 ;
+IF __EDTB29 THEN
+UTIL_SMSCONFIGED := (  true) ;
+END_IF ;
+__MO_1GAIN_8 := __EDTB29 ;
+__EDTB30 := __EDTB29 ;
+__EDTB31 := __EDTB27 ;
+IF __EDTB31 THEN
+UTIL_RETRYCOUNT := (  0) ;
+END_IF ;
+__MO_1GAIN_9 := __EDTB31 ;
+__EDTB32 := __EDTB31 ;
+__EDTB33 := (__EDTB30 OR __EDTB32) ;
+__EDTB35 := __EDTB26 ;
+IF __EDTB35 THEN
+(* Operator output on : <> with __EDTB34 *)
+__EDTB34 := (UTIL_SMSPLUGIN_CONFIG_1.ERRCODE <> 0) ;
+ELSE
+__EDTB34 := FALSE ;
+END_IF ;
+__MO_DIFF_1 := __EDTB34 ;
+__EDTB36 := __EDTB34 ;
+IF __EDTB36 THEN
+UTIL_CONFIGRETRYCOUNT := (UTIL_CONFIGRETRYCOUNT + 1) ;
+END_IF ;
+__MO_PLUS_1 := __EDTB36 ;
+__EDTB37 := __EDTB36 ;
+__EDTB39 := __EDTB34 ;
+IF __EDTB39 THEN
+(* Operator output on : > with __EDTB38 *)
+__EDTB38 := (UTIL_CONFIGRETRYCOUNT > 50) ;
+ELSE
+__EDTB38 := FALSE ;
+END_IF ;
+__MO_GREAT_2 := __EDTB38 ;
+__EDTB40 := __EDTB38 ;
+IF __EDTB40 THEN
+UTIL_SMSCONFIGED := (  false) ;
+END_IF ;
+__MO_1GAIN_10 := __EDTB40 ;
+__EDTB41 := __EDTB40 ;
+__EDTB42 := __EDTB38 ;
+IF __EDTB42 THEN
+STATUS_ERRCOUNT := (STATUS_ERRCOUNT + 1) ;
+END_IF ;
+__MO_PLUS_2 := __EDTB42 ;
+__EDTB43 := __EDTB42 ;
+__EDTB44 := (__EDTB41 OR __EDTB43) ;
+__EDTB45 := (__EDTB37 OR __EDTB44) ;
+__EDTB46 := (__EDTB33 OR __EDTB45) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*This rung sends out a greeting SMS message through the module when the module boots up. The message is sent to all phone numbers on the Receiver List.
+If you do not want this feature, delete this rung and modify rung 7 (see rung comments).*)
+(*Label :*)(**)
+__EDTB48 := NOT(UTIL_INITIALIZED) AND UTIL_EXECUTECMD.Q ;
+IF __EDTB48 THEN
+(* Operator output on : = with __EDTB47 *)
+__EDTB47 := (UTIL_COUNTER.CV = 2) ;
+ELSE
+__EDTB47 := FALSE ;
+END_IF ;
+__MO_EQUAL_3 := __EDTB47 ;
+(* FB call: PSFT_SMS_SEND *)
+UTIL_SEND_SMS_1(__EDTB47 AND NOT(UTIL_INITIALIZED), CONFIG_SLOTID, CONFIG_RECEIVERLIST, DATA_GREETINGSMSTEXT) ;
+__EDTB49 := UTIL_SEND_SMS_1.Q ;
+__EDTB51 := __EDTB47 AND UTIL_SEND_SMS_1.Q ;
+IF __EDTB51 THEN
+(* Operator output on : = with __EDTB50 *)
+__EDTB50 := (UTIL_SEND_SMS_1.ERRCODE = 0) ;
+ELSE
+__EDTB50 := FALSE ;
+END_IF ;
+__MO_EQUAL_4 := __EDTB50 ;
+__EDTB52 := __EDTB50 ;
+IF __EDTB52 THEN
+UTIL_INITIALIZED := (  true) ;
+END_IF ;
+__MO_1GAIN_11 := __EDTB52 ;
+__EDTB53 := __EDTB52 ;
+__EDTB54 := __EDTB50 ;
+IF __EDTB54 THEN
+UTIL_RETRYCOUNT := (  0) ;
+END_IF ;
+__MO_1GAIN_12 := __EDTB54 ;
+__EDTB55 := __EDTB54 ;
+__EDTB56 := (__EDTB53 OR __EDTB55) ;
+__EDTB58 := __EDTB47 AND UTIL_SEND_SMS_1.Q ;
+IF __EDTB58 THEN
+(* Operator output on : <> with __EDTB57 *)
+__EDTB57 := (UTIL_SEND_SMS_1.ERRCODE <> 0) ;
+ELSE
+__EDTB57 := FALSE ;
+END_IF ;
+__MO_DIFF_2 := __EDTB57 ;
+__EDTB60 := __EDTB57 ;
+IF __EDTB60 THEN
+(* Operator output on : <> with __EDTB59 *)
+__EDTB59 := (UTIL_SEND_SMS_1.ERRCODE <> 1) ;
+ELSE
+__EDTB59 := FALSE ;
+END_IF ;
+__MO_DIFF_3 := __EDTB59 ;
+__EDTB61 := __EDTB59 ;
+IF __EDTB61 THEN
+UTIL_SENDMSGRETRYCOUNT := (UTIL_SENDMSGRETRYCOUNT + 1) ;
+END_IF ;
+__MO_PLUS_3 := __EDTB61 ;
+__EDTB62 := __EDTB61 ;
+__EDTB64 := __EDTB57 ;
+IF __EDTB64 THEN
+(* Operator output on : > with __EDTB63 *)
+__EDTB63 := (UTIL_SENDMSGRETRYCOUNT > 50) ;
+ELSE
+__EDTB63 := FALSE ;
+END_IF ;
+__MO_GREAT_3 := __EDTB63 ;
+__EDTB65 := __EDTB63 ;
+IF __EDTB65 THEN
+UTIL_INITIALIZED := (  true) ;
+END_IF ;
+__MO_1GAIN_13 := __EDTB65 ;
+__EDTB66 := __EDTB65 ;
+__EDTB67 := __EDTB63 ;
+IF __EDTB67 THEN
+STATUS_ERRCOUNT := (STATUS_ERRCOUNT + 1) ;
+END_IF ;
+__MO_PLUS_4 := __EDTB67 ;
+__EDTB68 := __EDTB67 ;
+__EDTB69 := (__EDTB66 OR __EDTB68) ;
+__EDTB70 := (__EDTB62 OR __EDTB69) ;
+__EDTB71 := (__EDTB56 OR __EDTB70) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(*READY*)
+__GL __LG0001 ;
+__EDTB72 := UTIL_INITIALIZED AND UTIL_SMSCONFIGED ;
+IF __EDTB72 THEN
+(*Set coil*)
+UTIL_SYSTEMINITIALIZED := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+(* FB call: TON *)
+UTIL_TON_1(NOT(UTIL_TON_1.Q), time#1s) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+(* FB call: TON *)
+UTIL_TON_2(NOT(UTIL_TON_2.Q), time#1503ms) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB73 := UTIL_TON_2.Q ;
+IF __EDTB73 THEN
+UTIL_GETDIAGDATA := (  TRUE) ;
+END_IF ;
+__MO_1GAIN_14 := __EDTB73 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+(* FB call: PSFT_SMS_RECV *)
+UTIL_READ_SMS_1(UTIL_TON_1.Q, CONFIG_SLOTID) ;
+__EDTB74 := UTIL_READ_SMS_1.Q ;
+__EDTB76 := UTIL_TON_1.Q AND UTIL_READ_SMS_1.Q ;
+IF __EDTB76 THEN
+(* Operator output on : = with __EDTB75 *)
+__EDTB75 := (UTIL_READ_SMS_1.ERRCODE = 0) ;
+ELSE
+__EDTB75 := FALSE ;
+END_IF ;
+__MO_EQUAL_5 := __EDTB75 ;
+__EDTB77 := __EDTB75 ;
+IF __EDTB77 THEN
+UTIL_TMPSTRLEN := MLEN(UTIL_READ_SMS_1.SMSTEXT) ;
+END_IF ;
+__MO_MLEN_1 := __EDTB77 ;
+__EDTB78 := __EDTB77 ;
+__EDTB80 := __EDTB75 ;
+IF __EDTB80 THEN
+(* Operator output on : > with __EDTB79 *)
+__EDTB79 := (UTIL_TMPSTRLEN > 0) ;
+ELSE
+__EDTB79 := FALSE ;
+END_IF ;
+__MO_GREAT_4 := __EDTB79 ;
+__EDTB82 := __EDTB79 ;
+IF __EDTB82 THEN
+(* Operator output on : < with __EDTB81 *)
+__EDTB81 := (UTIL_TMPSTRLEN < 40) ;
+ELSE
+__EDTB81 := FALSE ;
+END_IF ;
+__MO_LESS_1 := __EDTB81 ;
+__EDTB83 := __EDTB81 ;
+IF __EDTB83 THEN
+DATA_RECVEDSMSTEXT := (  UTIL_READ_SMS_1.SMSTEXT) ;
+END_IF ;
+__MO_1GAIN_15 := __EDTB83 ;
+__EDTB84 := __EDTB83 ;
+__EDTB85 := __EDTB81 ;
+IF __EDTB85 THEN
+UTIL_NEWSMSRECVED := (  TRUE) ;
+END_IF ;
+__MO_1GAIN_16 := __EDTB85 ;
+__EDTB86 := __EDTB85 ;
+__EDTB87 := __EDTB81 ;
+IF __EDTB87 THEN
+UTIL_SENDER := (  UTIL_READ_SMS_1.SENDER) ;
+END_IF ;
+__MO_1GAIN_17 := __EDTB87 ;
+__EDTB88 := __EDTB87 ;
+__EDTB89 := (__EDTB86 OR __EDTB88) ;
+__EDTB90 := (__EDTB84 OR __EDTB89) ;
+__EDTB91 := (__EDTB78 OR __EDTB90) ;
+__EDTB93 := __EDTB75 ;
+IF __EDTB93 THEN
+(* Operator output on : <= with __EDTB92 *)
+__EDTB92 := (UTIL_TMPSTRLEN <= 0) ;
+ELSE
+__EDTB92 := FALSE ;
+END_IF ;
+__MO_LESSEQUAL_1 := __EDTB92 ;
+__EDTB94 := __EDTB92 ;
+__EDTB96 := __EDTB75 ;
+IF __EDTB96 THEN
+(* Operator output on : >= with __EDTB95 *)
+__EDTB95 := (UTIL_TMPSTRLEN >= 40) ;
+ELSE
+__EDTB95 := FALSE ;
+END_IF ;
+__MO_GREATEQUAL_1 := __EDTB95 ;
+__EDTB97 := __EDTB95 ;
+__EDTB98 := (__EDTB94 OR __EDTB97) ;
+IF __EDTB98 THEN
+(*Reset coil*)
+UTIL_NEWSMSRECVED := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+(* FB call: PSFT_SMS_DIAG *)
+UTIL_GET_DIAG(UTIL_SYSTEMINITIALIZED AND UTIL_GETDIAGDATA, CONFIG_SLOTID) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB99 := UTIL_GETDIAGDATA AND UTIL_GET_DIAG.Q ;
+__EDTB100 := __EDTB99 ;
+IF __EDTB100 THEN
+UTIL_TMPINT := ANY_TO_INT(UTIL_GET_DIAG.SIGNALSTRENGTH) ;
+END_IF ;
+__MO_ANY_TO_INT_1 := __EDTB100 ;
+__EDTB101 := __EDTB100 ;
+IF __EDTB101 THEN
+UTIL_TMPINT := (UTIL_TMPINT * 2) ;
+END_IF ;
+__MO_MULT_1 := __EDTB101 ;
+__EDTB102 := __EDTB101 ;
+IF __EDTB102 THEN
+STATUS_SIGNALSTRENGTH := (UTIL_TMPINT - 113) ;
+END_IF ;
+__MO_MINUS_1 := __EDTB102 ;
+__EDTB103 := __EDTB102 ;
+__EDTB104 := __EDTB99 ;
+IF __EDTB104 THEN
+STATUS_NETWORKSTATUS := (  UTIL_GET_DIAG.NETWORKSTATUS) ;
+END_IF ;
+__MO_1GAIN_18 := __EDTB104 ;
+__EDTB105 := __EDTB104 ;
+__EDTB106 := (__EDTB103 OR __EDTB105) ;
+__EDTB107 := __EDTB99 ;
+IF __EDTB107 THEN
+STATUS_SMSSENDCOUNT := (  UTIL_GET_DIAG.SMSSENTCOUNTER) ;
+END_IF ;
+__MO_1GAIN_19 := __EDTB107 ;
+__EDTB108 := __EDTB107 ;
+__EDTB109 := (__EDTB106 OR __EDTB108) ;
+__EDTB110 := __EDTB99 ;
+IF __EDTB110 THEN
+STATUS_SMSRECVCOUNT := (  UTIL_GET_DIAG.SMSRECVCOUNTER) ;
+END_IF ;
+__MO_1GAIN_20 := __EDTB110 ;
+__EDTB111 := __EDTB110 ;
+__EDTB112 := (__EDTB109 OR __EDTB111) ;
+__EDTB113 := __EDTB99 ;
+IF __EDTB113 THEN
+STATUS_SMSSENDFAILCOUNT := (  UTIL_GET_DIAG.FAILEDSMSSENTCOUNTER) ;
+END_IF ;
+__MO_1GAIN_21 := __EDTB113 ;
+__EDTB114 := __EDTB113 ;
+__EDTB115 := (__EDTB112 OR __EDTB114) ;
+__EDTB116 := __EDTB99 ;
+IF __EDTB116 THEN
+STATUS_NETCONNFAILEDRETRIES := (  UTIL_GET_DIAG.NETCONNFAILEDRETRIES) ;
+END_IF ;
+__MO_1GAIN_22 := __EDTB116 ;
+__EDTB117 := __EDTB116 ;
+__EDTB118 := (__EDTB115 OR __EDTB117) ;
+__EDTB119 := __EDTB99 ;
+IF __EDTB119 THEN
+STATUS_WLFILTCOUNT := (  UTIL_GET_DIAG.FILTEREDSMSRECEIVED) ;
+END_IF ;
+__MO_1GAIN_23 := __EDTB119 ;
+__EDTB120 := __EDTB119 ;
+__EDTB121 := (__EDTB118 OR __EDTB120) ;
+__EDTB122 := __EDTB99 ;
+IF __EDTB122 THEN
+STATUS_MINORREV := (  UTIL_GET_DIAG.MINORREV) ;
+END_IF ;
+__MO_1GAIN_24 := __EDTB122 ;
+__EDTB123 := __EDTB122 ;
+__EDTB124 := __EDTB99 ;
+IF __EDTB124 THEN
+STATUS_MAJORREV := (  UTIL_GET_DIAG.MAJORREV) ;
+END_IF ;
+__MO_1GAIN_25 := __EDTB124 ;
+__EDTB125 := __EDTB124 ;
+__EDTB126 := __EDTB99 ;
+IF __EDTB126 THEN
+STATUS_SIMCARDSTATUS := (  UTIL_GET_DIAG.SIMCARDSTATUS) ;
+END_IF ;
+__MO_1GAIN_26 := __EDTB126 ;
+__EDTB127 := __EDTB126 ;
+__EDTB128 := (__EDTB125 OR __EDTB127) ;
+__EDTB129 := __EDTB99 ;
+IF __EDTB129 THEN
+UTIL_GETDIAGDATA := (  FALSE) ;
+END_IF ;
+__MO_1GAIN_27 := __EDTB129 ;
+__EDTB130 := __EDTB129 ;
+__EDTB131 := (__EDTB128 OR __EDTB130) ;
+__EDTB132 := (__EDTB123 OR __EDTB131) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*Rungs 18-21 send out alarm messages if the program detects changes to digital inputs 0 and 1. Delete or add rungs for additional inputs as required. You can customize the text string.
+Digital Input 0: This rung checks for a 0-to-1 transition*)
+(*Label :*)(**)
+(* FB call: R_TRIG *)
+UTIL_input0_r(_IO_EM_DI_00) ;
+__EDTB133 := UTIL_input0_r.Q ;
+IF __EDTB133 THEN
+DATA_INPUTONOFFSMSTEXT := (  'Alarm Detected: Input 0 is ON') ;
+END_IF ;
+__MO_1GAIN_28 := __EDTB133 ;
+__EDTB134 := __EDTB133 ;
+(* FB call: PSFT_SMS_SEND *)
+UTIL_SEND_SMS_2(UTIL_input0_r.Q, CONFIG_SLOTID, CONFIG_RECEIVERLIST, DATA_INPUTONOFFSMSTEXT) ;
+__EDTB135 := UTIL_SEND_SMS_2.Q ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*Digital Input 0: This rung checks for a 1-to-0 transition*)
+(*Label :*)(**)
+(* FB call: F_TRIG *)
+UTIL_input0_f(_IO_EM_DI_00) ;
+__EDTB136 := UTIL_input0_f.Q ;
+IF __EDTB136 THEN
+DATA_INPUTONOFFSMSTEXT := (  'Alarm Detected: Input 0 is OFF') ;
+END_IF ;
+__MO_1GAIN_29 := __EDTB136 ;
+__EDTB137 := __EDTB136 ;
+(* FB call: PSFT_SMS_SEND *)
+UTIL_SEND_SMS_2(UTIL_input0_f.Q, CONFIG_SLOTID, CONFIG_RECEIVERLIST, DATA_INPUTONOFFSMSTEXT) ;
+__EDTB138 := UTIL_SEND_SMS_2.Q ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*Digital Input 1: This rung checks for a 0-to-1 transition*)
+(*Label :*)(**)
+(* FB call: R_TRIG *)
+UTIL_input1_r(_IO_EM_DI_01) ;
+__EDTB139 := UTIL_input1_r.Q ;
+IF __EDTB139 THEN
+DATA_INPUTONOFFSMSTEXT := (  'Alarm Detected: Input 1 is ON') ;
+END_IF ;
+__MO_1GAIN_30 := __EDTB139 ;
+__EDTB140 := __EDTB139 ;
+(* FB call: PSFT_SMS_SEND *)
+UTIL_SEND_SMS_2(UTIL_input1_r.Q, CONFIG_SLOTID, CONFIG_RECEIVERLIST, DATA_INPUTONOFFSMSTEXT) ;
+__EDTB141 := UTIL_SEND_SMS_2.Q ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*Digital Input 1: This rung checks for a 1-to-0 transition*)
+(*Label :*)(**)
+(* FB call: F_TRIG *)
+UTIL_input1_f(_IO_EM_DI_01) ;
+__EDTB142 := UTIL_input1_f.Q ;
+IF __EDTB142 THEN
+DATA_INPUTONOFFSMSTEXT := (  'Alarm Detected: Input 1 is OFF') ;
+END_IF ;
+__MO_1GAIN_31 := __EDTB142 ;
+__EDTB143 := __EDTB142 ;
+(* FB call: PSFT_SMS_SEND *)
+UTIL_SEND_SMS_2(UTIL_input1_f.Q, CONFIG_SLOTID, CONFIG_RECEIVERLIST, DATA_INPUTONOFFSMSTEXT) ;
+__EDTB144 := UTIL_SEND_SMS_2.Q ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*Generic Event-Triggered Text Message: Use this rung to create a custom SMS message to send out to all numbers on the Receiver List. The messages are sent when DATA_customSMSTrigger = TRUE.
+If you do not want this feature, delete this rung.*)
+(*Label :*)(**)
+(* FB call: PSFT_SMS_SEND *)
+UTIL_SEND_SMS_5(DATA_CUSTOMSMSTRIGGER, CONFIG_SLOTID, CONFIG_RECEIVERLIST, DATA_CUSTOMSMSTEXT) ;
+__EDTB145 := UTIL_SEND_SMS_5.Q ;
+__EDTB146 := DATA_CUSTOMSMSTRIGGER ;
+IF __EDTB146 THEN
+(*Reset coil*)
+DATA_CUSTOMSMSTRIGGER := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB147 := TRUE ;
+IF __EDTB147 THEN
+DATA_RECVEDSMSTXTLEN := MLEN(DATA_RECVEDSMSTEXT) ;
+END_IF ;
+__MO_MLEN_2 := __EDTB147 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB148 := TRUE ;
+IF __EDTB148 THEN
+UTIL_TARGETTAGNAME := (  '') ;
+END_IF ;
+__MO_1GAIN_32 := __EDTB148 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB149 := TRUE ;
+IF __EDTB149 THEN
+UTIL_TARGETTAGVALUE := (  '') ;
+END_IF ;
+__MO_1GAIN_33 := __EDTB149 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB150 := TRUE ;
+IF __EDTB150 THEN
+UTIL_TMPSTR := (  '') ;
+END_IF ;
+__MO_1GAIN_34 := __EDTB150 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB151 := TRUE ;
+IF __EDTB151 THEN
+UTIL_FINDTAGNAME := (  false) ;
+END_IF ;
+__MO_1GAIN_35 := __EDTB151 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB152 := NOT(UTIL_NEWSMSRECVED) ;
+__EDTB154 := TRUE ;
+IF __EDTB154 THEN
+(* Operator output on : < with __EDTB153 *)
+__EDTB153 := (DATA_RECVEDSMSTXTLEN < 2) ;
+ELSE
+__EDTB153 := FALSE ;
+END_IF ;
+__MO_LESS_2 := __EDTB153 ;
+__EDTB155 := __EDTB153 ;
+__EDTB156 := (__EDTB152 OR __EDTB155) ;
+IF __EDTB156 THEN
+(*RETURN*)
+__GJ __LG0000 ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB157 := TRUE ;
+IF __EDTB157 THEN
+UTIL_POS := (  1) ;
+END_IF ;
+__MO_1GAIN_36 := __EDTB157 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(*FOR_LOOP*)
+__GL __LG0002 ;
+__EDTB159 := TRUE ;
+IF __EDTB159 THEN
+(* Operator output on : > with __EDTB158 *)
+__EDTB158 := (UTIL_POS > DATA_RECVEDSMSTXTLEN) ;
+ELSE
+__EDTB158 := FALSE ;
+END_IF ;
+__MO_GREAT_5 := __EDTB158 ;
+__EDTB160 := __EDTB158 ;
+IF __EDTB160 THEN
+(*GOTO GET_RESULT*)
+__GJ __LG0003 ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB161 := TRUE ;
+IF __EDTB161 THEN
+UTIL_CHARVALUE := ASCII(DATA_RECVEDSMSTEXT, UTIL_POS) ;
+END_IF ;
+__MO_ASCII_1 := __EDTB161 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB163 := TRUE ;
+IF __EDTB163 THEN
+(* Operator output on : <> with __EDTB162 *)
+__EDTB162 := (UTIL_CHARVALUE <> 32) ;
+ELSE
+__EDTB162 := FALSE ;
+END_IF ;
+__MO_DIFF_4 := __EDTB162 ;
+__EDTB165 := __EDTB162 ;
+IF __EDTB165 THEN
+(* Operator output on : <> with __EDTB164 *)
+__EDTB164 := (UTIL_CHARVALUE <> 61) ;
+ELSE
+__EDTB164 := FALSE ;
+END_IF ;
+__MO_DIFF_5 := __EDTB164 ;
+__EDTB167 := __EDTB164 ;
+IF __EDTB167 THEN
+(* Operator output on : < with __EDTB166 *)
+__EDTB166 := (UTIL_POS < DATA_RECVEDSMSTXTLEN) ;
+ELSE
+__EDTB166 := FALSE ;
+END_IF ;
+__MO_LESS_3 := __EDTB166 ;
+__EDTB168 := __EDTB166 ;
+IF __EDTB168 THEN
+UTIL_TMPCHAR := CHAR(UTIL_CHARVALUE) ;
+END_IF ;
+__MO_CHAR_1 := __EDTB168 ;
+__EDTB169 := __EDTB168 ;
+__EDTB170 := __EDTB166 ;
+IF __EDTB170 THEN
+UTIL_TMPVALUE := MLEN(UTIL_TMPSTR) ;
+END_IF ;
+__MO_MLEN_3 := __EDTB170 ;
+__EDTB171 := __EDTB170 ;
+__EDTB172 := __EDTB166 ;
+IF __EDTB172 THEN
+UTIL_TMPVALUE := (UTIL_TMPVALUE + 1) ;
+END_IF ;
+__MO_PLUS_5 := __EDTB172 ;
+__EDTB173 := __EDTB172 ;
+__EDTB174 := (__EDTB171 OR __EDTB173) ;
+__EDTB175 := __EDTB166 ;
+IF __EDTB175 THEN
+UTIL_TMPSTR := INSERT(UTIL_TMPSTR, UTIL_TMPCHAR, UTIL_TMPVALUE) ;
+END_IF ;
+__MO_INSERT_1 := __EDTB175 ;
+__EDTB176 := __EDTB175 ;
+__EDTB177 := (__EDTB174 OR __EDTB176) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB179 := TRUE ;
+IF __EDTB179 THEN
+(* Operator output on : = with __EDTB178 *)
+__EDTB178 := (UTIL_CHARVALUE = 32) ;
+ELSE
+__EDTB178 := FALSE ;
+END_IF ;
+__MO_EQUAL_6 := __EDTB178 ;
+__EDTB180 := __EDTB178 ;
+__EDTB182 := TRUE ;
+IF __EDTB182 THEN
+(* Operator output on : = with __EDTB181 *)
+__EDTB181 := (UTIL_CHARVALUE = 61) ;
+ELSE
+__EDTB181 := FALSE ;
+END_IF ;
+__MO_EQUAL_7 := __EDTB181 ;
+__EDTB183 := __EDTB181 ;
+__EDTB184 := (__EDTB180 OR __EDTB183) ;
+__EDTB186 := TRUE ;
+IF __EDTB186 THEN
+(* Operator output on : >= with __EDTB185 *)
+__EDTB185 := (UTIL_POS >= DATA_RECVEDSMSTXTLEN) ;
+ELSE
+__EDTB185 := FALSE ;
+END_IF ;
+__MO_GREATEQUAL_2 := __EDTB185 ;
+__EDTB187 := __EDTB185 ;
+__EDTB188 := (__EDTB184 OR __EDTB187) ;
+__EDTB190 := __EDTB188 ;
+IF __EDTB190 THEN
+(* Operator output on : = with __EDTB189 *)
+__EDTB189 := (DATA_RECVEDSMSTXTLEN = UTIL_POS) ;
+ELSE
+__EDTB189 := FALSE ;
+END_IF ;
+__MO_EQUAL_8 := __EDTB189 ;
+__EDTB192 := __EDTB189 ;
+IF __EDTB192 THEN
+(* Operator output on : <> with __EDTB191 *)
+__EDTB191 := (UTIL_CHARVALUE <> 32) ;
+ELSE
+__EDTB191 := FALSE ;
+END_IF ;
+__MO_DIFF_6 := __EDTB191 ;
+__EDTB194 := __EDTB191 ;
+IF __EDTB194 THEN
+(* Operator output on : <> with __EDTB193 *)
+__EDTB193 := (UTIL_CHARVALUE <> 61) ;
+ELSE
+__EDTB193 := FALSE ;
+END_IF ;
+__MO_DIFF_7 := __EDTB193 ;
+__EDTB195 := __EDTB193 ;
+IF __EDTB195 THEN
+UTIL_TMPVALUE := MLEN(UTIL_TMPSTR) ;
+END_IF ;
+__MO_MLEN_4 := __EDTB195 ;
+__EDTB196 := __EDTB195 ;
+__EDTB197 := __EDTB193 ;
+IF __EDTB197 THEN
+UTIL_TMPVALUE := (UTIL_TMPVALUE + 1) ;
+END_IF ;
+__MO_PLUS_6 := __EDTB197 ;
+__EDTB198 := __EDTB197 ;
+__EDTB199 := (__EDTB196 OR __EDTB198) ;
+__EDTB200 := __EDTB193 ;
+IF __EDTB200 THEN
+UTIL_TMPCHAR := CHAR(UTIL_CHARVALUE) ;
+END_IF ;
+__MO_CHAR_2 := __EDTB200 ;
+__EDTB201 := __EDTB200 ;
+__EDTB202 := (__EDTB199 OR __EDTB201) ;
+__EDTB203 := __EDTB193 ;
+IF __EDTB203 THEN
+UTIL_TMPSTR := INSERT(UTIL_TMPSTR, UTIL_TMPCHAR, UTIL_TMPVALUE) ;
+END_IF ;
+__MO_INSERT_2 := __EDTB203 ;
+__EDTB204 := __EDTB203 ;
+__EDTB205 := (__EDTB202 OR __EDTB204) ;
+__EDTB206 := __EDTB188 ;
+IF __EDTB206 THEN
+UTIL_TMPVALUE := MLEN(UTIL_TMPSTR) ;
+END_IF ;
+__MO_MLEN_5 := __EDTB206 ;
+__EDTB207 := __EDTB206 ;
+__EDTB209 := __EDTB188 AND UTIL_FINDTAGNAME ;
+IF __EDTB209 THEN
+(* Operator output on : > with __EDTB208 *)
+__EDTB208 := (UTIL_TMPVALUE > 0) ;
+ELSE
+__EDTB208 := FALSE ;
+END_IF ;
+__MO_GREAT_6 := __EDTB208 ;
+__EDTB210 := __EDTB208 ;
+IF __EDTB210 THEN
+UTIL_TARGETTAGVALUE := (  UTIL_TMPSTR) ;
+END_IF ;
+__MO_1GAIN_37 := __EDTB210 ;
+__EDTB211 := __EDTB210 ;
+__EDTB212 := (__EDTB207 OR __EDTB211) ;
+__EDTB214 := __EDTB188 AND NOT(UTIL_FINDTAGNAME) ;
+IF __EDTB214 THEN
+(* Operator output on : > with __EDTB213 *)
+__EDTB213 := (UTIL_TMPVALUE > 0) ;
+ELSE
+__EDTB213 := FALSE ;
+END_IF ;
+__MO_GREAT_7 := __EDTB213 ;
+__EDTB215 := __EDTB213 ;
+IF __EDTB215 THEN
+(*Set coil*)
+UTIL_FINDTAGNAME := TRUE ;
+END_IF ;
+__EDTB216 := __EDTB213 ;
+IF __EDTB216 THEN
+UTIL_TARGETTAGNAME := (  UTIL_TMPSTR) ;
+END_IF ;
+__MO_1GAIN_38 := __EDTB216 ;
+__EDTB217 := __EDTB216 ;
+__EDTB218 := __EDTB213 ;
+IF __EDTB218 THEN
+UTIL_TMPSTR := (  '') ;
+END_IF ;
+__MO_1GAIN_39 := __EDTB218 ;
+__EDTB219 := __EDTB218 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB220 := TRUE ;
+IF __EDTB220 THEN
+UTIL_POS := (UTIL_POS + 1) ;
+END_IF ;
+__MO_PLUS_7 := __EDTB220 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+(*GOTO FOR_LOOP*)
+__GJ __LG0002 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(*GET_RESULT*)
+__GL __LG0003 ;
+__EDTB221 := TRUE ;
+IF __EDTB221 THEN
+UTIL_TMPVALUE := MLEN(UTIL_TARGETTAGNAME) ;
+END_IF ;
+__MO_MLEN_6 := __EDTB221 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB222 := TRUE ;
+IF __EDTB222 THEN
+UTIL_TMPVALUE1 := MLEN(UTIL_TARGETTAGVALUE) ;
+END_IF ;
+__MO_MLEN_7 := __EDTB222 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB224 := TRUE ;
+IF __EDTB224 THEN
+(* Operator output on : > with __EDTB223 *)
+__EDTB223 := (UTIL_TMPVALUE > 0) ;
+ELSE
+__EDTB223 := FALSE ;
+END_IF ;
+__MO_GREAT_8 := __EDTB223 ;
+__EDTB226 := __EDTB223 ;
+IF __EDTB226 THEN
+(* Operator output on : > with __EDTB225 *)
+__EDTB225 := (UTIL_TMPVALUE1 > 0) ;
+ELSE
+__EDTB225 := FALSE ;
+END_IF ;
+__MO_GREAT_9 := __EDTB225 ;
+__EDTB227 := __EDTB225 ;
+IF __EDTB227 THEN
+(*Set coil*)
+UTIL_SETTAGVALUECMD := TRUE ;
+END_IF ;
+__EDTB228 := __EDTB225 ;
+IF __EDTB228 THEN
+(*Reset coil*)
+UTIL_GETTAGVALUECMD := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB230 := TRUE ;
+IF __EDTB230 THEN
+(* Operator output on : > with __EDTB229 *)
+__EDTB229 := (UTIL_TMPVALUE > 0) ;
+ELSE
+__EDTB229 := FALSE ;
+END_IF ;
+__MO_GREAT_10 := __EDTB229 ;
+__EDTB232 := __EDTB229 ;
+IF __EDTB232 THEN
+(* Operator output on : = with __EDTB231 *)
+__EDTB231 := (UTIL_TMPVALUE1 = 0) ;
+ELSE
+__EDTB231 := FALSE ;
+END_IF ;
+__MO_EQUAL_9 := __EDTB231 ;
+__EDTB233 := __EDTB231 ;
+IF __EDTB233 THEN
+(*Reset coil*)
+UTIL_SETTAGVALUECMD := FALSE ;
+END_IF ;
+__EDTB234 := __EDTB231 ;
+IF __EDTB234 THEN
+(*Set coil*)
+UTIL_GETTAGVALUECMD := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB236 := TRUE ;
+IF __EDTB236 THEN
+(* Operator output on : <= with __EDTB235 *)
+__EDTB235 := (UTIL_TMPVALUE <= 0) ;
+ELSE
+__EDTB235 := FALSE ;
+END_IF ;
+__MO_LESSEQUAL_2 := __EDTB235 ;
+__EDTB238 := __EDTB235 ;
+IF __EDTB238 THEN
+(* Operator output on : <= with __EDTB237 *)
+__EDTB237 := (UTIL_TMPVALUE1 <= 0) ;
+ELSE
+__EDTB237 := FALSE ;
+END_IF ;
+__MO_LESSEQUAL_3 := __EDTB237 ;
+__EDTB239 := __EDTB237 ;
+IF __EDTB239 THEN
+(*Reset coil*)
+UTIL_SETTAGVALUECMD := FALSE ;
+END_IF ;
+__EDTB240 := __EDTB237 ;
+IF __EDTB240 THEN
+(*Reset coil*)
+UTIL_GETTAGVALUECMD := FALSE ;
+END_IF ;
+__EDTB241 := __EDTB237 ;
+IF __EDTB241 THEN
+(*Reset coil*)
+UTIL_SETCMDACKED := FALSE ;
+END_IF ;
+__EDTB242 := __EDTB237 ;
+IF __EDTB242 THEN
+DATA_ACKSMSTEXT := (  'Invalid command received:') ;
+END_IF ;
+__MO_1GAIN_40 := __EDTB242 ;
+__EDTB243 := __EDTB242 ;
+__EDTB244 := __EDTB237 ;
+IF __EDTB244 THEN
+UTIL_TMPVALUE := MLEN(DATA_ACKSMSTEXT) ;
+END_IF ;
+__MO_MLEN_8 := __EDTB244 ;
+__EDTB245 := __EDTB244 ;
+__EDTB246 := __EDTB237 ;
+IF __EDTB246 THEN
+UTIL_TMPVALUE := (UTIL_TMPVALUE + 1) ;
+END_IF ;
+__MO_PLUS_8 := __EDTB246 ;
+__EDTB247 := __EDTB246 ;
+__EDTB248 := __EDTB237 ;
+IF __EDTB248 THEN
+DATA_ACKSMSTEXT := INSERT(DATA_ACKSMSTEXT, DATA_RECVEDSMSTEXT, UTIL_TMPVALUE) ;
+END_IF ;
+__MO_INSERT_3 := __EDTB248 ;
+__EDTB249 := __EDTB248 ;
+__EDTB250 := (__EDTB247 OR __EDTB249) ;
+__EDTB251 := (__EDTB245 OR __EDTB250) ;
+__EDTB252 := (__EDTB243 OR __EDTB251) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB253 := TRUE ;
+IF __EDTB253 THEN
+(*Reset coil*)
+UTIL_NEWSMSRECVED := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB254 := NOT(UTIL_GETTAGVALUECMD) ;
+IF __EDTB254 THEN
+(*GOTO SEND_SMS*)
+__GJ __LG0004 ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB255 := TRUE ;
+IF __EDTB255 THEN
+UTIL_TAGNAME := (  '') ;
+END_IF ;
+__MO_1GAIN_41 := __EDTB255 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*PLCSTATUS request: This rung responds to a PLCSTATUS request by retrieving controller status variable values, and building a response message. If you do not want this feature, delete this rung.
+Delete or add digital inputs or outputs as required.*)
+(*Label :*)(**)
+__EDTB257 := TRUE ;
+IF __EDTB257 THEN
+(* Operator output on : = with __EDTB256 *)
+__EDTB256 := (UTIL_TARGETTAGNAME = 'PLCSTATUS') ;
+ELSE
+__EDTB256 := FALSE ;
+END_IF ;
+__MO_EQUAL_10 := __EDTB256 ;
+__EDTB258 := __EDTB256 AND __SYSVA_MAJ_ERR_HALT ;
+IF __EDTB258 THEN
+UTIL_TAGNAME := (  'FAULT, ') ;
+END_IF ;
+__MO_1GAIN_42 := __EDTB258 ;
+__EDTB259 := __EDTB258 ;
+__EDTB260 := __EDTB256 AND NOT(__SYSVA_MAJ_ERR_HALT) ;
+__EDTB261 := __EDTB260 AND __SYSVA_REMOTE ;
+IF __EDTB261 THEN
+UTIL_TAGNAME := (  'REMOTE ') ;
+END_IF ;
+__MO_1GAIN_43 := __EDTB261 ;
+__EDTB262 := __EDTB261 ;
+__EDTB264 := __EDTB260 ;
+IF __EDTB264 THEN
+(* Operator output on : = with __EDTB263 *)
+__EDTB263 := (__SYSVA_RESMODE = 8) ;
+ELSE
+__EDTB263 := FALSE ;
+END_IF ;
+__MO_EQUAL_11 := __EDTB263 ;
+__EDTB265 := __EDTB263 ;
+IF __EDTB265 THEN
+DATA_SENTSMSTEXT := (  'PROGRAM, ') ;
+END_IF ;
+__MO_1GAIN_44 := __EDTB265 ;
+__EDTB266 := __EDTB265 ;
+__EDTB268 := __EDTB260 ;
+IF __EDTB268 THEN
+(* Operator output on : = with __EDTB267 *)
+__EDTB267 := (__SYSVA_RESMODE = 3) ;
+ELSE
+__EDTB267 := FALSE ;
+END_IF ;
+__MO_EQUAL_12 := __EDTB267 ;
+__EDTB269 := __EDTB267 ;
+IF __EDTB269 THEN
+DATA_SENTSMSTEXT := (  'RUN, ') ;
+END_IF ;
+__MO_1GAIN_45 := __EDTB269 ;
+__EDTB270 := __EDTB269 ;
+__EDTB272 := __EDTB260 ;
+IF __EDTB272 THEN
+(* Operator output on : <> with __EDTB271 *)
+__EDTB271 := (__SYSVA_RESMODE <> 8) ;
+ELSE
+__EDTB271 := FALSE ;
+END_IF ;
+__MO_DIFF_8 := __EDTB271 ;
+__EDTB274 := __EDTB271 ;
+IF __EDTB274 THEN
+(* Operator output on : <> with __EDTB273 *)
+__EDTB273 := (__SYSVA_RESMODE <> 3) ;
+ELSE
+__EDTB273 := FALSE ;
+END_IF ;
+__MO_DIFF_9 := __EDTB273 ;
+__EDTB275 := __EDTB273 ;
+IF __EDTB275 THEN
+DATA_SENTSMSTEXT := (  'UNKNOWN, ') ;
+END_IF ;
+__MO_1GAIN_46 := __EDTB275 ;
+__EDTB276 := __EDTB275 ;
+__EDTB277 := (__EDTB270 OR __EDTB276) ;
+__EDTB278 := (__EDTB266 OR __EDTB277) ;
+__EDTB279 := __EDTB278 ;
+IF __EDTB279 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_9 := __EDTB279 ;
+__EDTB280 := __EDTB279 ;
+__EDTB281 := __EDTB278 ;
+IF __EDTB281 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_9 := __EDTB281 ;
+__EDTB282 := __EDTB281 ;
+__EDTB283 := __EDTB278 ;
+IF __EDTB283 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, DATA_SENTSMSTEXT, UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_4 := __EDTB283 ;
+__EDTB284 := __EDTB283 ;
+__EDTB285 := (__EDTB282 OR __EDTB284) ;
+__EDTB286 := (__EDTB280 OR __EDTB285) ;
+__EDTB287 := (__EDTB262 OR __EDTB286) ;
+__EDTB288 := __EDTB256 ;
+IF __EDTB288 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_10 := __EDTB288 ;
+__EDTB289 := __EDTB288 ;
+IF __EDTB289 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_10 := __EDTB289 ;
+__EDTB290 := __EDTB289 ;
+IF __EDTB290 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, 'DO: ', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_5 := __EDTB290 ;
+__EDTB291 := __EDTB290 ;
+__EDTB292 := __EDTB256 AND _IO_EM_DO_00 ;
+IF __EDTB292 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_11 := __EDTB292 ;
+__EDTB293 := __EDTB292 ;
+IF __EDTB293 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_11 := __EDTB293 ;
+__EDTB294 := __EDTB293 ;
+IF __EDTB294 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, '1', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_6 := __EDTB294 ;
+__EDTB295 := __EDTB294 ;
+__EDTB296 := __EDTB256 AND NOT(_IO_EM_DO_00) ;
+IF __EDTB296 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_12 := __EDTB296 ;
+__EDTB297 := __EDTB296 ;
+IF __EDTB297 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_12 := __EDTB297 ;
+__EDTB298 := __EDTB297 ;
+IF __EDTB298 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, '0', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_7 := __EDTB298 ;
+__EDTB299 := __EDTB298 ;
+__EDTB300 := __EDTB256 AND _IO_EM_DO_01 ;
+IF __EDTB300 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_13 := __EDTB300 ;
+__EDTB301 := __EDTB300 ;
+IF __EDTB301 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_13 := __EDTB301 ;
+__EDTB302 := __EDTB301 ;
+IF __EDTB302 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, '1', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_8 := __EDTB302 ;
+__EDTB303 := __EDTB302 ;
+__EDTB304 := __EDTB256 AND NOT(_IO_EM_DO_01) ;
+IF __EDTB304 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_14 := __EDTB304 ;
+__EDTB305 := __EDTB304 ;
+IF __EDTB305 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_14 := __EDTB305 ;
+__EDTB306 := __EDTB305 ;
+IF __EDTB306 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, '0', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_9 := __EDTB306 ;
+__EDTB307 := __EDTB306 ;
+__EDTB308 := (__EDTB303 OR __EDTB307) ;
+__EDTB309 := (__EDTB299 OR __EDTB308) ;
+__EDTB310 := (__EDTB295 OR __EDTB309) ;
+__EDTB311 := __EDTB256 ;
+IF __EDTB311 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_15 := __EDTB311 ;
+__EDTB312 := __EDTB311 ;
+IF __EDTB312 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_15 := __EDTB312 ;
+__EDTB313 := __EDTB312 ;
+IF __EDTB313 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, ', DI: ', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_10 := __EDTB313 ;
+__EDTB314 := __EDTB313 ;
+__EDTB315 := __EDTB256 AND _IO_EM_DI_00 ;
+IF __EDTB315 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_16 := __EDTB315 ;
+__EDTB316 := __EDTB315 ;
+IF __EDTB316 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_16 := __EDTB316 ;
+__EDTB317 := __EDTB316 ;
+IF __EDTB317 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, '1', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_11 := __EDTB317 ;
+__EDTB318 := __EDTB317 ;
+__EDTB319 := (__EDTB314 OR __EDTB318) ;
+__EDTB320 := __EDTB256 AND NOT(_IO_EM_DI_00) ;
+IF __EDTB320 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_17 := __EDTB320 ;
+__EDTB321 := __EDTB320 ;
+IF __EDTB321 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_17 := __EDTB321 ;
+__EDTB322 := __EDTB321 ;
+IF __EDTB322 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, '0', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_12 := __EDTB322 ;
+__EDTB323 := __EDTB322 ;
+__EDTB324 := __EDTB256 AND _IO_EM_DI_01 ;
+IF __EDTB324 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_18 := __EDTB324 ;
+__EDTB325 := __EDTB324 ;
+IF __EDTB325 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_18 := __EDTB325 ;
+__EDTB326 := __EDTB325 ;
+IF __EDTB326 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, '1', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_13 := __EDTB326 ;
+__EDTB327 := __EDTB326 ;
+__EDTB328 := __EDTB256 AND NOT(_IO_EM_DI_01) ;
+IF __EDTB328 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_19 := __EDTB328 ;
+__EDTB329 := __EDTB328 ;
+IF __EDTB329 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_19 := __EDTB329 ;
+__EDTB330 := __EDTB329 ;
+IF __EDTB330 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, '0', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_14 := __EDTB330 ;
+__EDTB331 := __EDTB330 ;
+__EDTB332 := (__EDTB327 OR __EDTB331) ;
+__EDTB333 := (__EDTB323 OR __EDTB332) ;
+__EDTB334 := (__EDTB319 OR __EDTB333) ;
+__EDTB335 := (__EDTB310 OR __EDTB334) ;
+__EDTB336 := __EDTB256 ;
+IF __EDTB336 THEN
+UTIL_TAGVALUE := (  '') ;
+END_IF ;
+__MO_1GAIN_47 := __EDTB336 ;
+__EDTB337 := __EDTB336 ;
+__EDTB338 := (__EDTB335 OR __EDTB337) ;
+__EDTB339 := (__EDTB291 OR __EDTB338) ;
+__EDTB340 := (__EDTB287 OR __EDTB339) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*MSGSTATUS request: This rung responds to a MSGSTATUS request by retrieving SMS message status variable values, and building a response SMS message to send out through the module.
+If you do not want this feature, delete this rung.*)
+(*Label :*)(**)
+__EDTB342 := TRUE ;
+IF __EDTB342 THEN
+(* Operator output on : = with __EDTB341 *)
+__EDTB341 := (UTIL_TARGETTAGNAME = 'MSGSTATUS') ;
+ELSE
+__EDTB341 := FALSE ;
+END_IF ;
+__MO_EQUAL_13 := __EDTB341 ;
+__EDTB343 := __EDTB341 ;
+IF __EDTB343 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_20 := __EDTB343 ;
+__EDTB344 := __EDTB343 ;
+IF __EDTB344 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_20 := __EDTB344 ;
+__EDTB345 := __EDTB344 ;
+IF __EDTB345 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, 'Msgs in: ', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_15 := __EDTB345 ;
+__EDTB346 := __EDTB345 ;
+__EDTB347 := __EDTB341 ;
+IF __EDTB347 THEN
+DATA_SENTSMSTEXT := ANY_TO_STRING(STATUS_SMSRECVCOUNT) ;
+END_IF ;
+__MO_ANY_TO_STRING_1 := __EDTB347 ;
+__EDTB348 := __EDTB347 ;
+IF __EDTB348 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_21 := __EDTB348 ;
+__EDTB349 := __EDTB348 ;
+IF __EDTB349 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_21 := __EDTB349 ;
+__EDTB350 := __EDTB349 ;
+IF __EDTB350 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, DATA_SENTSMSTEXT, UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_16 := __EDTB350 ;
+__EDTB351 := __EDTB350 ;
+__EDTB352 := __EDTB341 ;
+IF __EDTB352 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_22 := __EDTB352 ;
+__EDTB353 := __EDTB352 ;
+IF __EDTB353 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_22 := __EDTB353 ;
+__EDTB354 := __EDTB353 ;
+IF __EDTB354 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, ', Msgs out: ', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_17 := __EDTB354 ;
+__EDTB355 := __EDTB354 ;
+__EDTB356 := (__EDTB351 OR __EDTB355) ;
+__EDTB357 := __EDTB341 ;
+IF __EDTB357 THEN
+DATA_SENTSMSTEXT := ANY_TO_STRING(STATUS_SMSSENDCOUNT) ;
+END_IF ;
+__MO_ANY_TO_STRING_2 := __EDTB357 ;
+__EDTB358 := __EDTB357 ;
+IF __EDTB358 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_23 := __EDTB358 ;
+__EDTB359 := __EDTB358 ;
+IF __EDTB359 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_23 := __EDTB359 ;
+__EDTB360 := __EDTB359 ;
+IF __EDTB360 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, DATA_SENTSMSTEXT, UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_18 := __EDTB360 ;
+__EDTB361 := __EDTB360 ;
+__EDTB362 := __EDTB341 ;
+IF __EDTB362 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_24 := __EDTB362 ;
+__EDTB363 := __EDTB362 ;
+IF __EDTB363 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_24 := __EDTB363 ;
+__EDTB364 := __EDTB363 ;
+IF __EDTB364 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, ', Failed msgs out: ', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_19 := __EDTB364 ;
+__EDTB365 := __EDTB364 ;
+__EDTB366 := (__EDTB361 OR __EDTB365) ;
+__EDTB367 := (__EDTB356 OR __EDTB366) ;
+__EDTB368 := __EDTB341 ;
+IF __EDTB368 THEN
+DATA_SENTSMSTEXT := ANY_TO_STRING(STATUS_SMSSENDFAILCOUNT) ;
+END_IF ;
+__MO_ANY_TO_STRING_3 := __EDTB368 ;
+__EDTB369 := __EDTB368 ;
+IF __EDTB369 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_25 := __EDTB369 ;
+__EDTB370 := __EDTB369 ;
+IF __EDTB370 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_25 := __EDTB370 ;
+__EDTB371 := __EDTB370 ;
+IF __EDTB371 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, DATA_SENTSMSTEXT, UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_20 := __EDTB371 ;
+__EDTB372 := __EDTB371 ;
+__EDTB373 := __EDTB341 ;
+IF __EDTB373 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_26 := __EDTB373 ;
+__EDTB374 := __EDTB373 ;
+IF __EDTB374 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_26 := __EDTB374 ;
+__EDTB375 := __EDTB374 ;
+IF __EDTB375 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, ', WL filtered msgs: ', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_21 := __EDTB375 ;
+__EDTB376 := __EDTB375 ;
+__EDTB377 := (__EDTB372 OR __EDTB376) ;
+__EDTB378 := (__EDTB367 OR __EDTB377) ;
+__EDTB379 := __EDTB341 ;
+IF __EDTB379 THEN
+DATA_SENTSMSTEXT := ANY_TO_STRING(STATUS_WLFILTCOUNT) ;
+END_IF ;
+__MO_ANY_TO_STRING_4 := __EDTB379 ;
+__EDTB380 := __EDTB379 ;
+IF __EDTB380 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_27 := __EDTB380 ;
+__EDTB381 := __EDTB380 ;
+IF __EDTB381 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_27 := __EDTB381 ;
+__EDTB382 := __EDTB381 ;
+IF __EDTB382 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, DATA_SENTSMSTEXT, UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_22 := __EDTB382 ;
+__EDTB383 := __EDTB382 ;
+__EDTB384 := (__EDTB378 OR __EDTB383) ;
+__EDTB385 := __EDTB341 ;
+IF __EDTB385 THEN
+UTIL_TAGVALUE := (  '') ;
+END_IF ;
+__MO_1GAIN_48 := __EDTB385 ;
+__EDTB386 := __EDTB385 ;
+__EDTB387 := (__EDTB384 OR __EDTB386) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*NETSTATUS request: This rung responds to a NETSTATUS request by retrieving network status variable values, and building a response SMS message to send out through the module.
+If you do not want this feature, delete this rung.*)
+(*Label :*)(**)
+__EDTB389 := TRUE ;
+IF __EDTB389 THEN
+(* Operator output on : = with __EDTB388 *)
+__EDTB388 := (UTIL_TARGETTAGNAME = 'NETSTATUS') ;
+ELSE
+__EDTB388 := FALSE ;
+END_IF ;
+__MO_EQUAL_14 := __EDTB388 ;
+__EDTB390 := __EDTB388 ;
+IF __EDTB390 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_28 := __EDTB390 ;
+__EDTB391 := __EDTB390 ;
+IF __EDTB391 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_28 := __EDTB391 ;
+__EDTB392 := __EDTB391 ;
+IF __EDTB392 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, 'Signal strength (dBm): ', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_23 := __EDTB392 ;
+__EDTB393 := __EDTB392 ;
+__EDTB394 := __EDTB388 ;
+IF __EDTB394 THEN
+DATA_SENTSMSTEXT := ANY_TO_STRING(STATUS_SIGNALSTRENGTH) ;
+END_IF ;
+__MO_ANY_TO_STRING_5 := __EDTB394 ;
+__EDTB395 := __EDTB394 ;
+IF __EDTB395 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_29 := __EDTB395 ;
+__EDTB396 := __EDTB395 ;
+IF __EDTB396 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_29 := __EDTB396 ;
+__EDTB397 := __EDTB396 ;
+IF __EDTB397 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, DATA_SENTSMSTEXT, UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_24 := __EDTB397 ;
+__EDTB398 := __EDTB397 ;
+__EDTB399 := __EDTB388 ;
+IF __EDTB399 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_30 := __EDTB399 ;
+__EDTB400 := __EDTB399 ;
+IF __EDTB400 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_30 := __EDTB400 ;
+__EDTB401 := __EDTB400 ;
+IF __EDTB401 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, ', Network status: ', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_25 := __EDTB401 ;
+__EDTB402 := __EDTB401 ;
+__EDTB404 := __EDTB388 ;
+IF __EDTB404 THEN
+(* Operator output on : = with __EDTB403 *)
+__EDTB403 := (STATUS_NETWORKSTATUS = 48) ;
+ELSE
+__EDTB403 := FALSE ;
+END_IF ;
+__MO_EQUAL_15 := __EDTB403 ;
+__EDTB405 := __EDTB403 ;
+IF __EDTB405 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_31 := __EDTB405 ;
+__EDTB406 := __EDTB405 ;
+IF __EDTB406 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_31 := __EDTB406 ;
+__EDTB407 := __EDTB406 ;
+IF __EDTB407 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, 'NotRegisteredSearching', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_26 := __EDTB407 ;
+__EDTB408 := __EDTB407 ;
+__EDTB410 := __EDTB388 ;
+IF __EDTB410 THEN
+(* Operator output on : = with __EDTB409 *)
+__EDTB409 := (STATUS_NETWORKSTATUS = 49) ;
+ELSE
+__EDTB409 := FALSE ;
+END_IF ;
+__MO_EQUAL_16 := __EDTB409 ;
+__EDTB411 := __EDTB409 ;
+IF __EDTB411 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_32 := __EDTB411 ;
+__EDTB412 := __EDTB411 ;
+IF __EDTB412 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_32 := __EDTB412 ;
+__EDTB413 := __EDTB412 ;
+IF __EDTB413 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, 'RegisteredHome', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_27 := __EDTB413 ;
+__EDTB414 := __EDTB413 ;
+__EDTB416 := __EDTB388 ;
+IF __EDTB416 THEN
+(* Operator output on : = with __EDTB415 *)
+__EDTB415 := (STATUS_NETWORKSTATUS = 50) ;
+ELSE
+__EDTB415 := FALSE ;
+END_IF ;
+__MO_EQUAL_17 := __EDTB415 ;
+__EDTB417 := __EDTB415 ;
+IF __EDTB417 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_33 := __EDTB417 ;
+__EDTB418 := __EDTB417 ;
+IF __EDTB418 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_33 := __EDTB418 ;
+__EDTB419 := __EDTB418 ;
+IF __EDTB419 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, 'NotRegisteredNoSearching', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_28 := __EDTB419 ;
+__EDTB420 := __EDTB419 ;
+__EDTB421 := (__EDTB414 OR __EDTB420) ;
+__EDTB423 := __EDTB388 ;
+IF __EDTB423 THEN
+(* Operator output on : = with __EDTB422 *)
+__EDTB422 := (STATUS_NETWORKSTATUS = 51) ;
+ELSE
+__EDTB422 := FALSE ;
+END_IF ;
+__MO_EQUAL_18 := __EDTB422 ;
+__EDTB424 := __EDTB422 ;
+IF __EDTB424 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_34 := __EDTB424 ;
+__EDTB425 := __EDTB424 ;
+IF __EDTB425 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_34 := __EDTB425 ;
+__EDTB426 := __EDTB425 ;
+IF __EDTB426 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, 'RegistrationDenied', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_29 := __EDTB426 ;
+__EDTB427 := __EDTB426 ;
+__EDTB429 := __EDTB388 ;
+IF __EDTB429 THEN
+(* Operator output on : = with __EDTB428 *)
+__EDTB428 := (STATUS_NETWORKSTATUS = 52) ;
+ELSE
+__EDTB428 := FALSE ;
+END_IF ;
+__MO_EQUAL_19 := __EDTB428 ;
+__EDTB430 := __EDTB428 ;
+IF __EDTB430 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_35 := __EDTB430 ;
+__EDTB431 := __EDTB430 ;
+IF __EDTB431 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_35 := __EDTB431 ;
+__EDTB432 := __EDTB431 ;
+IF __EDTB432 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, 'Unknown', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_30 := __EDTB432 ;
+__EDTB433 := __EDTB432 ;
+__EDTB435 := __EDTB388 ;
+IF __EDTB435 THEN
+(* Operator output on : = with __EDTB434 *)
+__EDTB434 := (STATUS_NETWORKSTATUS = 53) ;
+ELSE
+__EDTB434 := FALSE ;
+END_IF ;
+__MO_EQUAL_20 := __EDTB434 ;
+__EDTB436 := __EDTB434 ;
+IF __EDTB436 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_36 := __EDTB436 ;
+__EDTB437 := __EDTB436 ;
+IF __EDTB437 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_36 := __EDTB437 ;
+__EDTB438 := __EDTB437 ;
+IF __EDTB438 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, 'RegisteredRoaming', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_31 := __EDTB438 ;
+__EDTB439 := __EDTB438 ;
+__EDTB441 := __EDTB388 ;
+IF __EDTB441 THEN
+(* Operator output on : < with __EDTB440 *)
+__EDTB440 := (STATUS_NETWORKSTATUS < 48) ;
+ELSE
+__EDTB440 := FALSE ;
+END_IF ;
+__MO_LESS_4 := __EDTB440 ;
+__EDTB442 := __EDTB440 ;
+__EDTB444 := __EDTB388 ;
+IF __EDTB444 THEN
+(* Operator output on : > with __EDTB443 *)
+__EDTB443 := (STATUS_NETWORKSTATUS > 53) ;
+ELSE
+__EDTB443 := FALSE ;
+END_IF ;
+__MO_GREAT_11 := __EDTB443 ;
+__EDTB445 := __EDTB443 ;
+__EDTB446 := (__EDTB442 OR __EDTB445) ;
+IF __EDTB446 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_37 := __EDTB446 ;
+__EDTB447 := __EDTB446 ;
+IF __EDTB447 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_37 := __EDTB447 ;
+__EDTB448 := __EDTB447 ;
+IF __EDTB448 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, 'Error', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_32 := __EDTB448 ;
+__EDTB449 := __EDTB448 ;
+__EDTB450 := (__EDTB439 OR __EDTB449) ;
+__EDTB451 := (__EDTB433 OR __EDTB450) ;
+__EDTB452 := (__EDTB427 OR __EDTB451) ;
+__EDTB453 := (__EDTB421 OR __EDTB452) ;
+__EDTB454 := (__EDTB408 OR __EDTB453) ;
+__EDTB455 := __EDTB388 ;
+IF __EDTB455 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_38 := __EDTB455 ;
+__EDTB456 := __EDTB455 ;
+IF __EDTB456 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_38 := __EDTB456 ;
+__EDTB457 := __EDTB456 ;
+IF __EDTB457 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, ', Connection failures: ', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_33 := __EDTB457 ;
+__EDTB458 := __EDTB457 ;
+__EDTB459 := (__EDTB454 OR __EDTB458) ;
+__EDTB460 := __EDTB388 ;
+IF __EDTB460 THEN
+DATA_SENTSMSTEXT := ANY_TO_STRING(STATUS_NETCONNFAILEDRETRIES) ;
+END_IF ;
+__MO_ANY_TO_STRING_6 := __EDTB460 ;
+__EDTB461 := __EDTB460 ;
+IF __EDTB461 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_39 := __EDTB461 ;
+__EDTB462 := __EDTB461 ;
+IF __EDTB462 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_39 := __EDTB462 ;
+__EDTB463 := __EDTB462 ;
+IF __EDTB463 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, DATA_SENTSMSTEXT, UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_34 := __EDTB463 ;
+__EDTB464 := __EDTB463 ;
+__EDTB465 := (__EDTB459 OR __EDTB464) ;
+__EDTB466 := (__EDTB402 OR __EDTB465) ;
+__EDTB467 := (__EDTB398 OR __EDTB466) ;
+__EDTB468 := __EDTB388 ;
+IF __EDTB468 THEN
+UTIL_TAGVALUE := (  '') ;
+END_IF ;
+__MO_1GAIN_49 := __EDTB468 ;
+__EDTB469 := __EDTB468 ;
+__EDTB470 := (__EDTB467 OR __EDTB469) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*UPTIME request: This rung responds to an UPTIME request by retrieving controller time variable values, and building a response SMS message to send out through the module.
+If you do not want this feature, delete this rung.*)
+(*Label :*)(**)
+__EDTB472 := TRUE ;
+IF __EDTB472 THEN
+(* Operator output on : = with __EDTB471 *)
+__EDTB471 := (UTIL_TARGETTAGNAME = 'UPTIME') ;
+ELSE
+__EDTB471 := FALSE ;
+END_IF ;
+__MO_EQUAL_21 := __EDTB471 ;
+__EDTB473 := __EDTB471 ;
+IF __EDTB473 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, 'Controller UP Time **NOTE Controller clock resets after 20 days**: ', UTIL_TMPVALUE) ;
+END_IF ;
+__MO_INSERT_35 := __EDTB473 ;
+__EDTB474 := __EDTB473 ;
+__EDTB475 := __EDTB471 ;
+IF __EDTB475 THEN
+UTIL_DATETIMEINDINT := ANY_TO_DINT(__SYSVA_CYCLEDATE) ;
+END_IF ;
+__MO_ANY_TO_DINT_1 := __EDTB475 ;
+__EDTB476 := __EDTB475 ;
+IF __EDTB476 THEN
+UTIL_CURVALUE := (UTIL_DATETIMEINDINT / 1000) ;
+END_IF ;
+__MO_DIV_1 := __EDTB476 ;
+__EDTB477 := __EDTB476 ;
+IF __EDTB477 THEN
+UTIL_CURVALUE := (UTIL_CURVALUE * 1000) ;
+END_IF ;
+__MO_MULT_2 := __EDTB477 ;
+__EDTB478 := __EDTB477 ;
+IF __EDTB478 THEN
+UTIL_CURVALUE := (UTIL_DATETIMEINDINT - UTIL_CURVALUE) ;
+END_IF ;
+__MO_MINUS_2 := __EDTB478 ;
+__EDTB479 := __EDTB478 ;
+IF __EDTB479 THEN
+UTIL_TAGVALUE := ANY_TO_STRING(UTIL_CURVALUE) ;
+END_IF ;
+__MO_ANY_TO_STRING_7 := __EDTB479 ;
+__EDTB480 := __EDTB479 ;
+__EDTB481 := __EDTB471 ;
+IF __EDTB481 THEN
+UTIL_DATETIMEINDINT := (UTIL_DATETIMEINDINT / 1000) ;
+END_IF ;
+__MO_DIV_2 := __EDTB481 ;
+__EDTB482 := __EDTB481 ;
+IF __EDTB482 THEN
+UTIL_CURVALUE := (UTIL_DATETIMEINDINT / 60) ;
+END_IF ;
+__MO_DIV_3 := __EDTB482 ;
+__EDTB483 := __EDTB482 ;
+IF __EDTB483 THEN
+UTIL_CURVALUE := (UTIL_CURVALUE * 60) ;
+END_IF ;
+__MO_MULT_3 := __EDTB483 ;
+__EDTB484 := __EDTB483 ;
+IF __EDTB484 THEN
+UTIL_CURVALUE := (UTIL_DATETIMEINDINT - UTIL_CURVALUE) ;
+END_IF ;
+__MO_MINUS_3 := __EDTB484 ;
+__EDTB485 := __EDTB484 ;
+IF __EDTB485 THEN
+UTIL_TAGVALUE := INSERT(UTIL_TAGVALUE, 's', 1) ;
+END_IF ;
+__MO_INSERT_36 := __EDTB485 ;
+__EDTB486 := __EDTB485 ;
+__EDTB487 := __EDTB471 ;
+IF __EDTB487 THEN
+UTIL_TMPSTR := ANY_TO_STRING(UTIL_CURVALUE) ;
+END_IF ;
+__MO_ANY_TO_STRING_8 := __EDTB487 ;
+__EDTB488 := __EDTB487 ;
+IF __EDTB488 THEN
+UTIL_TAGVALUE := INSERT(UTIL_TAGVALUE, UTIL_TMPSTR, 1) ;
+END_IF ;
+__MO_INSERT_37 := __EDTB488 ;
+__EDTB489 := __EDTB488 ;
+__EDTB490 := __EDTB471 ;
+IF __EDTB490 THEN
+UTIL_DATETIMEINDINT := (UTIL_DATETIMEINDINT / 60) ;
+END_IF ;
+__MO_DIV_4 := __EDTB490 ;
+__EDTB491 := __EDTB490 ;
+IF __EDTB491 THEN
+UTIL_CURVALUE := (UTIL_DATETIMEINDINT / 60) ;
+END_IF ;
+__MO_DIV_5 := __EDTB491 ;
+__EDTB492 := __EDTB491 ;
+IF __EDTB492 THEN
+UTIL_CURVALUE := (UTIL_CURVALUE * 60) ;
+END_IF ;
+__MO_MULT_4 := __EDTB492 ;
+__EDTB493 := __EDTB492 ;
+IF __EDTB493 THEN
+UTIL_CURVALUE := (UTIL_DATETIMEINDINT - UTIL_CURVALUE) ;
+END_IF ;
+__MO_MINUS_4 := __EDTB493 ;
+__EDTB494 := __EDTB493 ;
+IF __EDTB494 THEN
+UTIL_TAGVALUE := INSERT(UTIL_TAGVALUE, 'm', 1) ;
+END_IF ;
+__MO_INSERT_38 := __EDTB494 ;
+__EDTB495 := __EDTB494 ;
+__EDTB496 := __EDTB471 ;
+IF __EDTB496 THEN
+UTIL_TMPSTR := ANY_TO_STRING(UTIL_CURVALUE) ;
+END_IF ;
+__MO_ANY_TO_STRING_9 := __EDTB496 ;
+__EDTB497 := __EDTB496 ;
+IF __EDTB497 THEN
+UTIL_TAGVALUE := INSERT(UTIL_TAGVALUE, UTIL_TMPSTR, 1) ;
+END_IF ;
+__MO_INSERT_39 := __EDTB497 ;
+__EDTB498 := __EDTB497 ;
+__EDTB499 := __EDTB471 ;
+IF __EDTB499 THEN
+UTIL_DATETIMEINDINT := (UTIL_DATETIMEINDINT / 60) ;
+END_IF ;
+__MO_DIV_6 := __EDTB499 ;
+__EDTB500 := __EDTB499 ;
+IF __EDTB500 THEN
+UTIL_CURVALUE := (UTIL_DATETIMEINDINT / 24) ;
+END_IF ;
+__MO_DIV_7 := __EDTB500 ;
+__EDTB501 := __EDTB500 ;
+IF __EDTB501 THEN
+UTIL_CURVALUE := (UTIL_CURVALUE * 24) ;
+END_IF ;
+__MO_MULT_5 := __EDTB501 ;
+__EDTB502 := __EDTB501 ;
+IF __EDTB502 THEN
+UTIL_CURVALUE := (UTIL_DATETIMEINDINT - UTIL_CURVALUE) ;
+END_IF ;
+__MO_MINUS_5 := __EDTB502 ;
+__EDTB503 := __EDTB502 ;
+IF __EDTB503 THEN
+UTIL_TAGVALUE := INSERT(UTIL_TAGVALUE, 'h', 1) ;
+END_IF ;
+__MO_INSERT_40 := __EDTB503 ;
+__EDTB504 := __EDTB503 ;
+__EDTB505 := __EDTB471 ;
+IF __EDTB505 THEN
+UTIL_TMPSTR := ANY_TO_STRING(UTIL_CURVALUE) ;
+END_IF ;
+__MO_ANY_TO_STRING_10 := __EDTB505 ;
+__EDTB506 := __EDTB505 ;
+IF __EDTB506 THEN
+UTIL_TAGVALUE := INSERT(UTIL_TAGVALUE, UTIL_TMPSTR, 1) ;
+END_IF ;
+__MO_INSERT_41 := __EDTB506 ;
+__EDTB507 := __EDTB506 ;
+__EDTB508 := __EDTB471 ;
+IF __EDTB508 THEN
+UTIL_CURVALUE := (UTIL_DATETIMEINDINT / 24) ;
+END_IF ;
+__MO_DIV_8 := __EDTB508 ;
+__EDTB509 := __EDTB508 ;
+IF __EDTB509 THEN
+UTIL_TAGVALUE := INSERT(UTIL_TAGVALUE, 'd', 1) ;
+END_IF ;
+__MO_INSERT_42 := __EDTB509 ;
+__EDTB510 := __EDTB509 ;
+IF __EDTB510 THEN
+UTIL_TMPSTR := ANY_TO_STRING(UTIL_CURVALUE) ;
+END_IF ;
+__MO_ANY_TO_STRING_11 := __EDTB510 ;
+__EDTB511 := __EDTB510 ;
+IF __EDTB511 THEN
+UTIL_TAGVALUE := INSERT(UTIL_TAGVALUE, UTIL_TMPSTR, 1) ;
+END_IF ;
+__MO_INSERT_43 := __EDTB511 ;
+__EDTB512 := __EDTB511 ;
+__EDTB513 := __EDTB471 ;
+IF __EDTB513 THEN
+UTIL_TMPVALUE := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_40 := __EDTB513 ;
+__EDTB514 := __EDTB513 ;
+IF __EDTB514 THEN
+UTIL_TMPVALUE := (UTIL_TMPVALUE + 1) ;
+END_IF ;
+__MO_PLUS_40 := __EDTB514 ;
+__EDTB515 := __EDTB514 ;
+IF __EDTB515 THEN
+UTIL_TAGNAME := INSERT(UTIL_TAGNAME, UTIL_TAGVALUE, UTIL_TMPVALUE) ;
+END_IF ;
+__MO_INSERT_44 := __EDTB515 ;
+__EDTB516 := __EDTB515 ;
+__EDTB517 := (__EDTB512 OR __EDTB516) ;
+__EDTB518 := (__EDTB507 OR __EDTB517) ;
+__EDTB519 := (__EDTB504 OR __EDTB518) ;
+__EDTB520 := (__EDTB498 OR __EDTB519) ;
+__EDTB521 := (__EDTB495 OR __EDTB520) ;
+__EDTB522 := (__EDTB489 OR __EDTB521) ;
+__EDTB523 := __EDTB471 ;
+IF __EDTB523 THEN
+UTIL_TAGVALUE := (  '') ;
+END_IF ;
+__MO_1GAIN_50 := __EDTB523 ;
+__EDTB524 := __EDTB523 ;
+__EDTB525 := (__EDTB522 OR __EDTB524) ;
+__EDTB526 := (__EDTB486 OR __EDTB525) ;
+__EDTB527 := (__EDTB480 OR __EDTB526) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*WHITELIST request: This rung responds to a WHITELIST request by building a response SMS message indicating whether or not Whitelist filtering of incoming SMS messages is enabled.
+If you do not want this feature, delete this rung.*)
+(*Label :*)(**)
+__EDTB529 := TRUE ;
+IF __EDTB529 THEN
+(* Operator output on : = with __EDTB528 *)
+__EDTB528 := (UTIL_TARGETTAGNAME = 'WHITELIST') ;
+ELSE
+__EDTB528 := FALSE ;
+END_IF ;
+__MO_EQUAL_22 := __EDTB528 ;
+__EDTB530 := __EDTB528 ;
+IF __EDTB530 THEN
+UTIL_TAGNAME := (  UTIL_TARGETTAGNAME) ;
+END_IF ;
+__MO_1GAIN_51 := __EDTB530 ;
+__EDTB531 := __EDTB530 ;
+__EDTB532 := __EDTB528 AND CONFIG_WHITELISTENABLED ;
+IF __EDTB532 THEN
+UTIL_TAGVALUE := (  'ON') ;
+END_IF ;
+__MO_1GAIN_52 := __EDTB532 ;
+__EDTB533 := __EDTB532 ;
+__EDTB534 := __EDTB528 AND NOT(CONFIG_WHITELISTENABLED) ;
+IF __EDTB534 THEN
+UTIL_TAGVALUE := (  'OFF') ;
+END_IF ;
+__MO_1GAIN_53 := __EDTB534 ;
+__EDTB535 := __EDTB534 ;
+__EDTB536 := (__EDTB533 OR __EDTB535) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*OUTPUTx request: Rungs 49 and 50 respond to OUTPUT0 and OUTPUT1 requests by building a response SMS message indicating the ON/OFF status of the digital output. Delete or add digital outputs as required.
+OUTPUT0 request:*)
+(*Label :*)(**)
+__EDTB538 := TRUE ;
+IF __EDTB538 THEN
+(* Operator output on : = with __EDTB537 *)
+__EDTB537 := (UTIL_TARGETTAGNAME = 'OUTPUT0') ;
+ELSE
+__EDTB537 := FALSE ;
+END_IF ;
+__MO_EQUAL_23 := __EDTB537 ;
+__EDTB539 := __EDTB537 ;
+IF __EDTB539 THEN
+UTIL_TAGNAME := (  UTIL_TARGETTAGNAME) ;
+END_IF ;
+__MO_1GAIN_54 := __EDTB539 ;
+__EDTB540 := __EDTB539 ;
+__EDTB541 := __EDTB537 AND _IO_EM_DO_00 ;
+IF __EDTB541 THEN
+UTIL_TAGVALUE := (  'ON') ;
+END_IF ;
+__MO_1GAIN_55 := __EDTB541 ;
+__EDTB542 := __EDTB541 ;
+__EDTB543 := __EDTB537 AND NOT(_IO_EM_DO_00) ;
+IF __EDTB543 THEN
+UTIL_TAGVALUE := (  'OFF') ;
+END_IF ;
+__MO_1GAIN_56 := __EDTB543 ;
+__EDTB544 := __EDTB543 ;
+__EDTB545 := (__EDTB542 OR __EDTB544) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*OUTPUT1 request:*)
+(*Label :*)(**)
+__EDTB547 := TRUE ;
+IF __EDTB547 THEN
+(* Operator output on : = with __EDTB546 *)
+__EDTB546 := (UTIL_TARGETTAGNAME = 'OUTPUT1') ;
+ELSE
+__EDTB546 := FALSE ;
+END_IF ;
+__MO_EQUAL_24 := __EDTB546 ;
+__EDTB548 := __EDTB546 ;
+IF __EDTB548 THEN
+UTIL_TAGNAME := (  UTIL_TARGETTAGNAME) ;
+END_IF ;
+__MO_1GAIN_57 := __EDTB548 ;
+__EDTB549 := __EDTB548 ;
+__EDTB550 := __EDTB546 AND _IO_EM_DO_01 ;
+IF __EDTB550 THEN
+UTIL_TAGVALUE := (  'ON') ;
+END_IF ;
+__MO_1GAIN_58 := __EDTB550 ;
+__EDTB551 := __EDTB550 ;
+__EDTB552 := __EDTB546 AND NOT(_IO_EM_DO_01) ;
+IF __EDTB552 THEN
+UTIL_TAGVALUE := (  'OFF') ;
+END_IF ;
+__MO_1GAIN_59 := __EDTB552 ;
+__EDTB553 := __EDTB552 ;
+__EDTB554 := (__EDTB551 OR __EDTB553) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB555 := TRUE ;
+IF __EDTB555 THEN
+UTIL_TMPVALUE2 := MLEN(UTIL_TAGNAME) ;
+END_IF ;
+__MO_MLEN_41 := __EDTB555 ;
+__EDTB557 := __EDTB555 ;
+IF __EDTB557 THEN
+(* Operator output on : <= with __EDTB556 *)
+__EDTB556 := (UTIL_TMPVALUE2 <= 0) ;
+ELSE
+__EDTB556 := FALSE ;
+END_IF ;
+__MO_LESSEQUAL_4 := __EDTB556 ;
+__EDTB558 := __EDTB556 ;
+IF __EDTB558 THEN
+DATA_SENTSMSTEXT := (  'ok') ;
+END_IF ;
+__MO_1GAIN_60 := __EDTB558 ;
+__EDTB559 := __EDTB558 ;
+__EDTB561 := __EDTB555 ;
+IF __EDTB561 THEN
+(* Operator output on : > with __EDTB560 *)
+__EDTB560 := (UTIL_TMPVALUE2 > 0) ;
+ELSE
+__EDTB560 := FALSE ;
+END_IF ;
+__MO_GREAT_12 := __EDTB560 ;
+__EDTB562 := __EDTB560 ;
+IF __EDTB562 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_41 := __EDTB562 ;
+__EDTB563 := __EDTB562 ;
+IF __EDTB563 THEN
+DATA_SENTSMSTEXT := INSERT(UTIL_TAGNAME, ' ', UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_45 := __EDTB563 ;
+__EDTB564 := __EDTB563 ;
+__EDTB565 := __EDTB560 ;
+IF __EDTB565 THEN
+UTIL_TMPVALUE2 := MLEN(DATA_SENTSMSTEXT) ;
+END_IF ;
+__MO_MLEN_42 := __EDTB565 ;
+__EDTB566 := __EDTB565 ;
+IF __EDTB566 THEN
+UTIL_TMPVALUE2 := (UTIL_TMPVALUE2 + 1) ;
+END_IF ;
+__MO_PLUS_42 := __EDTB566 ;
+__EDTB567 := __EDTB566 ;
+IF __EDTB567 THEN
+DATA_SENTSMSTEXT := INSERT(DATA_SENTSMSTEXT, UTIL_TAGVALUE, UTIL_TMPVALUE2) ;
+END_IF ;
+__MO_INSERT_46 := __EDTB567 ;
+__EDTB568 := __EDTB567 ;
+__EDTB569 := (__EDTB564 OR __EDTB568) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB570 := TRUE ;
+IF __EDTB570 THEN
+(*Reset coil*)
+UTIL_SUCCEED := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB571 := TRUE ;
+IF __EDTB571 THEN
+(*Reset coil*)
+UTIL_GETTAGVALUECMD := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(*SEND_SMS*)
+__GL __LG0004 ;
+__EDTB573 := NOT(UTIL_SUCCEED) ;
+IF __EDTB573 THEN
+(* Operator output on : <> with __EDTB572 *)
+__EDTB572 := (UTIL_SENDER <> '') ;
+ELSE
+__EDTB572 := FALSE ;
+END_IF ;
+__MO_DIFF_10 := __EDTB572 ;
+__EDTB575 := __EDTB572 ;
+IF __EDTB575 THEN
+(* Operator output on : <> with __EDTB574 *)
+__EDTB574 := (DATA_SENTSMSTEXT <> '') ;
+ELSE
+__EDTB574 := FALSE ;
+END_IF ;
+__MO_DIFF_11 := __EDTB574 ;
+__EDTB576 := __EDTB574 ;
+IF __EDTB576 THEN
+UTIL_ACKRECEIVERS[1] := (  UTIL_SENDER) ;
+END_IF ;
+__MO_1GAIN_61 := __EDTB576 ;
+__EDTB577 := __EDTB576 ;
+__EDTB578 := __EDTB574 ;
+IF __EDTB578 THEN
+UTIL_ACKRECEIVERS[2] := (  '') ;
+END_IF ;
+__MO_1GAIN_62 := __EDTB578 ;
+__EDTB579 := __EDTB578 ;
+__EDTB580 := __EDTB574 ;
+IF __EDTB580 THEN
+UTIL_ACKRECEIVERS[3] := (  '') ;
+END_IF ;
+__MO_1GAIN_63 := __EDTB580 ;
+__EDTB581 := __EDTB580 ;
+__EDTB582 := __EDTB574 ;
+IF __EDTB582 THEN
+UTIL_ACKRECEIVERS[4] := (  '') ;
+END_IF ;
+__MO_1GAIN_64 := __EDTB582 ;
+__EDTB583 := __EDTB582 ;
+__EDTB584 := __EDTB574 ;
+IF __EDTB584 THEN
+UTIL_ACKRECEIVERS[5] := (  '') ;
+END_IF ;
+__MO_1GAIN_65 := __EDTB584 ;
+__EDTB585 := __EDTB584 ;
+(* FB call: PSFT_SMS_SEND *)
+UTIL_SEND_SMS_3(__EDTB574, CONFIG_SLOTID, UTIL_ACKRECEIVERS, DATA_SENTSMSTEXT) ;
+__EDTB586 := UTIL_SEND_SMS_3.Q ;
+__EDTB587 := (__EDTB585 OR __EDTB586) ;
+__EDTB589 := __EDTB574 AND UTIL_SEND_SMS_3.Q ;
+IF __EDTB589 THEN
+(* Operator output on : = with __EDTB588 *)
+__EDTB588 := (UTIL_SEND_SMS_3.ERRCODE = 0) ;
+ELSE
+__EDTB588 := FALSE ;
+END_IF ;
+__MO_EQUAL_25 := __EDTB588 ;
+__EDTB590 := __EDTB588 ;
+IF __EDTB590 THEN
+UTIL_SUCCEED := (  TRUE) ;
+END_IF ;
+__MO_1GAIN_66 := __EDTB590 ;
+__EDTB591 := __EDTB590 ;
+__EDTB592 := __EDTB574 AND NOT(UTIL_SEND_SMS_3.Q) ;
+__EDTB594 := __EDTB574 ;
+IF __EDTB594 THEN
+(* Operator output on : <> with __EDTB593 *)
+__EDTB593 := (UTIL_SEND_SMS_3.ERRCODE <> 0) ;
+ELSE
+__EDTB593 := FALSE ;
+END_IF ;
+__MO_DIFF_12 := __EDTB593 ;
+__EDTB595 := __EDTB593 ;
+__EDTB596 := (__EDTB592 OR __EDTB595) ;
+__EDTB597 := __EDTB596 ;
+IF __EDTB597 THEN
+UTIL_SUCCEED := (  FALSE) ;
+END_IF ;
+__MO_1GAIN_67 := __EDTB597 ;
+__EDTB598 := __EDTB597 ;
+__EDTB599 := __EDTB596 ;
+IF __EDTB599 THEN
+UTIL_RETRYCOUNT := (UTIL_RETRYCOUNT + 1) ;
+END_IF ;
+__MO_PLUS_43 := __EDTB599 ;
+__EDTB600 := __EDTB599 ;
+__EDTB601 := (__EDTB598 OR __EDTB600) ;
+__EDTB603 := __EDTB596 ;
+IF __EDTB603 THEN
+(* Operator output on : > with __EDTB602 *)
+__EDTB602 := (UTIL_RETRYCOUNT > UTIL_MAXRETRYTIME) ;
+ELSE
+__EDTB602 := FALSE ;
+END_IF ;
+__MO_GREAT_13 := __EDTB602 ;
+__EDTB604 := __EDTB602 ;
+IF __EDTB604 THEN
+STATUS_ERRCOUNT := (STATUS_ERRCOUNT + 1) ;
+END_IF ;
+__MO_PLUS_44 := __EDTB604 ;
+__EDTB605 := __EDTB604 ;
+__EDTB606 := __EDTB602 ;
+IF __EDTB606 THEN
+UTIL_SUCCEED := (  TRUE) ;
+END_IF ;
+__MO_1GAIN_68 := __EDTB606 ;
+__EDTB607 := __EDTB606 ;
+__EDTB608 := __EDTB602 ;
+IF __EDTB608 THEN
+UTIL_RETRYCOUNT := (  0) ;
+END_IF ;
+__MO_1GAIN_69 := __EDTB608 ;
+__EDTB609 := __EDTB608 ;
+__EDTB610 := (__EDTB607 OR __EDTB609) ;
+__EDTB611 := (__EDTB605 OR __EDTB610) ;
+__EDTB612 := (__EDTB601 OR __EDTB611) ;
+__EDTB613 := (__EDTB591 OR __EDTB612) ;
+__EDTB614 := (__EDTB587 OR __EDTB613) ;
+__EDTB615 := (__EDTB583 OR __EDTB614) ;
+__EDTB616 := (__EDTB581 OR __EDTB615) ;
+__EDTB617 := (__EDTB579 OR __EDTB616) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB618 := NOT(UTIL_SETTAGVALUECMD) ;
+IF __EDTB618 THEN
+(*GOTO ACK*)
+__GJ __LG0006 ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB619 := TRUE ;
+IF __EDTB619 THEN
+(*Reset coil*)
+UTIL_SETTAGVALUECMD := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB620 := TRUE ;
+IF __EDTB620 THEN
+DATA_ACKSMSTEXT := (  'OK: Set ') ;
+END_IF ;
+__MO_1GAIN_70 := __EDTB620 ;
+__EDTB621 := __EDTB620 ;
+IF __EDTB621 THEN
+UTIL_TMPVALUE3 := MLEN(DATA_ACKSMSTEXT) ;
+END_IF ;
+__MO_MLEN_43 := __EDTB621 ;
+__EDTB622 := __EDTB621 ;
+IF __EDTB622 THEN
+UTIL_TMPVALUE3 := (UTIL_TMPVALUE3 + 1) ;
+END_IF ;
+__MO_PLUS_45 := __EDTB622 ;
+__EDTB623 := __EDTB622 ;
+IF __EDTB623 THEN
+DATA_ACKSMSTEXT := INSERT(DATA_ACKSMSTEXT, UTIL_TARGETTAGNAME, UTIL_TMPVALUE3) ;
+END_IF ;
+__MO_INSERT_47 := __EDTB623 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB624 := TRUE ;
+IF __EDTB624 THEN
+UTIL_TMPVALUE3 := MLEN(DATA_ACKSMSTEXT) ;
+END_IF ;
+__MO_MLEN_44 := __EDTB624 ;
+__EDTB625 := __EDTB624 ;
+IF __EDTB625 THEN
+UTIL_TMPVALUE3 := (UTIL_TMPVALUE3 + 1) ;
+END_IF ;
+__MO_PLUS_46 := __EDTB625 ;
+__EDTB626 := __EDTB625 ;
+IF __EDTB626 THEN
+DATA_ACKSMSTEXT := INSERT(DATA_ACKSMSTEXT, ' = ', UTIL_TMPVALUE3) ;
+END_IF ;
+__MO_INSERT_48 := __EDTB626 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB627 := TRUE ;
+IF __EDTB627 THEN
+UTIL_TMPVALUE3 := MLEN(DATA_ACKSMSTEXT) ;
+END_IF ;
+__MO_MLEN_45 := __EDTB627 ;
+__EDTB628 := __EDTB627 ;
+IF __EDTB628 THEN
+UTIL_TMPVALUE3 := (UTIL_TMPVALUE3 + 1) ;
+END_IF ;
+__MO_PLUS_47 := __EDTB628 ;
+__EDTB629 := __EDTB628 ;
+IF __EDTB629 THEN
+DATA_ACKSMSTEXT := INSERT(DATA_ACKSMSTEXT, UTIL_TARGETTAGVALUE, UTIL_TMPVALUE3) ;
+END_IF ;
+__MO_INSERT_49 := __EDTB629 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*ADD command: This rung responds to SMS message commands to ADD a phone number to the 5th element of the Receiver List.
+If you do not want this feature, delete this rung.*)
+(*Label :*)(**)
+__EDTB631 := TRUE ;
+IF __EDTB631 THEN
+(* Operator output on : = with __EDTB630 *)
+__EDTB630 := (UTIL_TARGETTAGNAME = 'ADD') ;
+ELSE
+__EDTB630 := FALSE ;
+END_IF ;
+__MO_EQUAL_26 := __EDTB630 ;
+__EDTB632 := __EDTB630 ;
+IF __EDTB632 THEN
+CONFIG_RECEIVERLIST[5] := (  UTIL_TARGETTAGVALUE) ;
+END_IF ;
+__MO_1GAIN_71 := __EDTB632 ;
+__EDTB633 := __EDTB632 ;
+__EDTB634 := __EDTB630 ;
+IF __EDTB634 THEN
+DATA_ACKSMSTEXT := INSERT('OK:  added', UTIL_TARGETTAGVALUE, 5) ;
+END_IF ;
+__MO_INSERT_50 := __EDTB634 ;
+__EDTB635 := __EDTB634 ;
+__EDTB636 := __EDTB630 ;
+IF __EDTB636 THEN
+(*GOTO DONE*)
+__GJ __LG0005 ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DELETE command: This rung responds to SMS message commands to DELETE a phone number from the Receiver List.
+If you do not want this feature, delete this rung.*)
+(*Label :*)(**)
+__EDTB638 := TRUE ;
+IF __EDTB638 THEN
+(* Operator output on : = with __EDTB637 *)
+__EDTB637 := (UTIL_TARGETTAGNAME = 'DELETE') ;
+ELSE
+__EDTB637 := FALSE ;
+END_IF ;
+__MO_EQUAL_27 := __EDTB637 ;
+__EDTB639 := __EDTB637 ;
+IF __EDTB639 THEN
+DATA_ACKSMSTEXT := INSERT('FAILED:  not found', UTIL_TARGETTAGVALUE, 9) ;
+END_IF ;
+__MO_INSERT_51 := __EDTB639 ;
+__EDTB640 := __EDTB639 ;
+__EDTB641 := __EDTB637 ;
+IF __EDTB641 THEN
+UTIL_TMPVALUE3 := FIND(CONFIG_RECEIVERLIST[1], UTIL_TARGETTAGVALUE) ;
+END_IF ;
+__MO_FIND_1 := __EDTB641 ;
+__EDTB643 := __EDTB641 ;
+IF __EDTB643 THEN
+(* Operator output on : = with __EDTB642 *)
+__EDTB642 := (UTIL_TMPVALUE3 = 1) ;
+ELSE
+__EDTB642 := FALSE ;
+END_IF ;
+__MO_EQUAL_28 := __EDTB642 ;
+__EDTB644 := __EDTB642 ;
+IF __EDTB644 THEN
+CONFIG_RECEIVERLIST[1] := (  '') ;
+END_IF ;
+__MO_1GAIN_72 := __EDTB644 ;
+__EDTB645 := __EDTB644 ;
+__EDTB646 := __EDTB637 ;
+IF __EDTB646 THEN
+UTIL_TMPVALUE3 := FIND(CONFIG_RECEIVERLIST[2], UTIL_TARGETTAGVALUE) ;
+END_IF ;
+__MO_FIND_2 := __EDTB646 ;
+__EDTB648 := __EDTB646 ;
+IF __EDTB648 THEN
+(* Operator output on : = with __EDTB647 *)
+__EDTB647 := (UTIL_TMPVALUE3 = 1) ;
+ELSE
+__EDTB647 := FALSE ;
+END_IF ;
+__MO_EQUAL_29 := __EDTB647 ;
+__EDTB649 := __EDTB647 ;
+IF __EDTB649 THEN
+CONFIG_RECEIVERLIST[2] := (  '') ;
+END_IF ;
+__MO_1GAIN_73 := __EDTB649 ;
+__EDTB650 := __EDTB649 ;
+__EDTB651 := __EDTB637 ;
+IF __EDTB651 THEN
+UTIL_TMPVALUE3 := FIND(CONFIG_RECEIVERLIST[3], UTIL_TARGETTAGVALUE) ;
+END_IF ;
+__MO_FIND_3 := __EDTB651 ;
+__EDTB653 := __EDTB651 ;
+IF __EDTB653 THEN
+(* Operator output on : = with __EDTB652 *)
+__EDTB652 := (UTIL_TMPVALUE3 = 1) ;
+ELSE
+__EDTB652 := FALSE ;
+END_IF ;
+__MO_EQUAL_30 := __EDTB652 ;
+__EDTB654 := __EDTB652 ;
+IF __EDTB654 THEN
+CONFIG_RECEIVERLIST[3] := (  '') ;
+END_IF ;
+__MO_1GAIN_74 := __EDTB654 ;
+__EDTB655 := __EDTB654 ;
+__EDTB656 := (__EDTB650 OR __EDTB655) ;
+__EDTB657 := __EDTB637 ;
+IF __EDTB657 THEN
+UTIL_TMPVALUE3 := FIND(CONFIG_RECEIVERLIST[4], UTIL_TARGETTAGVALUE) ;
+END_IF ;
+__MO_FIND_4 := __EDTB657 ;
+__EDTB659 := __EDTB657 ;
+IF __EDTB659 THEN
+(* Operator output on : = with __EDTB658 *)
+__EDTB658 := (UTIL_TMPVALUE3 = 1) ;
+ELSE
+__EDTB658 := FALSE ;
+END_IF ;
+__MO_EQUAL_31 := __EDTB658 ;
+__EDTB660 := __EDTB658 ;
+IF __EDTB660 THEN
+CONFIG_RECEIVERLIST[4] := (  '') ;
+END_IF ;
+__MO_1GAIN_75 := __EDTB660 ;
+__EDTB661 := __EDTB660 ;
+__EDTB662 := (__EDTB656 OR __EDTB661) ;
+__EDTB663 := __EDTB637 ;
+IF __EDTB663 THEN
+UTIL_TMPVALUE3 := FIND(CONFIG_RECEIVERLIST[5], UTIL_TARGETTAGVALUE) ;
+END_IF ;
+__MO_FIND_5 := __EDTB663 ;
+__EDTB664 := __EDTB663 ;
+IF __EDTB664 THEN
+CONFIG_RECEIVERLIST[5] := (  '') ;
+END_IF ;
+__MO_1GAIN_76 := __EDTB664 ;
+__EDTB666 := __EDTB664 ;
+IF __EDTB666 THEN
+(* Operator output on : = with __EDTB665 *)
+__EDTB665 := (UTIL_TMPVALUE3 = 1) ;
+ELSE
+__EDTB665 := FALSE ;
+END_IF ;
+__MO_EQUAL_32 := __EDTB665 ;
+__EDTB667 := __EDTB665 ;
+__EDTB668 := (__EDTB662 OR __EDTB667) ;
+__EDTB669 := (__EDTB645 OR __EDTB668) ;
+IF __EDTB669 THEN
+DATA_ACKSMSTEXT := INSERT('OK:  deleted', UTIL_TARGETTAGVALUE, 5) ;
+END_IF ;
+__MO_INSERT_52 := __EDTB669 ;
+__EDTB670 := __EDTB669 ;
+__EDTB671 := (__EDTB640 OR __EDTB670) ;
+__EDTB672 := __EDTB637 ;
+IF __EDTB672 THEN
+(*Set coil*)
+UTIL_HANDLED := TRUE ;
+END_IF ;
+__EDTB673 := __EDTB637 ;
+IF __EDTB673 THEN
+(*GOTO DONE*)
+__GJ __LG0005 ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*WHITELIST ON/OFF command: This rung responds to SMS message commands to enable or disable Whitelist filtering of incoming SMS messages.
+If you do not want this feature, delete this rung.*)
+(*Label :*)(**)
+__EDTB675 := TRUE ;
+IF __EDTB675 THEN
+(* Operator output on : = with __EDTB674 *)
+__EDTB674 := (UTIL_TARGETTAGNAME = 'WHITELIST') ;
+ELSE
+__EDTB674 := FALSE ;
+END_IF ;
+__MO_EQUAL_33 := __EDTB674 ;
+__EDTB677 := __EDTB674 ;
+IF __EDTB677 THEN
+(* Operator output on : = with __EDTB676 *)
+__EDTB676 := (UTIL_TARGETTAGVALUE = 'OFF') ;
+ELSE
+__EDTB676 := FALSE ;
+END_IF ;
+__MO_EQUAL_34 := __EDTB676 ;
+__EDTB678 := __EDTB676 ;
+__EDTB680 := __EDTB674 ;
+IF __EDTB680 THEN
+(* Operator output on : = with __EDTB679 *)
+__EDTB679 := (UTIL_TARGETTAGVALUE = '0') ;
+ELSE
+__EDTB679 := FALSE ;
+END_IF ;
+__MO_EQUAL_35 := __EDTB679 ;
+__EDTB681 := __EDTB679 ;
+__EDTB682 := (__EDTB678 OR __EDTB681) ;
+IF __EDTB682 THEN
+CONFIG_WHITELISTENABLED := (  FALSE) ;
+END_IF ;
+__MO_1GAIN_77 := __EDTB682 ;
+__EDTB683 := __EDTB682 ;
+IF __EDTB683 THEN
+(*Set coil*)
+UTIL_HANDLED := TRUE ;
+END_IF ;
+__EDTB685 := __EDTB674 ;
+IF __EDTB685 THEN
+(* Operator output on : = with __EDTB684 *)
+__EDTB684 := (UTIL_TARGETTAGVALUE = 'ON') ;
+ELSE
+__EDTB684 := FALSE ;
+END_IF ;
+__MO_EQUAL_36 := __EDTB684 ;
+__EDTB686 := __EDTB684 ;
+__EDTB688 := __EDTB674 ;
+IF __EDTB688 THEN
+(* Operator output on : = with __EDTB687 *)
+__EDTB687 := (UTIL_TARGETTAGVALUE = '1') ;
+ELSE
+__EDTB687 := FALSE ;
+END_IF ;
+__MO_EQUAL_37 := __EDTB687 ;
+__EDTB689 := __EDTB687 ;
+__EDTB690 := (__EDTB686 OR __EDTB689) ;
+IF __EDTB690 THEN
+CONFIG_WHITELISTENABLED := (  TRUE) ;
+END_IF ;
+__MO_1GAIN_78 := __EDTB690 ;
+__EDTB691 := __EDTB690 ;
+IF __EDTB691 THEN
+(*Set coil*)
+UTIL_HANDLED := TRUE ;
+END_IF ;
+__EDTB692 := __EDTB674 AND NOT(UTIL_HANDLED) ;
+IF __EDTB692 THEN
+DATA_ACKSMSTEXT := (  UTIL_INVALIDTAGVALUE) ;
+END_IF ;
+__MO_1GAIN_79 := __EDTB692 ;
+__EDTB693 := __EDTB692 ;
+__EDTB694 := __EDTB674 ;
+IF __EDTB694 THEN
+(*GOTO DONE*)
+__GJ __LG0005 ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*OUTPUTx ON/OFF command: Rungs 63 and 64 respond to SMS message commands to turn digital inputs ON or OFF. This sample program handles digital outputs 0 and 1. Delete or add digital outputs as required.
+OUTPUT0 ON/OFF command:*)
+(*Label :*)(**)
+__EDTB696 := TRUE ;
+IF __EDTB696 THEN
+(* Operator output on : = with __EDTB695 *)
+__EDTB695 := (UTIL_TARGETTAGNAME = 'OUTPUT0') ;
+ELSE
+__EDTB695 := FALSE ;
+END_IF ;
+__MO_EQUAL_38 := __EDTB695 ;
+__EDTB698 := __EDTB695 ;
+IF __EDTB698 THEN
+(* Operator output on : = with __EDTB697 *)
+__EDTB697 := (UTIL_TARGETTAGVALUE = 'OFF') ;
+ELSE
+__EDTB697 := FALSE ;
+END_IF ;
+__MO_EQUAL_39 := __EDTB697 ;
+__EDTB699 := __EDTB697 ;
+__EDTB701 := __EDTB695 ;
+IF __EDTB701 THEN
+(* Operator output on : = with __EDTB700 *)
+__EDTB700 := (UTIL_TARGETTAGVALUE = '0') ;
+ELSE
+__EDTB700 := FALSE ;
+END_IF ;
+__MO_EQUAL_40 := __EDTB700 ;
+__EDTB702 := __EDTB700 ;
+__EDTB703 := (__EDTB699 OR __EDTB702) ;
+IF __EDTB703 THEN
+_IO_EM_DO_00 := (  FALSE) ;
+END_IF ;
+__MO_1GAIN_80 := __EDTB703 ;
+__EDTB704 := __EDTB703 ;
+IF __EDTB704 THEN
+(*Set coil*)
+UTIL_HANDLED := TRUE ;
+END_IF ;
+__EDTB706 := __EDTB695 ;
+IF __EDTB706 THEN
+(* Operator output on : = with __EDTB705 *)
+__EDTB705 := (UTIL_TARGETTAGVALUE = 'ON') ;
+ELSE
+__EDTB705 := FALSE ;
+END_IF ;
+__MO_EQUAL_41 := __EDTB705 ;
+__EDTB707 := __EDTB705 ;
+__EDTB709 := __EDTB695 ;
+IF __EDTB709 THEN
+(* Operator output on : = with __EDTB708 *)
+__EDTB708 := (UTIL_TARGETTAGVALUE = '1') ;
+ELSE
+__EDTB708 := FALSE ;
+END_IF ;
+__MO_EQUAL_42 := __EDTB708 ;
+__EDTB710 := __EDTB708 ;
+__EDTB711 := (__EDTB707 OR __EDTB710) ;
+IF __EDTB711 THEN
+_IO_EM_DO_00 := (  TRUE) ;
+END_IF ;
+__MO_1GAIN_81 := __EDTB711 ;
+__EDTB712 := __EDTB711 ;
+IF __EDTB712 THEN
+(*Set coil*)
+UTIL_HANDLED := TRUE ;
+END_IF ;
+__EDTB713 := __EDTB695 AND NOT(UTIL_HANDLED) ;
+IF __EDTB713 THEN
+DATA_ACKSMSTEXT := (  UTIL_INVALIDTAGVALUE) ;
+END_IF ;
+__MO_1GAIN_82 := __EDTB713 ;
+__EDTB714 := __EDTB713 ;
+__EDTB715 := __EDTB695 ;
+IF __EDTB715 THEN
+(*GOTO DONE*)
+__GJ __LG0005 ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*OUTPUT1 ON/OFF command:*)
+(*Label :*)(**)
+__EDTB717 := TRUE ;
+IF __EDTB717 THEN
+(* Operator output on : = with __EDTB716 *)
+__EDTB716 := (UTIL_TARGETTAGNAME = 'OUTPUT1') ;
+ELSE
+__EDTB716 := FALSE ;
+END_IF ;
+__MO_EQUAL_43 := __EDTB716 ;
+__EDTB719 := __EDTB716 ;
+IF __EDTB719 THEN
+(* Operator output on : = with __EDTB718 *)
+__EDTB718 := (UTIL_TARGETTAGVALUE = 'OFF') ;
+ELSE
+__EDTB718 := FALSE ;
+END_IF ;
+__MO_EQUAL_44 := __EDTB718 ;
+__EDTB720 := __EDTB718 ;
+__EDTB722 := __EDTB716 ;
+IF __EDTB722 THEN
+(* Operator output on : = with __EDTB721 *)
+__EDTB721 := (UTIL_TARGETTAGVALUE = '0') ;
+ELSE
+__EDTB721 := FALSE ;
+END_IF ;
+__MO_EQUAL_45 := __EDTB721 ;
+__EDTB723 := __EDTB721 ;
+__EDTB724 := (__EDTB720 OR __EDTB723) ;
+IF __EDTB724 THEN
+_IO_EM_DO_01 := (  FALSE) ;
+END_IF ;
+__MO_1GAIN_83 := __EDTB724 ;
+__EDTB725 := __EDTB724 ;
+IF __EDTB725 THEN
+(*Set coil*)
+UTIL_HANDLED := TRUE ;
+END_IF ;
+__EDTB727 := __EDTB716 ;
+IF __EDTB727 THEN
+(* Operator output on : = with __EDTB726 *)
+__EDTB726 := (UTIL_TARGETTAGVALUE = 'ON') ;
+ELSE
+__EDTB726 := FALSE ;
+END_IF ;
+__MO_EQUAL_46 := __EDTB726 ;
+__EDTB728 := __EDTB726 ;
+__EDTB730 := __EDTB716 ;
+IF __EDTB730 THEN
+(* Operator output on : = with __EDTB729 *)
+__EDTB729 := (UTIL_TARGETTAGVALUE = '1') ;
+ELSE
+__EDTB729 := FALSE ;
+END_IF ;
+__MO_EQUAL_47 := __EDTB729 ;
+__EDTB731 := __EDTB729 ;
+__EDTB732 := (__EDTB728 OR __EDTB731) ;
+IF __EDTB732 THEN
+_IO_EM_DO_01 := (  TRUE) ;
+END_IF ;
+__MO_1GAIN_84 := __EDTB732 ;
+__EDTB733 := __EDTB732 ;
+IF __EDTB733 THEN
+(*Set coil*)
+UTIL_HANDLED := TRUE ;
+END_IF ;
+__EDTB734 := __EDTB716 AND NOT(UTIL_HANDLED) ;
+IF __EDTB734 THEN
+DATA_ACKSMSTEXT := (  UTIL_INVALIDTAGVALUE) ;
+END_IF ;
+__MO_1GAIN_85 := __EDTB734 ;
+__EDTB735 := __EDTB734 ;
+__EDTB736 := __EDTB716 ;
+IF __EDTB736 THEN
+(*GOTO DONE*)
+__GJ __LG0005 ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB737 := NOT(UTIL_HANDLED) ;
+IF __EDTB737 THEN
+DATA_ACKSMSTEXT := (  'FAILED: Invalid command') ;
+END_IF ;
+__MO_1GAIN_86 := __EDTB737 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(*DONE*)
+__GL __LG0005 ;
+__EDTB738 := TRUE ;
+IF __EDTB738 THEN
+(*Reset coil*)
+UTIL_SETCMDACKED := FALSE ;
+END_IF ;
+__EDTB739 := TRUE ;
+IF __EDTB739 THEN
+(*Reset coil*)
+UTIL_HANDLED := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(*ACK*)
+__GL __LG0006 ;
+__EDTB740 := NOT(CONFIG_ACKENABLED) ;
+IF __EDTB740 THEN
+(*Set coil*)
+UTIL_SETCMDACKED := TRUE ;
+END_IF ;
+__EDTB741 := NOT(CONFIG_ACKENABLED) ;
+IF __EDTB741 THEN
+UTIL_RETRYCOUNT := (  0) ;
+END_IF ;
+__MO_1GAIN_87 := __EDTB741 ;
+__EDTB742 := __EDTB741 ;
+__EDTB743 := NOT(CONFIG_ACKENABLED) ;
+IF __EDTB743 THEN
+(*GOTO DONE2*)
+__GJ __LG0007 ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(**)
+__EDTB744 := CONFIG_ACKENABLED AND NOT(UTIL_SETCMDACKED) ;
+__EDTB745 := __EDTB744 ;
+IF __EDTB745 THEN
+UTIL_TMPVALUE4 := MLEN(DATA_ACKSMSTEXT) ;
+END_IF ;
+__MO_MLEN_46 := __EDTB745 ;
+__EDTB746 := __EDTB745 ;
+__EDTB747 := __EDTB744 ;
+IF __EDTB747 THEN
+UTIL_TMPVALUE5 := MLEN(UTIL_SENDER) ;
+END_IF ;
+__MO_MLEN_47 := __EDTB747 ;
+__EDTB748 := __EDTB747 ;
+__EDTB750 := __EDTB744 ;
+IF __EDTB750 THEN
+(* Operator output on : > with __EDTB749 *)
+__EDTB749 := (UTIL_TMPVALUE4 > 0) ;
+ELSE
+__EDTB749 := FALSE ;
+END_IF ;
+__MO_GREAT_14 := __EDTB749 ;
+__EDTB752 := __EDTB749 ;
+IF __EDTB752 THEN
+(* Operator output on : > with __EDTB751 *)
+__EDTB751 := (UTIL_TMPVALUE5 > 0) ;
+ELSE
+__EDTB751 := FALSE ;
+END_IF ;
+__MO_GREAT_15 := __EDTB751 ;
+__EDTB753 := __EDTB751 ;
+IF __EDTB753 THEN
+UTIL_ACKRECEIVERS[1] := (  UTIL_SENDER) ;
+END_IF ;
+__MO_1GAIN_88 := __EDTB753 ;
+__EDTB754 := __EDTB753 ;
+__EDTB755 := __EDTB751 ;
+IF __EDTB755 THEN
+UTIL_ACKRECEIVERS[2] := (  '') ;
+END_IF ;
+__MO_1GAIN_89 := __EDTB755 ;
+__EDTB756 := __EDTB755 ;
+__EDTB757 := __EDTB751 ;
+IF __EDTB757 THEN
+UTIL_ACKRECEIVERS[3] := (  '') ;
+END_IF ;
+__MO_1GAIN_90 := __EDTB757 ;
+__EDTB758 := __EDTB757 ;
+__EDTB759 := __EDTB751 ;
+IF __EDTB759 THEN
+UTIL_ACKRECEIVERS[4] := (  '') ;
+END_IF ;
+__MO_1GAIN_91 := __EDTB759 ;
+__EDTB760 := __EDTB759 ;
+__EDTB761 := __EDTB751 ;
+IF __EDTB761 THEN
+UTIL_ACKRECEIVERS[5] := (  '') ;
+END_IF ;
+__MO_1GAIN_92 := __EDTB761 ;
+__EDTB762 := __EDTB761 ;
+(* FB call: PSFT_SMS_SEND *)
+UTIL_SEND_SMS_4(__EDTB751 AND NOT(UTIL_SETCMDACKED), CONFIG_SLOTID, UTIL_ACKRECEIVERS, DATA_ACKSMSTEXT) ;
+__EDTB763 := UTIL_SEND_SMS_4.Q ;
+__EDTB764 := (__EDTB762 OR __EDTB763) ;
+__EDTB766 := __EDTB751 AND UTIL_SEND_SMS_4.Q ;
+IF __EDTB766 THEN
+(* Operator output on : = with __EDTB765 *)
+__EDTB765 := (UTIL_SEND_SMS_4.ERRCODE = 0) ;
+ELSE
+__EDTB765 := FALSE ;
+END_IF ;
+__MO_EQUAL_48 := __EDTB765 ;
+__EDTB767 := __EDTB765 ;
+IF __EDTB767 THEN
+UTIL_SETCMDACKED := (  TRUE) ;
+END_IF ;
+__MO_1GAIN_93 := __EDTB767 ;
+__EDTB768 := __EDTB767 ;
+__EDTB769 := __EDTB765 ;
+IF __EDTB769 THEN
+UTIL_RETRYCOUNT := (  0) ;
+END_IF ;
+__MO_1GAIN_94 := __EDTB769 ;
+__EDTB770 := __EDTB769 ;
+__EDTB771 := (__EDTB768 OR __EDTB770) ;
+__EDTB772 := __EDTB751 AND NOT(UTIL_SEND_SMS_4.Q) ;
+__EDTB774 := __EDTB751 ;
+IF __EDTB774 THEN
+(* Operator output on : <> with __EDTB773 *)
+__EDTB773 := (UTIL_SEND_SMS_4.ERRCODE <> 0) ;
+ELSE
+__EDTB773 := FALSE ;
+END_IF ;
+__MO_DIFF_13 := __EDTB773 ;
+__EDTB775 := __EDTB773 ;
+__EDTB776 := (__EDTB772 OR __EDTB775) ;
+IF __EDTB776 THEN
+UTIL_RETRYCOUNT := (UTIL_RETRYCOUNT + 1) ;
+END_IF ;
+__MO_PLUS_48 := __EDTB776 ;
+__EDTB778 := __EDTB776 ;
+IF __EDTB778 THEN
+(* Operator output on : > with __EDTB777 *)
+__EDTB777 := (UTIL_RETRYCOUNT > UTIL_MAXRETRYTIME) ;
+ELSE
+__EDTB777 := FALSE ;
+END_IF ;
+__MO_GREAT_16 := __EDTB777 ;
+__EDTB779 := __EDTB777 ;
+IF __EDTB779 THEN
+STATUS_ERRCOUNT := (STATUS_ERRCOUNT + 1) ;
+END_IF ;
+__MO_PLUS_49 := __EDTB779 ;
+__EDTB780 := __EDTB779 ;
+__EDTB781 := __EDTB777 ;
+IF __EDTB781 THEN
+UTIL_SETCMDACKED := (  TRUE) ;
+END_IF ;
+__MO_1GAIN_95 := __EDTB781 ;
+__EDTB782 := __EDTB781 ;
+__EDTB783 := __EDTB777 ;
+IF __EDTB783 THEN
+UTIL_RETRYCOUNT := (  0) ;
+END_IF ;
+__MO_1GAIN_96 := __EDTB783 ;
+__EDTB784 := __EDTB783 ;
+__EDTB785 := __EDTB777 ;
+IF __EDTB785 THEN
+DATA_ACKSMSTEXT := (  '') ;
+END_IF ;
+__MO_1GAIN_97 := __EDTB785 ;
+__EDTB786 := __EDTB785 ;
+__EDTB787 := (__EDTB784 OR __EDTB786) ;
+__EDTB788 := (__EDTB782 OR __EDTB787) ;
+__EDTB789 := (__EDTB780 OR __EDTB788) ;
+__EDTB790 := (__EDTB771 OR __EDTB789) ;
+__EDTB791 := (__EDTB764 OR __EDTB790) ;
+__EDTB792 := (__EDTB760 OR __EDTB791) ;
+__EDTB793 := (__EDTB758 OR __EDTB792) ;
+__EDTB794 := (__EDTB756 OR __EDTB793) ;
+__EDTB795 := (__EDTB754 OR __EDTB794) ;
+__EDTB796 := (__EDTB748 OR __EDTB795) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(*DO NOT MODIFY THIS RUNG*)
+(*Label :*)(*DONE2*)
+__GL __LG0007 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB797 := TRUE ;
+IF __EDTB797 THEN
+SMS_RECU := (  DATA_RECVEDSMSTEXT) ;
+END_IF ;
+__MO_1GAIN_98 := __EDTB797 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB799 := TRUE ;
+IF __EDTB799 THEN
+(* Operator output on : = with __EDTB798 *)
+__EDTB798 := (SMS_RECU = HS_L4) ;
+ELSE
+__EDTB798 := FALSE ;
+END_IF ;
+__MO_EQUAL_49 := __EDTB798 ;
+__EDTB800 := __EDTB798 ;
+IF __EDTB800 THEN
+(*Set coil*)
+DEF_BRANDALARM_HS_L4 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB802 := TRUE ;
+IF __EDTB802 THEN
+(* Operator output on : = with __EDTB801 *)
+__EDTB801 := (SMS_RECU = HS_L4_R) ;
+ELSE
+__EDTB801 := FALSE ;
+END_IF ;
+__MO_EQUAL_50 := __EDTB801 ;
+__EDTB803 := __EDTB801 ;
+IF __EDTB803 THEN
+(*Reset coil*)
+DEF_BRANDALARM_HS_L4 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB805 := TRUE ;
+IF __EDTB805 THEN
+(* Operator output on : = with __EDTB804 *)
+__EDTB804 := (SMS_RECU = HS_L4_CENT) ;
+ELSE
+__EDTB804 := FALSE ;
+END_IF ;
+__MO_EQUAL_51 := __EDTB804 ;
+__EDTB806 := __EDTB804 ;
+IF __EDTB806 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_HS_L4 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB808 := TRUE ;
+IF __EDTB808 THEN
+(* Operator output on : = with __EDTB807 *)
+__EDTB807 := (SMS_RECU = HS_L4_R_CENT) ;
+ELSE
+__EDTB807 := FALSE ;
+END_IF ;
+__MO_EQUAL_52 := __EDTB807 ;
+__EDTB809 := __EDTB807 ;
+IF __EDTB809 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_HS_L4 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB811 := TRUE ;
+IF __EDTB811 THEN
+(* Operator output on : = with __EDTB810 *)
+__EDTB810 := (SMS_RECU = GR_BRONZ_L2) ;
+ELSE
+__EDTB810 := FALSE ;
+END_IF ;
+__MO_EQUAL_53 := __EDTB810 ;
+__EDTB812 := __EDTB810 ;
+IF __EDTB812 THEN
+(*Set coil*)
+DEF_BRANDALARM_GR_BRONZ_L2 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB814 := TRUE ;
+IF __EDTB814 THEN
+(* Operator output on : = with __EDTB813 *)
+__EDTB813 := (SMS_RECU = GR_BRONZ_L2_R) ;
+ELSE
+__EDTB813 := FALSE ;
+END_IF ;
+__MO_EQUAL_54 := __EDTB813 ;
+__EDTB815 := __EDTB813 ;
+IF __EDTB815 THEN
+(*Reset coil*)
+DEF_BRANDALARM_GR_BRONZ_L2 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB817 := TRUE ;
+IF __EDTB817 THEN
+(* Operator output on : = with __EDTB816 *)
+__EDTB816 := (SMS_RECU = GR_BRONZ_L2_CENT) ;
+ELSE
+__EDTB816 := FALSE ;
+END_IF ;
+__MO_EQUAL_55 := __EDTB816 ;
+__EDTB818 := __EDTB816 ;
+IF __EDTB818 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_GR_BRONZ_L2 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB820 := TRUE ;
+IF __EDTB820 THEN
+(* Operator output on : = with __EDTB819 *)
+__EDTB819 := (SMS_RECU = GR_BRONZ_L2_R_CENT) ;
+ELSE
+__EDTB819 := FALSE ;
+END_IF ;
+__MO_EQUAL_56 := __EDTB819 ;
+__EDTB821 := __EDTB819 ;
+IF __EDTB821 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_GR_BRONZ_L2 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB823 := TRUE ;
+IF __EDTB823 THEN
+(* Operator output on : = with __EDTB822 *)
+__EDTB822 := (SMS_RECU = CV_COIL_7) ;
+ELSE
+__EDTB822 := FALSE ;
+END_IF ;
+__MO_EQUAL_57 := __EDTB822 ;
+__EDTB824 := __EDTB822 ;
+IF __EDTB824 THEN
+(*Set coil*)
+DEF_BRANDALARM_CV_COIL_7 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB826 := TRUE ;
+IF __EDTB826 THEN
+(* Operator output on : = with __EDTB825 *)
+__EDTB825 := (SMS_RECU = CV_COIL_7_R) ;
+ELSE
+__EDTB825 := FALSE ;
+END_IF ;
+__MO_EQUAL_58 := __EDTB825 ;
+__EDTB827 := __EDTB825 ;
+IF __EDTB827 THEN
+(*Reset coil*)
+DEF_BRANDALARM_CV_COIL_7 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB829 := TRUE ;
+IF __EDTB829 THEN
+(* Operator output on : = with __EDTB828 *)
+__EDTB828 := (SMS_RECU = CV_COIL_7_CENT) ;
+ELSE
+__EDTB828 := FALSE ;
+END_IF ;
+__MO_EQUAL_59 := __EDTB828 ;
+__EDTB830 := __EDTB828 ;
+IF __EDTB830 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_CV_COIL_7 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB832 := TRUE ;
+IF __EDTB832 THEN
+(* Operator output on : = with __EDTB831 *)
+__EDTB831 := (SMS_RECU = CV_COIL_7_R_CENT) ;
+ELSE
+__EDTB831 := FALSE ;
+END_IF ;
+__MO_EQUAL_60 := __EDTB831 ;
+__EDTB833 := __EDTB831 ;
+IF __EDTB833 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_CV_COIL_7 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB835 := TRUE ;
+IF __EDTB835 THEN
+(* Operator output on : = with __EDTB834 *)
+__EDTB834 := (SMS_RECU = HS_L1) ;
+ELSE
+__EDTB834 := FALSE ;
+END_IF ;
+__MO_EQUAL_61 := __EDTB834 ;
+__EDTB836 := __EDTB834 ;
+IF __EDTB836 THEN
+(*Set coil*)
+DEF_BRANDALARM_HS_L1 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB838 := TRUE ;
+IF __EDTB838 THEN
+(* Operator output on : = with __EDTB837 *)
+__EDTB837 := (SMS_RECU = HS_L1_R) ;
+ELSE
+__EDTB837 := FALSE ;
+END_IF ;
+__MO_EQUAL_62 := __EDTB837 ;
+__EDTB839 := __EDTB837 ;
+IF __EDTB839 THEN
+(*Reset coil*)
+DEF_BRANDALARM_HS_L1 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB841 := TRUE ;
+IF __EDTB841 THEN
+(* Operator output on : = with __EDTB840 *)
+__EDTB840 := (SMS_RECU = HS_L1_CENT) ;
+ELSE
+__EDTB840 := FALSE ;
+END_IF ;
+__MO_EQUAL_63 := __EDTB840 ;
+__EDTB842 := __EDTB840 ;
+IF __EDTB842 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_HS_L1 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB844 := TRUE ;
+IF __EDTB844 THEN
+(* Operator output on : = with __EDTB843 *)
+__EDTB843 := (SMS_RECU = HS_L1_R_CENT) ;
+ELSE
+__EDTB843 := FALSE ;
+END_IF ;
+__MO_EQUAL_64 := __EDTB843 ;
+__EDTB845 := __EDTB843 ;
+IF __EDTB845 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_HS_L1 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB847 := TRUE ;
+IF __EDTB847 THEN
+(* Operator output on : = with __EDTB846 *)
+__EDTB846 := (SMS_RECU = HS_L2) ;
+ELSE
+__EDTB846 := FALSE ;
+END_IF ;
+__MO_EQUAL_65 := __EDTB846 ;
+__EDTB848 := __EDTB846 ;
+IF __EDTB848 THEN
+(*Set coil*)
+DEF_BRANDALARM_HS_L2 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB850 := TRUE ;
+IF __EDTB850 THEN
+(* Operator output on : = with __EDTB849 *)
+__EDTB849 := (SMS_RECU = HS_L2_R) ;
+ELSE
+__EDTB849 := FALSE ;
+END_IF ;
+__MO_EQUAL_66 := __EDTB849 ;
+__EDTB851 := __EDTB849 ;
+IF __EDTB851 THEN
+(*Reset coil*)
+DEF_BRANDALARM_HS_L2 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB853 := TRUE ;
+IF __EDTB853 THEN
+(* Operator output on : = with __EDTB852 *)
+__EDTB852 := (SMS_RECU = HS_L2_CENT) ;
+ELSE
+__EDTB852 := FALSE ;
+END_IF ;
+__MO_EQUAL_67 := __EDTB852 ;
+__EDTB854 := __EDTB852 ;
+IF __EDTB854 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_HS_L2 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB856 := TRUE ;
+IF __EDTB856 THEN
+(* Operator output on : = with __EDTB855 *)
+__EDTB855 := (SMS_RECU = HS_L2_R_CENT) ;
+ELSE
+__EDTB855 := FALSE ;
+END_IF ;
+__MO_EQUAL_68 := __EDTB855 ;
+__EDTB857 := __EDTB855 ;
+IF __EDTB857 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_HS_L2 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB859 := TRUE ;
+IF __EDTB859 THEN
+(* Operator output on : = with __EDTB858 *)
+__EDTB858 := (SMS_RECU = HS_L3) ;
+ELSE
+__EDTB858 := FALSE ;
+END_IF ;
+__MO_EQUAL_69 := __EDTB858 ;
+__EDTB860 := __EDTB858 ;
+IF __EDTB860 THEN
+(*Set coil*)
+DEF_BRANDALARM_HS_L3 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB862 := TRUE ;
+IF __EDTB862 THEN
+(* Operator output on : = with __EDTB861 *)
+__EDTB861 := (SMS_RECU = HS_L3_R) ;
+ELSE
+__EDTB861 := FALSE ;
+END_IF ;
+__MO_EQUAL_70 := __EDTB861 ;
+__EDTB863 := __EDTB861 ;
+IF __EDTB863 THEN
+(*Reset coil*)
+DEF_BRANDALARM_HS_L3 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB865 := TRUE ;
+IF __EDTB865 THEN
+(* Operator output on : = with __EDTB864 *)
+__EDTB864 := (SMS_RECU = HS_L3_CENT) ;
+ELSE
+__EDTB864 := FALSE ;
+END_IF ;
+__MO_EQUAL_71 := __EDTB864 ;
+__EDTB866 := __EDTB864 ;
+IF __EDTB866 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_HS_L3 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB868 := TRUE ;
+IF __EDTB868 THEN
+(* Operator output on : = with __EDTB867 *)
+__EDTB867 := (SMS_RECU = HS_L3_R_CENT) ;
+ELSE
+__EDTB867 := FALSE ;
+END_IF ;
+__MO_EQUAL_72 := __EDTB867 ;
+__EDTB869 := __EDTB867 ;
+IF __EDTB869 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_HS_L3 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB871 := TRUE ;
+IF __EDTB871 THEN
+(* Operator output on : = with __EDTB870 *)
+__EDTB870 := (SMS_RECU = IBT) ;
+ELSE
+__EDTB870 := FALSE ;
+END_IF ;
+__MO_EQUAL_73 := __EDTB870 ;
+__EDTB872 := __EDTB870 ;
+IF __EDTB872 THEN
+(*Set coil*)
+DEF_BRANDALARM_IBT := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB874 := TRUE ;
+IF __EDTB874 THEN
+(* Operator output on : = with __EDTB873 *)
+__EDTB873 := (SMS_RECU = IBT_R) ;
+ELSE
+__EDTB873 := FALSE ;
+END_IF ;
+__MO_EQUAL_74 := __EDTB873 ;
+__EDTB875 := __EDTB873 ;
+IF __EDTB875 THEN
+(*Reset coil*)
+DEF_BRANDALARM_IBT := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB877 := TRUE ;
+IF __EDTB877 THEN
+(* Operator output on : = with __EDTB876 *)
+__EDTB876 := (SMS_RECU = IBT_CENT) ;
+ELSE
+__EDTB876 := FALSE ;
+END_IF ;
+__MO_EQUAL_75 := __EDTB876 ;
+__EDTB878 := __EDTB876 ;
+IF __EDTB878 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_IBT := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB880 := TRUE ;
+IF __EDTB880 THEN
+(* Operator output on : = with __EDTB879 *)
+__EDTB879 := (SMS_RECU = IBT_R_CENT) ;
+ELSE
+__EDTB879 := FALSE ;
+END_IF ;
+__MO_EQUAL_76 := __EDTB879 ;
+__EDTB881 := __EDTB879 ;
+IF __EDTB881 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_IBT := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB883 := TRUE ;
+IF __EDTB883 THEN
+(* Operator output on : = with __EDTB882 *)
+__EDTB882 := (SMS_RECU = ICT) ;
+ELSE
+__EDTB882 := FALSE ;
+END_IF ;
+__MO_EQUAL_77 := __EDTB882 ;
+__EDTB884 := __EDTB882 ;
+IF __EDTB884 THEN
+(*Set coil*)
+DEF_BRANDALARM_ICT := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB886 := TRUE ;
+IF __EDTB886 THEN
+(* Operator output on : = with __EDTB885 *)
+__EDTB885 := (SMS_RECU = ICT_R) ;
+ELSE
+__EDTB885 := FALSE ;
+END_IF ;
+__MO_EQUAL_78 := __EDTB885 ;
+__EDTB887 := __EDTB885 ;
+IF __EDTB887 THEN
+(*Reset coil*)
+DEF_BRANDALARM_ICT := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB889 := TRUE ;
+IF __EDTB889 THEN
+(* Operator output on : = with __EDTB888 *)
+__EDTB888 := (SMS_RECU = ICT_CENT) ;
+ELSE
+__EDTB888 := FALSE ;
+END_IF ;
+__MO_EQUAL_79 := __EDTB888 ;
+__EDTB890 := __EDTB888 ;
+IF __EDTB890 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_ICT := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB892 := TRUE ;
+IF __EDTB892 THEN
+(* Operator output on : = with __EDTB891 *)
+__EDTB891 := (SMS_RECU = ICT_R_CENT) ;
+ELSE
+__EDTB891 := FALSE ;
+END_IF ;
+__MO_EQUAL_80 := __EDTB891 ;
+__EDTB893 := __EDTB891 ;
+IF __EDTB893 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_ICT := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB895 := TRUE ;
+IF __EDTB895 THEN
+(* Operator output on : = with __EDTB894 *)
+__EDTB894 := (SMS_RECU = INGANG_L1) ;
+ELSE
+__EDTB894 := FALSE ;
+END_IF ;
+__MO_EQUAL_81 := __EDTB894 ;
+__EDTB896 := __EDTB894 ;
+IF __EDTB896 THEN
+(*Set coil*)
+DEF_BRANDALARM_INGANG_L1 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB898 := TRUE ;
+IF __EDTB898 THEN
+(* Operator output on : = with __EDTB897 *)
+__EDTB897 := (SMS_RECU = INGANG_L1_R) ;
+ELSE
+__EDTB897 := FALSE ;
+END_IF ;
+__MO_EQUAL_82 := __EDTB897 ;
+__EDTB899 := __EDTB897 ;
+IF __EDTB899 THEN
+(*Reset coil*)
+DEF_BRANDALARM_INGANG_L1 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB901 := TRUE ;
+IF __EDTB901 THEN
+(* Operator output on : = with __EDTB900 *)
+__EDTB900 := (SMS_RECU = INGANG_L1_CENT) ;
+ELSE
+__EDTB900 := FALSE ;
+END_IF ;
+__MO_EQUAL_83 := __EDTB900 ;
+__EDTB902 := __EDTB900 ;
+IF __EDTB902 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_CV_INGANG_L1 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB904 := TRUE ;
+IF __EDTB904 THEN
+(* Operator output on : = with __EDTB903 *)
+__EDTB903 := (SMS_RECU = INGANG_L1_R_CENT) ;
+ELSE
+__EDTB903 := FALSE ;
+END_IF ;
+__MO_EQUAL_84 := __EDTB903 ;
+__EDTB905 := __EDTB903 ;
+IF __EDTB905 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_CV_INGANG_L1 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB907 := TRUE ;
+IF __EDTB907 THEN
+(* Operator output on : = with __EDTB906 *)
+__EDTB906 := (SMS_RECU = UITGANG_L1) ;
+ELSE
+__EDTB906 := FALSE ;
+END_IF ;
+__MO_EQUAL_85 := __EDTB906 ;
+__EDTB908 := __EDTB906 ;
+IF __EDTB908 THEN
+(*Set coil*)
+DEF_BRANDALARM_UITGANG_L1 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB910 := TRUE ;
+IF __EDTB910 THEN
+(* Operator output on : = with __EDTB909 *)
+__EDTB909 := (SMS_RECU = UITGANG_L1_R) ;
+ELSE
+__EDTB909 := FALSE ;
+END_IF ;
+__MO_EQUAL_86 := __EDTB909 ;
+__EDTB911 := __EDTB909 ;
+IF __EDTB911 THEN
+(*Reset coil*)
+DEF_BRANDALARM_UITGANG_L1 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB913 := TRUE ;
+IF __EDTB913 THEN
+(* Operator output on : = with __EDTB912 *)
+__EDTB912 := (SMS_RECU = UITGANG_L1_CENT) ;
+ELSE
+__EDTB912 := FALSE ;
+END_IF ;
+__MO_EQUAL_87 := __EDTB912 ;
+__EDTB914 := __EDTB912 ;
+IF __EDTB914 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_UITGANG_L1 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB916 := TRUE ;
+IF __EDTB916 THEN
+(* Operator output on : = with __EDTB915 *)
+__EDTB915 := (SMS_RECU = UITGANG_L1_R_CENT) ;
+ELSE
+__EDTB915 := FALSE ;
+END_IF ;
+__MO_EQUAL_88 := __EDTB915 ;
+__EDTB917 := __EDTB915 ;
+IF __EDTB917 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_UITGANG_L1 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB919 := TRUE ;
+IF __EDTB919 THEN
+(* Operator output on : = with __EDTB918 *)
+__EDTB918 := (SMS_RECU = IWTS_WANS) ;
+ELSE
+__EDTB918 := FALSE ;
+END_IF ;
+__MO_EQUAL_89 := __EDTB918 ;
+__EDTB920 := __EDTB918 ;
+IF __EDTB920 THEN
+(*Set coil*)
+DEF_BRANDALARM_IWTS_WANS := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB922 := TRUE ;
+IF __EDTB922 THEN
+(* Operator output on : = with __EDTB921 *)
+__EDTB921 := (SMS_RECU = IWTS_WANS_R) ;
+ELSE
+__EDTB921 := FALSE ;
+END_IF ;
+__MO_EQUAL_90 := __EDTB921 ;
+__EDTB923 := __EDTB921 ;
+IF __EDTB923 THEN
+(*Reset coil*)
+DEF_BRANDALARM_IWTS_WANS := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB925 := TRUE ;
+IF __EDTB925 THEN
+(* Operator output on : = with __EDTB924 *)
+__EDTB924 := (SMS_RECU = IWTS_WANS_CENT) ;
+ELSE
+__EDTB924 := FALSE ;
+END_IF ;
+__MO_EQUAL_91 := __EDTB924 ;
+__EDTB926 := __EDTB924 ;
+IF __EDTB926 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_IWTS_WANS := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB928 := TRUE ;
+IF __EDTB928 THEN
+(* Operator output on : = with __EDTB927 *)
+__EDTB927 := (SMS_RECU = IWTS_WANS_R_CENT) ;
+ELSE
+__EDTB927 := FALSE ;
+END_IF ;
+__MO_EQUAL_92 := __EDTB927 ;
+__EDTB929 := __EDTB927 ;
+IF __EDTB929 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_IWTS_WANS := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB931 := TRUE ;
+IF __EDTB931 THEN
+(* Operator output on : = with __EDTB930 *)
+__EDTB930 := (SMS_RECU = WANSON_L3) ;
+ELSE
+__EDTB930 := FALSE ;
+END_IF ;
+__MO_EQUAL_93 := __EDTB930 ;
+__EDTB932 := __EDTB930 ;
+IF __EDTB932 THEN
+(*Set coil*)
+DEF_BRANDALARM_WANSON_L3 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB934 := TRUE ;
+IF __EDTB934 THEN
+(* Operator output on : = with __EDTB933 *)
+__EDTB933 := (SMS_RECU = WANSON_L3_R) ;
+ELSE
+__EDTB933 := FALSE ;
+END_IF ;
+__MO_EQUAL_94 := __EDTB933 ;
+__EDTB935 := __EDTB933 ;
+IF __EDTB935 THEN
+(*Reset coil*)
+DEF_BRANDALARM_WANSON_L3 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB937 := TRUE ;
+IF __EDTB937 THEN
+(* Operator output on : = with __EDTB936 *)
+__EDTB936 := (SMS_RECU = WANSON_L3_CENT) ;
+ELSE
+__EDTB936 := FALSE ;
+END_IF ;
+__MO_EQUAL_95 := __EDTB936 ;
+__EDTB938 := __EDTB936 ;
+IF __EDTB938 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_WANSON_L3 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB940 := TRUE ;
+IF __EDTB940 THEN
+(* Operator output on : = with __EDTB939 *)
+__EDTB939 := (SMS_RECU = WANSON_L3_R_CENT) ;
+ELSE
+__EDTB939 := FALSE ;
+END_IF ;
+__MO_EQUAL_96 := __EDTB939 ;
+__EDTB941 := __EDTB939 ;
+IF __EDTB941 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_WANSON_L3 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB943 := TRUE ;
+IF __EDTB943 THEN
+(* Operator output on : = with __EDTB942 *)
+__EDTB942 := (SMS_RECU = WKK) ;
+ELSE
+__EDTB942 := FALSE ;
+END_IF ;
+__MO_EQUAL_97 := __EDTB942 ;
+__EDTB944 := __EDTB942 ;
+IF __EDTB944 THEN
+(*Set coil*)
+DEF_BRANDALARM_WKK := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB946 := TRUE ;
+IF __EDTB946 THEN
+(* Operator output on : = with __EDTB945 *)
+__EDTB945 := (SMS_RECU = WKK_R) ;
+ELSE
+__EDTB945 := FALSE ;
+END_IF ;
+__MO_EQUAL_98 := __EDTB945 ;
+__EDTB947 := __EDTB945 ;
+IF __EDTB947 THEN
+(*Reset coil*)
+DEF_BRANDALARM_WKK := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB949 := TRUE ;
+IF __EDTB949 THEN
+(* Operator output on : = with __EDTB948 *)
+__EDTB948 := (SMS_RECU = WKK_CENT) ;
+ELSE
+__EDTB948 := FALSE ;
+END_IF ;
+__MO_EQUAL_99 := __EDTB948 ;
+__EDTB950 := __EDTB948 ;
+IF __EDTB950 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_WKK := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB952 := TRUE ;
+IF __EDTB952 THEN
+(* Operator output on : = with __EDTB951 *)
+__EDTB951 := (SMS_RECU = WKK_R_CENT) ;
+ELSE
+__EDTB951 := FALSE ;
+END_IF ;
+__MO_EQUAL_100 := __EDTB951 ;
+__EDTB953 := __EDTB951 ;
+IF __EDTB953 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_WKK := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB955 := TRUE ;
+IF __EDTB955 THEN
+(* Operator output on : = with __EDTB954 *)
+__EDTB954 := (SMS_RECU = LS_L2) ;
+ELSE
+__EDTB954 := FALSE ;
+END_IF ;
+__MO_EQUAL_101 := __EDTB954 ;
+__EDTB956 := __EDTB954 ;
+IF __EDTB956 THEN
+(*Set coil*)
+DEF_BRANDALARM_LS_L2 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB958 := TRUE ;
+IF __EDTB958 THEN
+(* Operator output on : = with __EDTB957 *)
+__EDTB957 := (SMS_RECU = LS_L2_R) ;
+ELSE
+__EDTB957 := FALSE ;
+END_IF ;
+__MO_EQUAL_102 := __EDTB957 ;
+__EDTB959 := __EDTB957 ;
+IF __EDTB959 THEN
+(*Reset coil*)
+DEF_BRANDALARM_LS_L2 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB961 := TRUE ;
+IF __EDTB961 THEN
+(* Operator output on : = with __EDTB960 *)
+__EDTB960 := (SMS_RECU = LS_L2_CENT) ;
+ELSE
+__EDTB960 := FALSE ;
+END_IF ;
+__MO_EQUAL_103 := __EDTB960 ;
+__EDTB962 := __EDTB960 ;
+IF __EDTB962 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_LS_L2 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB964 := TRUE ;
+IF __EDTB964 THEN
+(* Operator output on : = with __EDTB963 *)
+__EDTB963 := (SMS_RECU = LS_L2_R_CENT) ;
+ELSE
+__EDTB963 := FALSE ;
+END_IF ;
+__MO_EQUAL_104 := __EDTB963 ;
+__EDTB965 := __EDTB963 ;
+IF __EDTB965 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_LS_L2 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB967 := TRUE ;
+IF __EDTB967 THEN
+(* Operator output on : = with __EDTB966 *)
+__EDTB966 := (SMS_RECU = LS_L3) ;
+ELSE
+__EDTB966 := FALSE ;
+END_IF ;
+__MO_EQUAL_105 := __EDTB966 ;
+__EDTB968 := __EDTB966 ;
+IF __EDTB968 THEN
+(*Set coil*)
+DEF_BRANDALARM_INGANG_L1 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB970 := TRUE ;
+IF __EDTB970 THEN
+(* Operator output on : = with __EDTB969 *)
+__EDTB969 := (SMS_RECU = LS_L3_R) ;
+ELSE
+__EDTB969 := FALSE ;
+END_IF ;
+__MO_EQUAL_106 := __EDTB969 ;
+__EDTB971 := __EDTB969 ;
+IF __EDTB971 THEN
+(*Reset coil*)
+DEF_BRANDALARM_INGANG_L1 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB973 := TRUE ;
+IF __EDTB973 THEN
+(* Operator output on : = with __EDTB972 *)
+__EDTB972 := (SMS_RECU = LS_L3_CENT) ;
+ELSE
+__EDTB972 := FALSE ;
+END_IF ;
+__MO_EQUAL_107 := __EDTB972 ;
+__EDTB974 := __EDTB972 ;
+IF __EDTB974 THEN
+(*Set coil*)
+DEF_CENTRALEALARM_CV_INGANG_L1 := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB976 := TRUE ;
+IF __EDTB976 THEN
+(* Operator output on : = with __EDTB975 *)
+__EDTB975 := (SMS_RECU = LS_L3_R_CENT) ;
+ELSE
+__EDTB975 := FALSE ;
+END_IF ;
+__MO_EQUAL_108 := __EDTB975 ;
+__EDTB977 := __EDTB975 ;
+IF __EDTB977 THEN
+(*Reset coil*)
+DEF_CENTRALEALARM_CV_INGANG_L1 := FALSE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+AUX3 := NOT(DEF_BRANDALARM_HS_L4) AND NOT(DEF_BRANDALARM_IBT) AND NOT(DEF_BRANDALARM_ICT) AND NOT(DEF_BRANDALARM_INGANG_L1) AND NOT(DEF_BRANDALARM_IWTS_WANS) AND NOT(DEF_BRANDALARM_LS_L2) AND NOT(DEF_BRANDALARM_LS_L3) AND NOT(DEF_BRANDALARM_UITGANG_L1) AND NOT(DEF_BRANDALARM_WANSON_L3) AND NOT(DEF_BRANDALARM_WKK) AND NOT(DEF_BRANDALARM_HS_L3) AND NOT(DEF_BRANDALARM_HS_L2) AND NOT(DEF_BRANDALARM_HS_L1) AND NOT(DEF_BRANDALARM_GR_BRONZ_L2) AND NOT(DEF_BRANDALARM_CV_COIL_7) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+AUX2 := NOT(DEF_CENTRALEALARM_CV_COIL_7) AND NOT(DEF_CENTRALEALARM_CV_INGANG_L1) AND NOT(DEF_CENTRALEALARM_GR_BRONZ_L2) AND NOT(DEF_CENTRALEALARM_HS_L1) AND NOT(DEF_CENTRALEALARM_HS_L2) AND NOT(DEF_CENTRALEALARM_HS_L3) AND NOT(DEF_CENTRALEALARM_HS_L4) AND NOT(DEF_CENTRALEALARM_IBT) AND NOT(DEF_CENTRALEALARM_ICT) AND NOT(DEF_CENTRALEALARM_IWTS_WANS) AND NOT(DEF_CENTRALEALARM_LS_L2) AND NOT(DEF_CENTRALEALARM_LS_L3) AND NOT(DEF_CENTRALEALARM_UITGANG_L1) AND NOT(DEF_CENTRALEALARM_WANSON_L3) AND NOT(DEF_CENTRALEALARM_WKK) AND AUX3 ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+__EDTB978 := AUX4 AND NOT(AUX4) ;
+__EDTB979 := __EDTB978 ;
+IF __EDTB979 THEN
+(*Set coil*)
+SCR_L1 := TRUE ;
+END_IF ;
+__EDTB980 := __EDTB978 ;
+IF __EDTB980 THEN
+(*Set coil*)
+SCR_L2 := TRUE ;
+END_IF ;
+__EDTB981 := __EDTB978 ;
+IF __EDTB981 THEN
+(*Set coil*)
+SCR_L3 := TRUE ;
+END_IF ;
+__EDTB982 := __EDTB978 ;
+IF __EDTB982 THEN
+(*Set coil*)
+SCT_STAT := TRUE ;
+END_IF ;
+__EDTB983 := __EDTB978 ;
+IF __EDTB983 THEN
+(*Set coil*)
+SCR_TL := TRUE ;
+END_IF ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+AUX4 := NOT(AUX2) AND NOT(ONS2) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+ONS2 := NOT(AUX2) ;
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Rung **********************************)
+(**)
+(*Label :*)(**)
+
+(*************** Code for the end of Rung **************)
+
+
+(*************** Code for the end of File **************)
+__GL __LG0000 ;
+
+
+
+(*************** Local Symbols table *******************)
+(* __EDTB1 *)
+(* __EDTB2 *)
+(* __EDTB3 *)
+(* __EDTB4 *)
+(* __EDTB5 *)
+(* __EDTB6 *)
+(* __EDTB7 *)
+(* __EDTB8 *)
+(* __EDTB9 *)
+(* __EDTB10 *)
+(* __EDTB11 *)
+(* __EDTB12 *)
+(* __EDTB13 *)
+(* __EDTB14 *)
+(* __EDTB15 *)
+(* __EDTB16 *)
+(* __EDTB17 *)
+(* __EDTB18 *)
+(* __EDTB19 *)
+(* __EDTB20 *)
+(* __EDTB21 *)
+(* __EDTB22 *)
+(* __EDTB23 *)
+(* __EDTB24 *)
+(* __EDTB25 *)
+(* __EDTB26 *)
+(* __EDTB27 *)
+(* __EDTB28 *)
+(* __EDTB29 *)
+(* __EDTB30 *)
+(* __EDTB31 *)
+(* __EDTB32 *)
+(* __EDTB33 *)
+(* __EDTB34 *)
+(* __EDTB35 *)
+(* __EDTB36 *)
+(* __EDTB37 *)
+(* __EDTB38 *)
+(* __EDTB39 *)
+(* __EDTB40 *)
+(* __EDTB41 *)
+(* __EDTB42 *)
+(* __EDTB43 *)
+(* __EDTB44 *)
+(* __EDTB45 *)
+(* __EDTB46 *)
+(* __EDTB47 *)
+(* __EDTB48 *)
+(* __EDTB49 *)
+(* __EDTB50 *)
+(* __EDTB51 *)
+(* __EDTB52 *)
+(* __EDTB53 *)
+(* __EDTB54 *)
+(* __EDTB55 *)
+(* __EDTB56 *)
+(* __EDTB57 *)
+(* __EDTB58 *)
+(* __EDTB59 *)
+(* __EDTB60 *)
+(* __EDTB61 *)
+(* __EDTB62 *)
+(* __EDTB63 *)
+(* __EDTB64 *)
+(* __EDTB65 *)
+(* __EDTB66 *)
+(* __EDTB67 *)
+(* __EDTB68 *)
+(* __EDTB69 *)
+(* __EDTB70 *)
+(* __EDTB71 *)
+(* __EDTB72 *)
+(* __EDTB73 *)
+(* __EDTB74 *)
+(* __EDTB75 *)
+(* __EDTB76 *)
+(* __EDTB77 *)
+(* __EDTB78 *)
+(* __EDTB79 *)
+(* __EDTB80 *)
+(* __EDTB81 *)
+(* __EDTB82 *)
+(* __EDTB83 *)
+(* __EDTB84 *)
+(* __EDTB85 *)
+(* __EDTB86 *)
+(* __EDTB87 *)
+(* __EDTB88 *)
+(* __EDTB89 *)
+(* __EDTB90 *)
+(* __EDTB91 *)
+(* __EDTB92 *)
+(* __EDTB93 *)
+(* __EDTB94 *)
+(* __EDTB95 *)
+(* __EDTB96 *)
+(* __EDTB97 *)
+(* __EDTB98 *)
+(* __EDTB99 *)
+(* __EDTB100 *)
+(* __EDTB101 *)
+(* __EDTB102 *)
+(* __EDTB103 *)
+(* __EDTB104 *)
+(* __EDTB105 *)
+(* __EDTB106 *)
+(* __EDTB107 *)
+(* __EDTB108 *)
+(* __EDTB109 *)
+(* __EDTB110 *)
+(* __EDTB111 *)
+(* __EDTB112 *)
+(* __EDTB113 *)
+(* __EDTB114 *)
+(* __EDTB115 *)
+(* __EDTB116 *)
+(* __EDTB117 *)
+(* __EDTB118 *)
+(* __EDTB119 *)
+(* __EDTB120 *)
+(* __EDTB121 *)
+(* __EDTB122 *)
+(* __EDTB123 *)
+(* __EDTB124 *)
+(* __EDTB125 *)
+(* __EDTB126 *)
+(* __EDTB127 *)
+(* __EDTB128 *)
+(* __EDTB129 *)
+(* __EDTB130 *)
+(* __EDTB131 *)
+(* __EDTB132 *)
+(* __EDTB133 *)
+(* __EDTB134 *)
+(* __EDTB135 *)
+(* __EDTB136 *)
+(* __EDTB137 *)
+(* __EDTB138 *)
+(* __EDTB139 *)
+(* __EDTB140 *)
+(* __EDTB141 *)
+(* __EDTB142 *)
+(* __EDTB143 *)
+(* __EDTB144 *)
+(* __EDTB145 *)
+(* __EDTB146 *)
+(* __EDTB147 *)
+(* __EDTB148 *)
+(* __EDTB149 *)
+(* __EDTB150 *)
+(* __EDTB151 *)
+(* __EDTB152 *)
+(* __EDTB153 *)
+(* __EDTB154 *)
+(* __EDTB155 *)
+(* __EDTB156 *)
+(* __EDTB157 *)
+(* __EDTB158 *)
+(* __EDTB159 *)
+(* __EDTB160 *)
+(* __EDTB161 *)
+(* __EDTB162 *)
+(* __EDTB163 *)
+(* __EDTB164 *)
+(* __EDTB165 *)
+(* __EDTB166 *)
+(* __EDTB167 *)
+(* __EDTB168 *)
+(* __EDTB169 *)
+(* __EDTB170 *)
+(* __EDTB171 *)
+(* __EDTB172 *)
+(* __EDTB173 *)
+(* __EDTB174 *)
+(* __EDTB175 *)
+(* __EDTB176 *)
+(* __EDTB177 *)
+(* __EDTB178 *)
+(* __EDTB179 *)
+(* __EDTB180 *)
+(* __EDTB181 *)
+(* __EDTB182 *)
+(* __EDTB183 *)
+(* __EDTB184 *)
+(* __EDTB185 *)
+(* __EDTB186 *)
+(* __EDTB187 *)
+(* __EDTB188 *)
+(* __EDTB189 *)
+(* __EDTB190 *)
+(* __EDTB191 *)
+(* __EDTB192 *)
+(* __EDTB193 *)
+(* __EDTB194 *)
+(* __EDTB195 *)
+(* __EDTB196 *)
+(* __EDTB197 *)
+(* __EDTB198 *)
+(* __EDTB199 *)
+(* __EDTB200 *)
+(* __EDTB201 *)
+(* __EDTB202 *)
+(* __EDTB203 *)
+(* __EDTB204 *)
+(* __EDTB205 *)
+(* __EDTB206 *)
+(* __EDTB207 *)
+(* __EDTB208 *)
+(* __EDTB209 *)
+(* __EDTB210 *)
+(* __EDTB211 *)
+(* __EDTB212 *)
+(* __EDTB213 *)
+(* __EDTB214 *)
+(* __EDTB215 *)
+(* __EDTB216 *)
+(* __EDTB217 *)
+(* __EDTB218 *)
+(* __EDTB219 *)
+(* __EDTB220 *)
+(* __EDTB221 *)
+(* __EDTB222 *)
+(* __EDTB223 *)
+(* __EDTB224 *)
+(* __EDTB225 *)
+(* __EDTB226 *)
+(* __EDTB227 *)
+(* __EDTB228 *)
+(* __EDTB229 *)
+(* __EDTB230 *)
+(* __EDTB231 *)
+(* __EDTB232 *)
+(* __EDTB233 *)
+(* __EDTB234 *)
+(* __EDTB235 *)
+(* __EDTB236 *)
+(* __EDTB237 *)
+(* __EDTB238 *)
+(* __EDTB239 *)
+(* __EDTB240 *)
+(* __EDTB241 *)
+(* __EDTB242 *)
+(* __EDTB243 *)
+(* __EDTB244 *)
+(* __EDTB245 *)
+(* __EDTB246 *)
+(* __EDTB247 *)
+(* __EDTB248 *)
+(* __EDTB249 *)
+(* __EDTB250 *)
+(* __EDTB251 *)
+(* __EDTB252 *)
+(* __EDTB253 *)
+(* __EDTB254 *)
+(* __EDTB255 *)
+(* __EDTB256 *)
+(* __EDTB257 *)
+(* __EDTB258 *)
+(* __EDTB259 *)
+(* __EDTB260 *)
+(* __EDTB261 *)
+(* __EDTB262 *)
+(* __EDTB263 *)
+(* __EDTB264 *)
+(* __EDTB265 *)
+(* __EDTB266 *)
+(* __EDTB267 *)
+(* __EDTB268 *)
+(* __EDTB269 *)
+(* __EDTB270 *)
+(* __EDTB271 *)
+(* __EDTB272 *)
+(* __EDTB273 *)
+(* __EDTB274 *)
+(* __EDTB275 *)
+(* __EDTB276 *)
+(* __EDTB277 *)
+(* __EDTB278 *)
+(* __EDTB279 *)
+(* __EDTB280 *)
+(* __EDTB281 *)
+(* __EDTB282 *)
+(* __EDTB283 *)
+(* __EDTB284 *)
+(* __EDTB285 *)
+(* __EDTB286 *)
+(* __EDTB287 *)
+(* __EDTB288 *)
+(* __EDTB289 *)
+(* __EDTB290 *)
+(* __EDTB291 *)
+(* __EDTB292 *)
+(* __EDTB293 *)
+(* __EDTB294 *)
+(* __EDTB295 *)
+(* __EDTB296 *)
+(* __EDTB297 *)
+(* __EDTB298 *)
+(* __EDTB299 *)
+(* __EDTB300 *)
+(* __EDTB301 *)
+(* __EDTB302 *)
+(* __EDTB303 *)
+(* __EDTB304 *)
+(* __EDTB305 *)
+(* __EDTB306 *)
+(* __EDTB307 *)
+(* __EDTB308 *)
+(* __EDTB309 *)
+(* __EDTB310 *)
+(* __EDTB311 *)
+(* __EDTB312 *)
+(* __EDTB313 *)
+(* __EDTB314 *)
+(* __EDTB315 *)
+(* __EDTB316 *)
+(* __EDTB317 *)
+(* __EDTB318 *)
+(* __EDTB319 *)
+(* __EDTB320 *)
+(* __EDTB321 *)
+(* __EDTB322 *)
+(* __EDTB323 *)
+(* __EDTB324 *)
+(* __EDTB325 *)
+(* __EDTB326 *)
+(* __EDTB327 *)
+(* __EDTB328 *)
+(* __EDTB329 *)
+(* __EDTB330 *)
+(* __EDTB331 *)
+(* __EDTB332 *)
+(* __EDTB333 *)
+(* __EDTB334 *)
+(* __EDTB335 *)
+(* __EDTB336 *)
+(* __EDTB337 *)
+(* __EDTB338 *)
+(* __EDTB339 *)
+(* __EDTB340 *)
+(* __EDTB341 *)
+(* __EDTB342 *)
+(* __EDTB343 *)
+(* __EDTB344 *)
+(* __EDTB345 *)
+(* __EDTB346 *)
+(* __EDTB347 *)
+(* __EDTB348 *)
+(* __EDTB349 *)
+(* __EDTB350 *)
+(* __EDTB351 *)
+(* __EDTB352 *)
+(* __EDTB353 *)
+(* __EDTB354 *)
+(* __EDTB355 *)
+(* __EDTB356 *)
+(* __EDTB357 *)
+(* __EDTB358 *)
+(* __EDTB359 *)
+(* __EDTB360 *)
+(* __EDTB361 *)
+(* __EDTB362 *)
+(* __EDTB363 *)
+(* __EDTB364 *)
+(* __EDTB365 *)
+(* __EDTB366 *)
+(* __EDTB367 *)
+(* __EDTB368 *)
+(* __EDTB369 *)
+(* __EDTB370 *)
+(* __EDTB371 *)
+(* __EDTB372 *)
+(* __EDTB373 *)
+(* __EDTB374 *)
+(* __EDTB375 *)
+(* __EDTB376 *)
+(* __EDTB377 *)
+(* __EDTB378 *)
+(* __EDTB379 *)
+(* __EDTB380 *)
+(* __EDTB381 *)
+(* __EDTB382 *)
+(* __EDTB383 *)
+(* __EDTB384 *)
+(* __EDTB385 *)
+(* __EDTB386 *)
+(* __EDTB387 *)
+(* __EDTB388 *)
+(* __EDTB389 *)
+(* __EDTB390 *)
+(* __EDTB391 *)
+(* __EDTB392 *)
+(* __EDTB393 *)
+(* __EDTB394 *)
+(* __EDTB395 *)
+(* __EDTB396 *)
+(* __EDTB397 *)
+(* __EDTB398 *)
+(* __EDTB399 *)
+(* __EDTB400 *)
+(* __EDTB401 *)
+(* __EDTB402 *)
+(* __EDTB403 *)
+(* __EDTB404 *)
+(* __EDTB405 *)
+(* __EDTB406 *)
+(* __EDTB407 *)
+(* __EDTB408 *)
+(* __EDTB409 *)
+(* __EDTB410 *)
+(* __EDTB411 *)
+(* __EDTB412 *)
+(* __EDTB413 *)
+(* __EDTB414 *)
+(* __EDTB415 *)
+(* __EDTB416 *)
+(* __EDTB417 *)
+(* __EDTB418 *)
+(* __EDTB419 *)
+(* __EDTB420 *)
+(* __EDTB421 *)
+(* __EDTB422 *)
+(* __EDTB423 *)
+(* __EDTB424 *)
+(* __EDTB425 *)
+(* __EDTB426 *)
+(* __EDTB427 *)
+(* __EDTB428 *)
+(* __EDTB429 *)
+(* __EDTB430 *)
+(* __EDTB431 *)
+(* __EDTB432 *)
+(* __EDTB433 *)
+(* __EDTB434 *)
+(* __EDTB435 *)
+(* __EDTB436 *)
+(* __EDTB437 *)
+(* __EDTB438 *)
+(* __EDTB439 *)
+(* __EDTB440 *)
+(* __EDTB441 *)
+(* __EDTB442 *)
+(* __EDTB443 *)
+(* __EDTB444 *)
+(* __EDTB445 *)
+(* __EDTB446 *)
+(* __EDTB447 *)
+(* __EDTB448 *)
+(* __EDTB449 *)
+(* __EDTB450 *)
+(* __EDTB451 *)
+(* __EDTB452 *)
+(* __EDTB453 *)
+(* __EDTB454 *)
+(* __EDTB455 *)
+(* __EDTB456 *)
+(* __EDTB457 *)
+(* __EDTB458 *)
+(* __EDTB459 *)
+(* __EDTB460 *)
+(* __EDTB461 *)
+(* __EDTB462 *)
+(* __EDTB463 *)
+(* __EDTB464 *)
+(* __EDTB465 *)
+(* __EDTB466 *)
+(* __EDTB467 *)
+(* __EDTB468 *)
+(* __EDTB469 *)
+(* __EDTB470 *)
+(* __EDTB471 *)
+(* __EDTB472 *)
+(* __EDTB473 *)
+(* __EDTB474 *)
+(* __EDTB475 *)
+(* __EDTB476 *)
+(* __EDTB477 *)
+(* __EDTB478 *)
+(* __EDTB479 *)
+(* __EDTB480 *)
+(* __EDTB481 *)
+(* __EDTB482 *)
+(* __EDTB483 *)
+(* __EDTB484 *)
+(* __EDTB485 *)
+(* __EDTB486 *)
+(* __EDTB487 *)
+(* __EDTB488 *)
+(* __EDTB489 *)
+(* __EDTB490 *)
+(* __EDTB491 *)
+(* __EDTB492 *)
+(* __EDTB493 *)
+(* __EDTB494 *)
+(* __EDTB495 *)
+(* __EDTB496 *)
+(* __EDTB497 *)
+(* __EDTB498 *)
+(* __EDTB499 *)
+(* __EDTB500 *)
+(* __EDTB501 *)
+(* __EDTB502 *)
+(* __EDTB503 *)
+(* __EDTB504 *)
+(* __EDTB505 *)
+(* __EDTB506 *)
+(* __EDTB507 *)
+(* __EDTB508 *)
+(* __EDTB509 *)
+(* __EDTB510 *)
+(* __EDTB511 *)
+(* __EDTB512 *)
+(* __EDTB513 *)
+(* __EDTB514 *)
+(* __EDTB515 *)
+(* __EDTB516 *)
+(* __EDTB517 *)
+(* __EDTB518 *)
+(* __EDTB519 *)
+(* __EDTB520 *)
+(* __EDTB521 *)
+(* __EDTB522 *)
+(* __EDTB523 *)
+(* __EDTB524 *)
+(* __EDTB525 *)
+(* __EDTB526 *)
+(* __EDTB527 *)
+(* __EDTB528 *)
+(* __EDTB529 *)
+(* __EDTB530 *)
+(* __EDTB531 *)
+(* __EDTB532 *)
+(* __EDTB533 *)
+(* __EDTB534 *)
+(* __EDTB535 *)
+(* __EDTB536 *)
+(* __EDTB537 *)
+(* __EDTB538 *)
+(* __EDTB539 *)
+(* __EDTB540 *)
+(* __EDTB541 *)
+(* __EDTB542 *)
+(* __EDTB543 *)
+(* __EDTB544 *)
+(* __EDTB545 *)
+(* __EDTB546 *)
+(* __EDTB547 *)
+(* __EDTB548 *)
+(* __EDTB549 *)
+(* __EDTB550 *)
+(* __EDTB551 *)
+(* __EDTB552 *)
+(* __EDTB553 *)
+(* __EDTB554 *)
+(* __EDTB555 *)
+(* __EDTB556 *)
+(* __EDTB557 *)
+(* __EDTB558 *)
+(* __EDTB559 *)
+(* __EDTB560 *)
+(* __EDTB561 *)
+(* __EDTB562 *)
+(* __EDTB563 *)
+(* __EDTB564 *)
+(* __EDTB565 *)
+(* __EDTB566 *)
+(* __EDTB567 *)
+(* __EDTB568 *)
+(* __EDTB569 *)
+(* __EDTB570 *)
+(* __EDTB571 *)
+(* __EDTB572 *)
+(* __EDTB573 *)
+(* __EDTB574 *)
+(* __EDTB575 *)
+(* __EDTB576 *)
+(* __EDTB577 *)
+(* __EDTB578 *)
+(* __EDTB579 *)
+(* __EDTB580 *)
+(* __EDTB581 *)
+(* __EDTB582 *)
+(* __EDTB583 *)
+(* __EDTB584 *)
+(* __EDTB585 *)
+(* __EDTB586 *)
+(* __EDTB587 *)
+(* __EDTB588 *)
+(* __EDTB589 *)
+(* __EDTB590 *)
+(* __EDTB591 *)
+(* __EDTB592 *)
+(* __EDTB593 *)
+(* __EDTB594 *)
+(* __EDTB595 *)
+(* __EDTB596 *)
+(* __EDTB597 *)
+(* __EDTB598 *)
+(* __EDTB599 *)
+(* __EDTB600 *)
+(* __EDTB601 *)
+(* __EDTB602 *)
+(* __EDTB603 *)
+(* __EDTB604 *)
+(* __EDTB605 *)
+(* __EDTB606 *)
+(* __EDTB607 *)
+(* __EDTB608 *)
+(* __EDTB609 *)
+(* __EDTB610 *)
+(* __EDTB611 *)
+(* __EDTB612 *)
+(* __EDTB613 *)
+(* __EDTB614 *)
+(* __EDTB615 *)
+(* __EDTB616 *)
+(* __EDTB617 *)
+(* __EDTB618 *)
+(* __EDTB619 *)
+(* __EDTB620 *)
+(* __EDTB621 *)
+(* __EDTB622 *)
+(* __EDTB623 *)
+(* __EDTB624 *)
+(* __EDTB625 *)
+(* __EDTB626 *)
+(* __EDTB627 *)
+(* __EDTB628 *)
+(* __EDTB629 *)
+(* __EDTB630 *)
+(* __EDTB631 *)
+(* __EDTB632 *)
+(* __EDTB633 *)
+(* __EDTB634 *)
+(* __EDTB635 *)
+(* __EDTB636 *)
+(* __EDTB637 *)
+(* __EDTB638 *)
+(* __EDTB639 *)
+(* __EDTB640 *)
+(* __EDTB641 *)
+(* __EDTB642 *)
+(* __EDTB643 *)
+(* __EDTB644 *)
+(* __EDTB645 *)
+(* __EDTB646 *)
+(* __EDTB647 *)
+(* __EDTB648 *)
+(* __EDTB649 *)
+(* __EDTB650 *)
+(* __EDTB651 *)
+(* __EDTB652 *)
+(* __EDTB653 *)
+(* __EDTB654 *)
+(* __EDTB655 *)
+(* __EDTB656 *)
+(* __EDTB657 *)
+(* __EDTB658 *)
+(* __EDTB659 *)
+(* __EDTB660 *)
+(* __EDTB661 *)
+(* __EDTB662 *)
+(* __EDTB663 *)
+(* __EDTB664 *)
+(* __EDTB665 *)
+(* __EDTB666 *)
+(* __EDTB667 *)
+(* __EDTB668 *)
+(* __EDTB669 *)
+(* __EDTB670 *)
+(* __EDTB671 *)
+(* __EDTB672 *)
+(* __EDTB673 *)
+(* __EDTB674 *)
+(* __EDTB675 *)
+(* __EDTB676 *)
+(* __EDTB677 *)
+(* __EDTB678 *)
+(* __EDTB679 *)
+(* __EDTB680 *)
+(* __EDTB681 *)
+(* __EDTB682 *)
+(* __EDTB683 *)
+(* __EDTB684 *)
+(* __EDTB685 *)
+(* __EDTB686 *)
+(* __EDTB687 *)
+(* __EDTB688 *)
+(* __EDTB689 *)
+(* __EDTB690 *)
+(* __EDTB691 *)
+(* __EDTB692 *)
+(* __EDTB693 *)
+(* __EDTB694 *)
+(* __EDTB695 *)
+(* __EDTB696 *)
+(* __EDTB697 *)
+(* __EDTB698 *)
+(* __EDTB699 *)
+(* __EDTB700 *)
+(* __EDTB701 *)
+(* __EDTB702 *)
+(* __EDTB703 *)
+(* __EDTB704 *)
+(* __EDTB705 *)
+(* __EDTB706 *)
+(* __EDTB707 *)
+(* __EDTB708 *)
+(* __EDTB709 *)
+(* __EDTB710 *)
+(* __EDTB711 *)
+(* __EDTB712 *)
+(* __EDTB713 *)
+(* __EDTB714 *)
+(* __EDTB715 *)
+(* __EDTB716 *)
+(* __EDTB717 *)
+(* __EDTB718 *)
+(* __EDTB719 *)
+(* __EDTB720 *)
+(* __EDTB721 *)
+(* __EDTB722 *)
+(* __EDTB723 *)
+(* __EDTB724 *)
+(* __EDTB725 *)
+(* __EDTB726 *)
+(* __EDTB727 *)
+(* __EDTB728 *)
+(* __EDTB729 *)
+(* __EDTB730 *)
+(* __EDTB731 *)
+(* __EDTB732 *)
+(* __EDTB733 *)
+(* __EDTB734 *)
+(* __EDTB735 *)
+(* __EDTB736 *)
+(* __EDTB737 *)
+(* __EDTB738 *)
+(* __EDTB739 *)
+(* __EDTB740 *)
+(* __EDTB741 *)
+(* __EDTB742 *)
+(* __EDTB743 *)
+(* __EDTB744 *)
+(* __EDTB745 *)
+(* __EDTB746 *)
+(* __EDTB747 *)
+(* __EDTB748 *)
+(* __EDTB749 *)
+(* __EDTB750 *)
+(* __EDTB751 *)
+(* __EDTB752 *)
+(* __EDTB753 *)
+(* __EDTB754 *)
+(* __EDTB755 *)
+(* __EDTB756 *)
+(* __EDTB757 *)
+(* __EDTB758 *)
+(* __EDTB759 *)
+(* __EDTB760 *)
+(* __EDTB761 *)
+(* __EDTB762 *)
+(* __EDTB763 *)
+(* __EDTB764 *)
+(* __EDTB765 *)
+(* __EDTB766 *)
+(* __EDTB767 *)
+(* __EDTB768 *)
+(* __EDTB769 *)
+(* __EDTB770 *)
+(* __EDTB771 *)
+(* __EDTB772 *)
+(* __EDTB773 *)
+(* __EDTB774 *)
+(* __EDTB775 *)
+(* __EDTB776 *)
+(* __EDTB777 *)
+(* __EDTB778 *)
+(* __EDTB779 *)
+(* __EDTB780 *)
+(* __EDTB781 *)
+(* __EDTB782 *)
+(* __EDTB783 *)
+(* __EDTB784 *)
+(* __EDTB785 *)
+(* __EDTB786 *)
+(* __EDTB787 *)
+(* __EDTB788 *)
+(* __EDTB789 *)
+(* __EDTB790 *)
+(* __EDTB791 *)
+(* __EDTB792 *)
+(* __EDTB793 *)
+(* __EDTB794 *)
+(* __EDTB795 *)
+(* __EDTB796 *)
+(* __EDTB797 *)
+(* __EDTB798 *)
+(* __EDTB799 *)
+(* __EDTB800 *)
+(* __EDTB801 *)
+(* __EDTB802 *)
+(* __EDTB803 *)
+(* __EDTB804 *)
+(* __EDTB805 *)
+(* __EDTB806 *)
+(* __EDTB807 *)
+(* __EDTB808 *)
+(* __EDTB809 *)
+(* __EDTB810 *)
+(* __EDTB811 *)
+(* __EDTB812 *)
+(* __EDTB813 *)
+(* __EDTB814 *)
+(* __EDTB815 *)
+(* __EDTB816 *)
+(* __EDTB817 *)
+(* __EDTB818 *)
+(* __EDTB819 *)
+(* __EDTB820 *)
+(* __EDTB821 *)
+(* __EDTB822 *)
+(* __EDTB823 *)
+(* __EDTB824 *)
+(* __EDTB825 *)
+(* __EDTB826 *)
+(* __EDTB827 *)
+(* __EDTB828 *)
+(* __EDTB829 *)
+(* __EDTB830 *)
+(* __EDTB831 *)
+(* __EDTB832 *)
+(* __EDTB833 *)
+(* __EDTB834 *)
+(* __EDTB835 *)
+(* __EDTB836 *)
+(* __EDTB837 *)
+(* __EDTB838 *)
+(* __EDTB839 *)
+(* __EDTB840 *)
+(* __EDTB841 *)
+(* __EDTB842 *)
+(* __EDTB843 *)
+(* __EDTB844 *)
+(* __EDTB845 *)
+(* __EDTB846 *)
+(* __EDTB847 *)
+(* __EDTB848 *)
+(* __EDTB849 *)
+(* __EDTB850 *)
+(* __EDTB851 *)
+(* __EDTB852 *)
+(* __EDTB853 *)
+(* __EDTB854 *)
+(* __EDTB855 *)
+(* __EDTB856 *)
+(* __EDTB857 *)
+(* __EDTB858 *)
+(* __EDTB859 *)
+(* __EDTB860 *)
+(* __EDTB861 *)
+(* __EDTB862 *)
+(* __EDTB863 *)
+(* __EDTB864 *)
+(* __EDTB865 *)
+(* __EDTB866 *)
+(* __EDTB867 *)
+(* __EDTB868 *)
+(* __EDTB869 *)
+(* __EDTB870 *)
+(* __EDTB871 *)
+(* __EDTB872 *)
+(* __EDTB873 *)
+(* __EDTB874 *)
+(* __EDTB875 *)
+(* __EDTB876 *)
+(* __EDTB877 *)
+(* __EDTB878 *)
+(* __EDTB879 *)
+(* __EDTB880 *)
+(* __EDTB881 *)
+(* __EDTB882 *)
+(* __EDTB883 *)
+(* __EDTB884 *)
+(* __EDTB885 *)
+(* __EDTB886 *)
+(* __EDTB887 *)
+(* __EDTB888 *)
+(* __EDTB889 *)
+(* __EDTB890 *)
+(* __EDTB891 *)
+(* __EDTB892 *)
+(* __EDTB893 *)
+(* __EDTB894 *)
+(* __EDTB895 *)
+(* __EDTB896 *)
+(* __EDTB897 *)
+(* __EDTB898 *)
+(* __EDTB899 *)
+(* __EDTB900 *)
+(* __EDTB901 *)
+(* __EDTB902 *)
+(* __EDTB903 *)
+(* __EDTB904 *)
+(* __EDTB905 *)
+(* __EDTB906 *)
+(* __EDTB907 *)
+(* __EDTB908 *)
+(* __EDTB909 *)
+(* __EDTB910 *)
+(* __EDTB911 *)
+(* __EDTB912 *)
+(* __EDTB913 *)
+(* __EDTB914 *)
+(* __EDTB915 *)
+(* __EDTB916 *)
+(* __EDTB917 *)
+(* __EDTB918 *)
+(* __EDTB919 *)
+(* __EDTB920 *)
+(* __EDTB921 *)
+(* __EDTB922 *)
+(* __EDTB923 *)
+(* __EDTB924 *)
+(* __EDTB925 *)
+(* __EDTB926 *)
+(* __EDTB927 *)
+(* __EDTB928 *)
+(* __EDTB929 *)
+(* __EDTB930 *)
+(* __EDTB931 *)
+(* __EDTB932 *)
+(* __EDTB933 *)
+(* __EDTB934 *)
+(* __EDTB935 *)
+(* __EDTB936 *)
+(* __EDTB937 *)
+(* __EDTB938 *)
+(* __EDTB939 *)
+(* __EDTB940 *)
+(* __EDTB941 *)
+(* __EDTB942 *)
+(* __EDTB943 *)
+(* __EDTB944 *)
+(* __EDTB945 *)
+(* __EDTB946 *)
+(* __EDTB947 *)
+(* __EDTB948 *)
+(* __EDTB949 *)
+(* __EDTB950 *)
+(* __EDTB951 *)
+(* __EDTB952 *)
+(* __EDTB953 *)
+(* __EDTB954 *)
+(* __EDTB955 *)
+(* __EDTB956 *)
+(* __EDTB957 *)
+(* __EDTB958 *)
+(* __EDTB959 *)
+(* __EDTB960 *)
+(* __EDTB961 *)
+(* __EDTB962 *)
+(* __EDTB963 *)
+(* __EDTB964 *)
+(* __EDTB965 *)
+(* __EDTB966 *)
+(* __EDTB967 *)
+(* __EDTB968 *)
+(* __EDTB969 *)
+(* __EDTB970 *)
+(* __EDTB971 *)
+(* __EDTB972 *)
+(* __EDTB973 *)
+(* __EDTB974 *)
+(* __EDTB975 *)
+(* __EDTB976 *)
+(* __EDTB977 *)
+(* __EDTB978 *)
+(* __EDTB979 *)
+(* __EDTB980 *)
+(* __EDTB981 *)
+(* __EDTB982 *)
+(* __EDTB983 *)
+
